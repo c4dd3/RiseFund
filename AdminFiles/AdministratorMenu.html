@@ -73,7 +73,9 @@
             border-radius: 10px;
             background-color: #000000;
             color: #FFFFFF;
-            font-family: ;
+            cursor: pointer; 
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 20px;
         }
     </style>
 </head>
@@ -85,18 +87,19 @@
         <div class="subContainer">
             <h class="title-2">User Register</h>
             <div class="registerContainer"></div>
-            <button class="button">Manage</button>
+            <button class="button" onclick="UserManage()">Manage</button>
         </div>
         <div class="subContainer">
             <h class="title-2">Donation Register</h>
             <div class="registerContainer"></div>
-            <button class="button">Manage</button>
+            <button class="button" onclick="DonationManage()">Manage</button>
         </div>
         <div class="subContainer">
             <h class="title-2">Projects Register</h>
             <div class="registerContainer"></div>
-            <button class="button">Manage</button>
+            <button class="button" onclick="ProjectsManage()">Manage</button>
         </div>
+        <script src="AdministratorMenu_Script_1.js"></script>
     </div>
 </body>
 </html>
