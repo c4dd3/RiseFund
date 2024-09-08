@@ -8,21 +8,73 @@
         .navigation_bar{    
             position: relative;
             width: device-width;
-            height: 60px;
-            top: 0;
-            border: none;
+            height: 80px;
             margin: -8px;
-            padding: 0px;
             background-color: #A0D5C3;
-
+            box-shadow: 0px 5px #e2e2e2af;
+            box-align: left; 
         }           
-        /**/
+        .ContenedorDatos{
+            position: relative;
+            width: calc(30%);
+            height: 65vh;
+            margin: auto;
+            background-color: #A0D5C3;
+            margin-top: 12vh;
+            padding: 2px;
+            border-radius: 8%;
+            text-align: center;
+        }
+        .textfield{
+            position: relative;
+            width: calc(60%);
+            padding: 10px;
+            border: 2px solid #000000;
+            border-radius: 10px;
+            font-size: 20px;
+            font-size: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 1vh;
+            margin-bottom: 2vh;
+        }
+        .button_ok {
+            width: calc(45%);
+            padding: 10px 20px; /*alto - ancho  */
+            background-color: #A2BFF4;
+            border: 2px solid #000000;
+            border-radius: 5px ;
+            font-size: 20px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;	
+            margin-top: 2vh;
+            margin-bottom: 7vh;
+            color: #000000;
+            cursor: pointer; 
+        }
+        .title{
+            font-size: 50px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 10vh;
+            margin-bottom: 5vh;
+        }
+        .RegistroLink{
+            color: rgba(251, 251, 251, 0.797);
+            font-size: 25px;
+        }
+        
     </style>
-    <!---->
 </head>
 <body>
-
+    
     <div class="navigation_bar">
+    </div>
+
+    <div class="ContenedorDatos">
+    
+        <h1 class="title">Sign In</h1>
+        <input type="text" id="LoginEmail" class="textfield" placeholder="Email"> <br>
+        <input type="password" id="LoginPassword" class="textfield" placeholder="Password"> <br>
+        <button id="LoginButton" class="button_ok" onclick="Login()">Log In</button> <br>
+        <script src="LogIn_Script_1.js"></script>
+        <a class= "RegistroLink"href="SignUp.html">Don't have an account? Sign up now!</a>
     </div>
 </body>
 </html>
