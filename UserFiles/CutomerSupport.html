@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RISEFUND About</title>
+    <style>
+        .navigation_bar{    
+            position: relative;
+            width: device-width;
+            height: 80px;
+            margin: -8px;
+            margin-bottom: 0px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px #e2e2e2af;
+            box-align: left; 
+        }
+        .navigation_bar_content_container{
+            position: relative;
+            width: fit-content;
+            height: 60px;
+            margin: 0px;
+            float: right;
+            margin-right: calc(1%);
+            margin-top: 15px;
+            
+            
+        }
+        .nav_item{
+            margin: 0px 15px;
+            padding: 0px 10px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 25px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        .hamburgerButton {
+            background-color: #A0D5C3;
+            font-size: 25px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdown_menu {
+            display: none;
+            position: absolute;
+            top: 65px;
+            right: 0;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .dropdown_menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 15px;
+        }
+        .dropdown_menu a:hover {
+            background-color: #e2e2e2;
+        }
+
+  /* Flexbox layout for the form and FAQ */
+  .content {
+            display: flex;
+            justify-content: space-between;
+            margin: 10px auto;
+            width: 80%;
+            align-items: flex-start;
+        }
+
+        .form_container {
+            width: 48%;
+            padding: 40px;
+        }
+
+
+        .form_group {
+            margin-bottom: 20px;
+        }
+
+        .form_group label {
+            display: block;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+
+        .form_group input, .form_group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .form_group textarea {
+            height: 150px;
+        }
+
+        .submit_button {
+            width: 100%;
+            padding: 12px;
+            background-color: black;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .faq_container {
+            width: 48%;
+            padding: 20px;
+        }
+
+        .faq_item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            background-color: #F9F9F9;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-bottom: 15px;
+            transition: background-color 0.2s ease;
+        }
+
+        .faq_item:hover {
+            background-color: #e2e2e2;
+        }
+
+        .faq_item span {
+            font-size: 18px;
+        }
+
+        .faq_item button {
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .title_section {
+            padding: 20px;
+            text-align: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+
+        .title{
+            font-size: 50px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 15vh;
+            margin-bottom: 5vh;
+        }
+      
+    </style>
+</head>
+<body>
+    <div class="navigation_bar">
+        <div class="navigation_bar_content_container">
+            <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
+            <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
+            <a href="#" class="nav_item">Customer support</a>
+            <a href="#" class="nav_item">About</a>
+            <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
+            <nav>
+                <div class="dropdown_menu" id="dropdownMenu">
+                    <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                    <!--<a href="#">Option 2</a>-->
+                </div>
+            </nav>
+    </div>
+
+    <div class="title_section">
+        <h1 class="title">Customer Support</h1>
+    </div>
+
+
+    <div class="content">
+        
+        <!-- Form Section -->
+        <div class="form_container">
+            <div class="form_group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter your name">
+            </div>
+            <div class="form_group">
+                <label for="inquiry">Inquiry</label>
+                <textarea id="inquiry" placeholder="Type your question"></textarea>
+            </div>
+            <button class="submit_button">Send</button>
+        </div>
+
+        <!-- FAQ Section -->
+        <div class="faq_container">
+            <div class="faq_item">
+                <span>How do I activate notifications?</span>
+                <button>+</button>
+            </div>
+            <div class="faq_item">
+                <span>How do I donate?</span>
+                <button>+</button>
+            </div>
+            <div class="faq_item">
+                <span>Requirements to publish my project</span>
+                <button>+</button>
+            </div>
+            <div class="faq_item">
+                <span>How do I request refunds?</span>
+                <button>+</button>
+            </div>
+        </div>
+        
+    </div>
+
+
+    <script src="About_Script_1.js"></script>
+</body>
+</html>
