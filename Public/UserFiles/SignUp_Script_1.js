@@ -1,42 +1,66 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const path = require('path');
+async function SignUp() {
+    const name = document.getElementById("SignUpName").value;
+    const last_name = document.getElementById("SignUpLastName").value;
+    const email = document.getElementById("SignUpEmail").value;
+    const password = document.getElementById("SignUpPassword").value;
+    const confirm_password = document.getElementById("SignUpConfirmPassword").value;
+    const terms = document.getElementById("SignUpTerms").checked;
 
-const app = express();
-const port = 3000; // or any port you prefer
+    if (!validateFields(name, last_name, email, password, confirm_password, terms)) {
+        console.log("Validation Failed");
+        return;
+    }
 
-// Middleware to parse form data
-app.use(bodyParser.urlencoded({ extended: true }));
+    // const emailAvailable = await verifyEmail(email);
+    // if (!emailAvailable) {
+    //     console.log("Email already in use or invalid.");
+    //     return;
+    // }
 
-// Serve static files (like HTML, CSS) from the 'public' directory
-app.use(express.static(path.join(__dirname, 'public')));
+    console.log("Sign Up Successful");
+    window.location.href = 'MainMenu.html';
+}
 
-
-app.post('/signup', (req, res) => {
-    const { name, last_name, email, password, confirm_password, terms } = req.body;
-
+function validateFields(name, last_name, email, password, confirm_password, terms) {
     if (!name || !last_name || !email || !password || !confirm_password) {
-        return res.status(400).send('All fields are required.');
+        alert("All fields are required.");
+        return false;
     }
 
     if (password !== confirm_password) {
-        return res.status(400).send('Passwords do not match.');
+        alert("Passwords do not match.");
+        return false;
+    }
+
+    if (password.length < 8) {
+        alert("Password must be at least 8 characters long.");
+        return false;
+    }
+
+    if (!email.includes('@') || !email.includes('estudiantec.cr')) {
+        alert("Invalid email address. Must be from estudiantec.cr.");
+        return false;
     }
 
     if (!terms) {
-        return res.status(400).send('You must accept the terms and conditions.');
+        alert("You must accept the terms and conditions.");
+        return false;
     }
 
-    // Normally, you would save the data to a database here
+    return true;
+}
 
+async function verifyEmail(email) {
+    try {
+        const response = await fetch('/verifyEmail');
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        const result = await response.json();
+        return result.available;  
 
-
-
-
-    res.redirect('/MainMenu.html'); 
-});
-
-
-app.listen(port, () => {
-    console.log(`Server running at http://localhost:${port}`);
-});
+    } catch (error) {
+        console.error('Error verifying email:', error);
+        return false;
+    }
+}

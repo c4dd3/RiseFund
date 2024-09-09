@@ -64,7 +64,7 @@
         .textfield {
             width: 100%;
             padding: 10px;
-            margin: 8px 0;
+            margin: 0px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
             font-size: 13px;
@@ -144,29 +144,26 @@
     <div class="container">
         <div class="leftContainer">
             <h1 class="title">Create your account</h1>
-            <form action="/signup" method="post">
-                <input type="text" name="name" class="textfield" placeholder="Name" required><br>
-                <input type="text" name="last_name" class="textfield" placeholder="Last Name" required><br>
-                <input type="email" name="email" class="textfield" placeholder="Email" required><br>
-                <input type="password" name="password" class="textfield" placeholder="Password" required><br>
-                <input type="password" name="confirm_password" class="textfield" placeholder="Confirm Password" required><br>
+            <input type="text" id="SignUpName" class="textfield" placeholder="Name" required><br>
+            <input type="text" id="SignUpLastName" class="textfield" placeholder="Last Name" required><br>
+            <input type="email" id="SignUpEmail" class="textfield" placeholder="Email" required><br>
+            <input type="password" id="SignUpPassword" class="textfield" placeholder="Password" required><br>
+            <input type="password" id="SignUpConfirmPassword" class="textfield" placeholder="Confirm Password" required><br>
 
-                <div class="terms">
-                    <label>
-                        <input type="checkbox" name="terms" required>
-                        <b>Accept Terms and Conditions.</b><br>
-                        By registering, you will be agreeing to the information you provide being used at the discretion of the developers of the page and the page itself.
-                    </label>
-                </div>
-
-                <input type="submit" value="Sign Up" class="button_ok">
-            </form>
+            <div class="terms">
+                <label>
+                    <input type="checkbox" id="SignUpTerms" required>
+                    <b>Accept Terms and Conditions.</b><br>
+                    By registering, you will be agreeing to the information you provide being used at the discretion of the developers of the page and the page itself.
+                </label>
+            </div>
+            <input type="button" value="Sign Up" class="button_ok" onclick="SignUp()">
             <a href="LogIn.html" class="RegistroLink">Log In</a>
         </div>
         <div class="rightContainer">
             <img src="SignUpImage.jpg" class="image">
         </div>
     </div>
-    </div>
+    <script src="SignUp_Script.js"></script>
 </body>
 </html>
