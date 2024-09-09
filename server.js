@@ -1,3 +1,17 @@
+/*
+app.get('/function name', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('SELECT * FROM [TABLE]');
+        res.json(result.recordset);  // Send data as JSON
+    } catch (err) {
+        res.status(500).send('Error retrieving users: ' + err.message);
+    }
+});
+
+*/
+
+
 const express = require('express');
 const sql = require('mssql');
 const path = require('path');
@@ -40,6 +54,18 @@ app.get('/users', async (req, res) => {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
 });
+
+//ConfirmExistingEmail
+app.get('/confirmEmail', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('SELECT * FROM [USER]');
+        res.json(result.recordset);  // Send data as JSON
+    } catch (err) {
+        res.status(500).send('Error retrieving users: ' + err.message);
+    }
+});
+
 
 // Start the server
 app.listen(port, () => {
