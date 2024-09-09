@@ -6,3 +6,12 @@ function toggleDropdown() {
         dropdownMenu.style.display = 'block';
     }
 }
+
+function Compartir() {
+    console.log("Ha compartido el proyecto");
+}
+
+function Contacto() {
+    console.log("Se quiere contactar con el autor");
+}
+
