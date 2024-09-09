@@ -5,11 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
         .logo {
             display: flex;
             align-items: center;
@@ -18,7 +13,7 @@
         .logo img {
             width: 200px;
             height: 60px;
-            margin-top: 5px;
+            margin-top: 10px;
             margin-left: 30px;
             border-radius: 10px;
         }
@@ -28,21 +23,22 @@
             font-size: 25px;
             margin-left: 10px;
         }
-
-        .navigation_bar {    
+        .navigation_bar{    
             position: relative;
-            width: 100%;
-            height: 70px;
+            width: device-width;
+            height: 80px;
+            margin: -8px;
             background-color: #A0D5C3;
             box-shadow: 0px 5px #e2e2e2af;
-        }
+            box-align: left; 
+        } 
 
         .container {
             display: flex;
             justify-content: space-around;
             align-items: center;
-            height: 90vh;
-            width: 100%;
+            height: 88vh;
+            width: device-width;
             padding: 0 3%;
             background-color: #F0F0F0;
         }
@@ -108,13 +104,14 @@
         }
 
         .rightContainer {
-            width: 55%;
+            width: 60%;
             background-color: #A0D5C3;
             padding: 20px;
             border-radius: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            margin-left: 70px;
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
         }
 
@@ -141,7 +138,7 @@
 <body>
     <div class="navigation_bar">
         <div class="logo">
-            <img src="../Logo.jpg" alt="Logo">
+            <img src="../Logo.jpg" alt="RiseFund Logo">
         </div>
     </div>
     <div class="container">
@@ -169,6 +166,7 @@
         <div class="rightContainer">
             <img src="SignUpImage.jpg" class="image">
         </div>
+    </div>
     </div>
 </body>
 </html>
