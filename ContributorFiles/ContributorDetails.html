@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiseFund Menu</title>
+    
+    <style>
+        /*Barra de navegacion*/
+        .navigation_bar{    
+            position: relative;
+            width: device-width;
+            height: 80px;
+            margin: -8px;
+            margin-bottom: 0px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px #e2e2e2af;
+            box-align: left; 
+        }
+        .navigation_bar_content_container{
+            position: relative;
+            width: fit-content;
+            height: 60px;
+            margin: 0px;
+            float: right;
+            margin-right: calc(1%);
+            margin-top: 15px;
+        }
+        .nav_item{
+            margin: 0px 15px;
+            padding: 0px 10px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 25px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        .hamburgerButton {
+            background-color: #A0D5C3;
+            font-size: 25px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdown_menu {
+            display: none;
+            position: absolute;
+            top: 65px;
+            right: 0;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+        .dropdown_menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 15px;
+        }
+        .dropdown_menu a:hover {
+            background-color: #e2e2e2;
+        }
+        /*Barra de navegacion*/
+
+        /*Contenedor Global*/
+        .container{
+            display: block;
+            justify-content: space-between;
+            height: auto;
+            width: 100%;
+        }
+        .Titulo{
+            margin-left: calc(5%);
+            margin-top: 4vh;
+            color: black;
+            font-family: 'Baskerville', 'Baskerville Old Face', Garamond, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 50px;
+        }
+        /*Contenedor de informacion, izquierda y derecha*/
+        .ProjectInfo{
+            display: flex;
+            justify-content: space-between;
+            height: auto;
+            width: 100%;            
+        }
+        .InfoPanel{
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+            padding: 20px;
+            text-align: center;
+            border-radius: 15px;
+            height: auto;
+            width: auto;
+
+        }
+        .image{
+            height: auto;
+            width: 100%;
+            border-radius: 25px;
+        }
+        .DescriptionPanel{
+            padding-top: 25px;
+            padding-bottom: 25px;
+            padding-right: 25px;
+            padding-left: 25px;
+            background-color: rgba(240, 255, 255, 0.694);
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); 
+            width: 100vh;
+            height: auto;
+            border-radius: 25px;
+        }
+        .Description{
+            font-size: 20px;
+            text-align: justify;
+        }
+        .Authors{
+            font-size: 18px;
+            text-align: justify;
+        }
+        
+        /*Paneles de la derecha*/
+        .InfoDatos{
+            height: auto;
+            width: 50vh;
+        }
+        .PrimerPanel{
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            height: auto;
+            width: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .ProgressContainerText {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            margin-bottom: 10px; 
+        }
+        .ProgressText, .AmountRaised {
+            font-size: 25px;
+            margin: 0; 
+        }
+
+        /*Barra de progreso, formato*/
+        .ProgressBar{
+            width: 100%;
+            appearance: none; 
+        }
+
+        .ProgressBar::-webkit-progress-bar {
+            background-color: #e0e0e0; 
+            border-radius: 10px;
+            height: 20px; 
+        }
+
+        .ProgressBar::-webkit-progress-value {
+            background-color: #4caf50; 
+            border-radius: 10px;
+            height: 20px; 
+        }
+
+        .ProgressBar::-moz-progress-bar {
+            background-color: #4caf50; 
+            border-radius: 10px;
+            height: 20px; 
+        }
+
+        /*Contenedor de botones*/
+        .ButtonContainer {
+            display: flex;
+            flex-direction: column; /* Apila los botones uno encima del otro */
+            gap: 10px; /* Espacio entre los botones */
+            margin-top: 20px; /* Espacio superior para separar de los textos */
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .ShareButton {
+            background-color: black;
+            color: white;
+            border-radius: 15px;
+        }
+
+        .ContactButton {
+            background-color: black;
+            color: white;
+            border-radius: 15px;
+        }
+  
+        .SegundoPanel{
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            height: auto;
+            width: auto;
+            border-radius: 15px;
+        }
+
+        .Comentario {
+            width: 100%; /* Ocupa todo el ancho disponible */
+            height: 150px; /* Ajusta la altura */
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            resize: none; 
+            overflow-y: auto; 
+        }
+
+        #charCount {
+            font-size: 14px;
+            color: #666;
+            text-align: right;
+            margin-top: 5px;
+        }
+
+        .DonateContainer{
+            display: flex;
+            width: 100%;
+            height: auto;
+            align-items: center;
+        }
+
+        .DonateButton{
+            width: 40%;
+            font-size: 15px;
+            background-color: #000000;
+            color: white;
+            border-radius: 15px;
+        }
+
+        .AmmountInputText{
+            width: 50%;
+            margin-right: 15px;
+            font-size: 25px;
+        }
+  </style>
+</head>
+
+<body>
+    
+    <!-- Barra de navegacion -->
+    <div class="navigation_bar">
+        <div class="navigation_bar_content_container">
+            <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
+            <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
+            <a href="#" class="nav_item">Customer support</a>
+            <a href="../AdminFiles/AdministratorMenu.html" class="nav_item">About</a>
+            <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
+            <nav>
+                <div class="dropdown_menu" id="dropdownMenu">
+                    <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                    <!--<a href="#">Option 2</a>-->
+                </div>
+            </nav>
+        </div>
+    </div>
+    <script src="ContributorMenu_Script_1.js"></script>
+
+    <!-- Barra de navegacion -->
+    
+    <div class="container">
+        
+        <h1 class="Titulo">Title of project</h1> 
+
+        <div class="ProjectInfo"> 
+            <div class="InfoPanel">
+
+                <img src="Perro.jpeg" class="image">
+                <div class="DescriptionPanel">                     
+                    <p class="Description"> 
+                        Descripción del Proyecto: Max es un perro rescatado que recientemente sufrió un accidente grave, y ahora necesita una cirugía urgente para poder caminar nuevamente. Es un perro amoroso y juguetón que, a pesar de su difícil pasado, ha mantenido una actitud alegre y optimista. El costo de su tratamiento médico, que incluye la cirugía, medicamentos y cuidados postoperatorios, supera los recursos disponibles.
+                        Objetivo: Nuestro objetivo es recaudar fondos para cubrir los gastos médicos de Max y darle una segunda oportunidad de vivir una vida saludable y feliz. La meta de la campaña es $2,500, lo que garantizará que Max reciba el mejor cuidado posible y una rehabilitación completa.
+                        Cómo Puedes Ayudar: Cada donación cuenta, sin importar el monto. Incluso con pequeñas contribuciones, puedes hacer una gran diferencia en la vida de Max. Además, si no puedes donar, te invitamos a compartir esta campaña con amigos y familiares para que más personas puedan sumarse a esta causa.
+                    </p>
+                </div>
+                <p class="Authors">Authors...</p>
+
+            </div>
+
+            <div class="InfoDatos">
+
+                <div class="PrimerPanel">
+                    <div class="ProgressContainerText">
+                        <h2 class="ProgressText">Progress: 50%</h2>
+                        <h2 class="AmountRaised">USD Collected: 500</h2>
+                    </div>
+                
+                    <progress class="ProgressBar" value="500" max="1000"></progress>
+                
+                    <div class="AdditionalText"> 
+                        <h2 class="GoalAmount">Goal: 1000$</h2>
+                        <h2 class="AmountContributors">Contributors: 632</h2>
+                    </div>
+                
+                    <div class="ButtonContainer">
+                        <button class="ShareButton" onclick="Compartir()">Share</button>
+                        <button class="ContactButton" onclick="Contactos()">Contact</button>
+                    </div>
+                </div>
+                
+                <div class="SegundoPanel">
+                    <h2>Comment:</h2>
+                    <textarea id="Comment" class="Comentario" placeholder="Share your thoughts with the author/authors" maxlength="500"></textarea>
+                    <p id="charCount">0/500 characters</p>
+                    <!--Contador de caracteres-->
+                    <script>
+                        const commentBox = document.getElementById('Comment');
+                        const charCount = document.getElementById('charCount');
+                    
+                        commentBox.addEventListener('input', () => {
+                            const currentLength = commentBox.value.length;
+                            charCount.textContent = `${currentLength}/500 characters`;
+                        });
+                    </script>
+
+                    <div class="DonateContainer">
+                        <input id="AmmountToDonate" class="AmmountInputText" placeholder="$0000.00"></input>
+                        <button class="DonateButton">Donate</button>
+                    </div>
+
+                </div>
+                
+            </div>
+            
+        </div>
+    
+    
+    </div>
+    
+</body>
+
+
+</html>
