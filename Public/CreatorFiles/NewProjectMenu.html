@@ -228,8 +228,8 @@
             <div class="navigation_bar_content_container">
                 <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
                 <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
-                <a href="#" class="nav_item">Customer Support</a>
-                <a href="#" class="nav_item">About</a>
+                <a href="../UserFiles/CustomerSupport.html" class="nav_item">Customer Support</a>
+                <a href="../UserFiles/About.html" class="nav_item">About</a>
                 <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
                 <nav>
                     <div class="dropdown_menu" id="dropdownMenu">
@@ -283,10 +283,6 @@
                     </select>
                 </div>
                 <div class="form-row">
-                    <label for="expiration">Expiration date:</label>
-                    <input type="date" id="expiration" value="2024-12-31">
-                </div>
-                <div class="form-row">
                     <label for="account-number">Account Number:</label>
                     <input type="text" id="account-number">
                 </div>
@@ -301,7 +297,7 @@
                     <input type="file" id="file-input" accept="image/*" onchange="updateImage(event)">
                 </div>
                 <div class="description-box">
-                    <textarea placeholder="Description..."></textarea>
+                    <textarea placeholder="Description..." id="description"></textarea>
                 </div>
             </div>
         </section>

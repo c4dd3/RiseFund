@@ -11,12 +11,12 @@ async function SignUp() {
         return;
     }
 
-    // const emailAvailable = await verifyEmail(email);
-    // if (!emailAvailable) {
-    //     console.log("Email already in use or invalid.");
-    //     return;
-    // }
-
+        const emailUnavailable = await verifyEmail(email);
+        if (emailUnavailable) {
+            console.log("Email already in use or invalid.");
+            return;
+        }
+    createUser(name, last_name, email, password)
     console.log("Sign Up Successful");
     window.location.href = 'MainMenu.html';
 }
@@ -52,15 +52,45 @@ function validateFields(name, last_name, email, password, confirm_password, term
 
 async function verifyEmail(email) {
     try {
-        const response = await fetch('/verifyEmail');
+        const response = await fetch('/confirmEmail');
         if (!response.ok) {
             throw new Error('Network response was not ok.');
         }
         const result = await response.json();
-        return result.available;  
-
+        const emailFound = result.some(element => element.Email === email);
+        return emailFound;
     } catch (error) {
         console.error('Error verifying email:', error);
         return false;
+    }
+}
+
+async function createUser(name, last_name, email, password) {
+    const userData = {
+        firstName: name,
+        lastName: last_name,
+        email: email,
+        password: password, 
+        status: 1
+    };
+
+    try {
+        const response = await fetch('/AddUser', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  
+            },
+            body: JSON.stringify(userData)  
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(errorData.error);
+        }
+
+        const result = await response.json();  
+        console.log('Response from server:', result);
+    } catch (err) {
+        console.error('Error creating user:', err.message);  
     }
 }

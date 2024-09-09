@@ -3,7 +3,7 @@ async function Login(){
     const password = document.getElementById("LoginPassword").value;
     const emailFound = await confirmEmail(email);
     const correctPassword = await confirmPassword(email, password);
-    if(emailFound && correctPassword ){
+    if(emailFound &&correctPassword ){
         console.log("Granted");
         window.location.href = 'MainMenu.html';
     } else {
