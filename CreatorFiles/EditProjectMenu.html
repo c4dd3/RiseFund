@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Creator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .navigation_bar {    
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin: -8px;
+            margin-bottom: 0px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px #e2e2e2af;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 200px;
+            height: 60px;
+            margin-top: 5px;
+            margin-left: 30px;
+            border-radius: 10px;
+        }
+        
+        .logo span {
+            font-weight: bold;
+            font-size: 25px;
+            margin-left: 10px;
+        }
+
+        .navigation_bar_content_container {
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav_item {
+            margin: 0 15px;
+            padding: 0 10px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .hamburgerButton {
+            background-color: #A0D5C3;
+            font-size: 25px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown_menu {
+            display: none;
+            position: absolute;
+            top: 65px;
+            right: 0;
+            background-color: #FFFFFF;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .dropdown_menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .dropdown_menu a:hover {
+            background-color: #e2e2e2;
+        }
+
+        .container {
+            display: flex;
+            justify-content: center;
+            margin: 20px auto;
+            max-width: 1200px;
+        }
+        
+        .project-form {
+            display: flex;
+            justify-content: space-between;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        
+        .form-left, .form-right {
+            flex: 1;
+            padding: 20px;
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        label {
+            width: 150px;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input, select, textarea {
+            width: calc(100% - 160px); 
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        textarea {
+            resize: none;
+        }
+
+        button {
+            padding: 10px 15px;
+            border: none;
+            background-color: black;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .create-button {
+            width: 100%;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .image-upload {
+            background-color: #f4f4f4;
+            padding: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 64%; 
+        }
+
+        .image-upload img {
+            width: 90%;
+            height: auto;
+        }
+
+        .edit-image {
+            position: absolute;
+            top: 70%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .description-box {
+            margin-top: 20px;
+            position: relative;
+            height: 30%; 
+        }
+
+        .description-box textarea {
+            width: 100%;
+            height: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .edit-description {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: black;
+            color: white;
+            border: none;
+            padding: 5px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        #file-input {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header class="navbar">
+        <div class="navigation_bar">
+            <div class="logo">
+                <img src="../Logo.jpg" alt="Logo">
+            </div>
+            <div class="navigation_bar_content_container">
+                <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
+                <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
+                <a href="#" class="nav_item">Customer Support</a>
+                <a href="#" class="nav_item">About</a>
+                <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
+                <nav>
+                    <div class="dropdown_menu" id="dropdownMenu">
+                        <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <main class="container">
+        <section class="project-form">
+            <div class="form-left">
+                <h1>EDIT PROJECT</h1>
+                <div class="form-row">
+                    <label for="project-title">Project Title:</label>
+                    <input type="text" id="project-title">
+                </div>
+                <div class="form-row">
+                    <label for="project-id">Project ID:</label>
+                    <input type="text" id="project-id" value="0987654321" readonly>
+                </div>
+                <div class="form-row">
+                    <label for="start-date">Start:</label>
+                    <input type="date" id="start-date" value="2024-12-31">
+                </div>
+                <div class="form-row">
+                    <label for="goal">Contribution Goal:</label>
+                    <input type="text" id="goal">
+                </div>
+                <div class="form-row">
+                    <label for="completion-date">Expected Completion:</label>
+                    <input type="date" id="completion-date" value="2024-12-31">
+                </div>
+                <div class="form-row">
+                    <label for="status">Status:</label>
+                    <select id="status">
+                        <option value="blocked">Blocked</option>
+                        <option value="active">Active</option>
+                        <option value="secondary">Secondary</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="contact">Project Contact:</label>
+                    <input type="text" id="contact">
+                </div>
+                <div class="form-row">
+                    <label for="deposit-method">Deposit Method:</label>
+                    <select id="deposit-method">
+                        <option value="immediate">Immediate</option>
+                        <option value="completion">Per completion</option>
+                    </select>
+                </div>
+                <div class="form-row">
+                    <label for="expiration">Expiration date:</label>
+                    <input type="date" id="expiration" value="2024-12-31">
+                </div>
+                <div class="form-row">
+                    <label for="account-number">Account Number:</label>
+                    <input type="text" id="account-number">
+                </div>
+                <div class="form-row">
+                    <button class="create-button" onclick="showConfirmation()">Create</button>
+                </div>
+            </div>
+            <div class="form-right">
+                <div class="image-upload">
+                    <img id="uploaded-image" src="EmptyProjectImage.jpg" alt="Upload Image">
+                    <button class="edit-image" onclick="document.getElementById('file-input').click()">✎</button>
+                    <input type="file" id="file-input" accept="image/*" onchange="updateImage(event)">
+                </div>
+                <div class="description-box">
+                    <textarea placeholder="Description..."></textarea>
+                </div>
+            </div>
+        </section>
+    </main>
+    <script src="EditProjectMenu_Script_1.js"></script>
+</body>
+</html>

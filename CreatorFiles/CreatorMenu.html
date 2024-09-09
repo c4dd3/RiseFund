@@ -3,12 +3,255 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RiseFund Creator Menu</title>
+    <title>Creator Menu</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
         
+        body {
+            background-color: #f4f4f4;
+        }
+
+        .navigation_bar{    
+            position: relative;
+            width: 100%;
+            height: 80px;
+            margin: -8px;
+            margin-bottom: 0px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px #e2e2e2af;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 200px;
+            height: 60px;
+            margin-top: 5px;
+            margin-left: 30px;
+            border-radius: 10px;
+        }
+        
+        .logo span {
+            font-weight: bold;
+            font-size: 25px;
+            margin-left: 10px;
+        }
+
+        .navigation_bar_content_container{
+            display: flex;
+            align-items: center;
+        }
+        
+        .nav_item{
+            margin: 0 15px;
+            padding: 0 10px;
+            color: #000000;
+            text-decoration: none;
+            font-size: 20px;
+        }
+
+        .hamburgerButton {
+            background-color: #A0D5C3;
+            font-size: 25px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .dropdown_menu {
+            display: none;
+            position: absolute;
+            top: 65px;
+            right: 0;
+            background-color: #FFFFFF;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 5px;
+            z-index: 1;
+        }
+
+        .dropdown_menu a {
+            display: block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #333;
+            font-size: 15px;
+        }
+
+        .dropdown_menu a:hover {
+            background-color: #e2e2e2;
+        }
+
+        .container {
+            width: 80%;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .project-container {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .project {
+            width: 30%;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .project-title {
+            font-size: 1.5em;
+            margin: 5px 0;
+            padding-bottom: 5px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .project-details {
+            margin: 10px 5px;
+            padding-bottom: 5px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            font-size: 15px;
+            color: #555;
+        }
+
+        .project img {
+            width: 95%;
+            height: auto;
+            border-radius: 20px; 
+            margin-bottom: 5px; 
+        }
+
+        .edit-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .edit-button:hover {
+            background-color: #3e8e41;
+        }
+
+        .new-project-button {
+            margin-top: 20px;
+            padding: 15px 30px; 
+            background-color: #008CBA;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-size: 16px; 
+            border-radius: 5px; 
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            transition: background-color 0.3s;
+        }
+
+        .new-project-button:hover {
+            background-color: #2878cc;
+        }
+
+        .progress-bar {
+            width: 100%;
+            background-color: #e0e0e0; 
+            border-radius: 5px; 
+            height: 15px; 
+            margin-bottom: 15px;
+        }
+        
+        .progress {
+            background-color: #4CAF50; 
+            height: 100%;
+            border-radius: 5px; 
+        }
+
+        .title {
+            font-size: 28px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            margin-bottom: 20px;
+            margin-top: 15px;
+            color: #333;
+        }
     </style>
 </head>
 <body>
-    
+    <header class="navbar">
+        <div class="navigation_bar">
+            <div class="logo">
+                <img src="../Logo.jpg" alt="Logo">
+            </div>
+            <div class="navigation_bar_content_container">
+                <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
+                <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
+                <a href="#" class="nav_item">Customer Support</a>
+                <a href="#" class="nav_item">About</a>
+                <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
+                <nav>
+                    <div class="dropdown_menu" id="dropdownMenu">
+                        <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
+    <script src="CreatorMenu_Script_1.js"></script>
+    <div class="container">
+        <h1 class="title">My Projects</h1>
+        <div class="project-container">
+            <div class="project">
+                <img src="ProjectImage.jpg" alt="Project 1 Image" class="project-image">
+                <div class="project-title">Project 1</div>
+                <div class="project-details">Money Collected: $1000</div>
+                <div class="project-details">Progress: 50%</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 50%;"></div>
+                </div>
+                <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
+            </div>
+            <div class="project">
+                <img src="ProjectImage.jpg" alt="Project Image" class="project-image">
+                <div class="project-title">Project 2</div>
+                <div class="project-details">Money Collected: $2000</div>
+                <div class="project-details">Progress: 75%</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 75%;"></div>
+                </div>
+                <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
+            </div>
+            <div class="project">
+                <img src="ProjectImage.jpg" alt="Project Image" class="project-image">
+                <div class="project-title">Project 3</div>
+                <div class="project-details">Money Collected: $3000</div>
+                <div class="project-details">Progress: 90%</div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: 90%;"></div>
+                </div>
+                <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
+            </div>
+        </div>
+        <button class="new-project-button" onclick="window.location.href='../CreatorFiles/NewProjectMenu.html'">New Project</button>
+        
+    </div>
 </body>
 </html>
