@@ -168,6 +168,10 @@
             font-size: 18px;
         }
 
+        .title_section {
+            text-align: center;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
         .faq_item button {
             background-color: #333;
             color: white;
@@ -178,10 +182,17 @@
             cursor: pointer;
         }
 
-        .title_section {
-            text-align: center;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        /* Estilos para las respuestas, inicialmente ocultas */
+        .faq_answer {
+            display: none;
+            margin-top: 10px;
+            padding: 10px;
+            background-color: #F0F0F0;
+            border-left: 3px solid #A0D5C3;
+            border-radius: 8px;
+            font-size: 16px;
         }
+
 
         .title{
             font-size: 50px;
@@ -237,24 +248,38 @@
         <div class="faq_container">
             <div class="faq_item">
                 <span>How do I activate notifications?</span>
-                <button>+</button>
+                <button onclick="toggleFAQ(this)">+</button>
             </div>
+            <div class="faq_answer">
+                <p>You can activate notifications by going to Settings and enabling them in the Notifications section.</p>
+            </div>
+
             <div class="faq_item">
                 <span>How do I donate?</span>
-                <button>+</button>
+                <button onclick="toggleFAQ(this)">+</button>
             </div>
+            <div class="faq_answer">
+                <p>You can donate through our platform using PayPal, credit card, or other payment methods available on the Donations page.</p>
+            </div>
+
             <div class="faq_item">
                 <span>Requirements to publish my project</span>
-                <button>+</button>
+                <button onclick="toggleFAQ(this)">+</button>
             </div>
+            <div class="faq_answer">
+                <p>To publish your project, you need to submit an application with details about your project, and it must meet our guidelines.</p>
+            </div>
+
             <div class="faq_item">
                 <span>How do I request refunds?</span>
-                <button>+</button>
+                <button onclick="toggleFAQ(this)">+</button>
+            </div>
+            <div class="faq_answer">
+                <p>Refund requests can be made by contacting our support team within 14 days of the transaction.</p>
             </div>
         </div>
         
     </div>
-
 
     <script src="CustomerSupport_Script_1.js"></script>
 </body>
