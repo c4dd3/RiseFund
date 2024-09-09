@@ -5,10 +5,148 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <style>
-        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .navigation_bar {    
+            position: relative;
+            width: 100%;
+            height: 70px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px #e2e2e2af;
+        }
+
+        .container {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            height: 90vh;
+            width: 100%;
+            padding: 0 3%;
+            background-color: #F0F0F0;
+        }
+
+        .leftContainer {
+            background-color: #ffffff;
+            padding: 30px;
+            width: 35%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .title {
+            font-size: 28px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        .textfield {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 13px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+        }
+
+        .button_ok {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            background-color: #3697FF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 13px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .button_ok:hover {
+            background-color: #2878cc;
+        }
+
+        .RegistroLink {
+            margin-top: 15px;
+            display: block;
+            text-decoration: none;
+            color: #3697FF;
+            font-size: 13px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            transition: color 0.3s;
+        }
+
+        .RegistroLink:hover {
+            color: #2878cc;
+        }
+
+        .rightContainer {
+            width: 55%;
+            background-color: #A0D5C3;
+            padding: 20px;
+            border-radius: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .terms {
+            margin-top: 15px;
+            font-size: 12px;
+            font-family: 'Lucida Sans', Geneva, sans-serif;
+            text-align: justify;
+            color: #555;
+        }
+
+        .terms input[type="checkbox"] {
+            margin-right: 10px;
+        }
+
+        .image {
+            height: 100%;
+            width: 100%;
+            object-fit: cover;
+            border-radius: 15px; /* Ensures the image fits within the container with rounded corners */
+        }
     </style>
 </head>
 <body>
-    
+    <div class="navigation_bar"></div>
+    <div class="container">
+        <div class="leftContainer">
+            <h1 class="title">Create your account</h1>
+            <form action="/signup" method="post">
+                <input type="text" name="name" class="textfield" placeholder="Name" required><br>
+                <input type="text" name="last_name" class="textfield" placeholder="Last Name" required><br>
+                <input type="email" name="email" class="textfield" placeholder="Email" required><br>
+                <input type="password" name="password" class="textfield" placeholder="Password" required><br>
+                <input type="password" name="confirm_password" class="textfield" placeholder="Confirm Password" required><br>
+
+                <div class="terms">
+                    <label>
+                        <input type="checkbox" name="terms" required>
+                        <b>Accept Terms and Conditions.</b><br>
+                        By registering, you will be agreeing to the information you provide being used at the discretion of the developers of the page and the page itself.
+                    </label>
+                </div>
+
+                <input type="submit" value="Sign Up" class="button_ok">
+            </form>
+            <a href="LogIn.html" class="RegistroLink">Log In</a>
+        </div>
+        <div class="rightContainer">
+            <img src="SignUpImage.jpg" class="image">
+        </div>
+    </div>
 </body>
 </html>
