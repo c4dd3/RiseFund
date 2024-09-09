@@ -10,6 +10,24 @@
             padding: 0;
             box-sizing: border-box;
         }
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 200px;
+            height: 60px;
+            margin-top: 5px;
+            margin-left: 30px;
+            border-radius: 10px;
+        }
+        
+        .logo span {
+            font-weight: bold;
+            font-size: 25px;
+            margin-left: 10px;
+        }
 
         .navigation_bar {    
             position: relative;
@@ -121,7 +139,11 @@
     </style>
 </head>
 <body>
-    <div class="navigation_bar"></div>
+    <div class="navigation_bar">
+        <div class="logo">
+            <img src="../Logo.jpg" alt="Logo">
+        </div>
+    </div>
     <div class="container">
         <div class="leftContainer">
             <h1 class="title">Create your account</h1>
