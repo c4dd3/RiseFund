@@ -3,10 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RiseFund Menu</title>
-    
+    <title>RISEFUND About</title>
     <style>
-        /*Barra de navegacion*/
         .navigation_bar{    
             position: relative;
             width: device-width;
@@ -25,6 +23,8 @@
             float: right;
             margin-right: calc(1%);
             margin-top: 15px;
+            
+            
         }
         .nav_item{
             margin: 0px 15px;
@@ -62,55 +62,47 @@
         .dropdown_menu a:hover {
             background-color: #e2e2e2;
         }
-        /*Barra de navegacion*/
 
-        /*Contenedor Global*/
-        .container{
-            display: block;
-            justify-content: space-between;
-            height: 90vh;
-            width: 100%;
+        .logo {
+            height: 50px;
         }
-        .Titulo{
-            margin-left: calc(5%);
-            margin-top: 4vh;
-            color: black;
-            font-family: 'Baskerville', 'Baskerville Old Face', Garamond, 'Times New Roman', serif;
-            font-style: italic;
-            font-size: 50px;
-        }
-        .ProjectsDisplay{
-            display: grid;
-            margin: 10px;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px; 
-            padding: 10px; 
-            height: 90vh;
-            width: 100%;
-            
-        }
-        .InfoPanel{
-            display: block;
-            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+
+        .about_section {
             padding: 20px;
             text-align: center;
-            border-radius: 7px;
-            height: 600px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
 
-  
-  </style>
-</head>
+        .title{
+            font-size: 50px;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            margin-top: 15vh;
+            margin-bottom: 5vh;
+        }
 
+        .logo {
+            width: 80px;
+            height: auto;
+        }
+
+        .text {
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #333333;
+        }
+
+      
+    </style>
+</head>
 <body>
-    
-    <!-- Barra de navegacion -->
     <div class="navigation_bar">
         <div class="navigation_bar_content_container">
             <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
             <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
             <a href="#" class="nav_item">Customer support</a>
-            <a href="../AdminFiles/AdministratorMenu.html" class="nav_item">About</a>
+            <a href="#" class="nav_item">About</a>
             <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
             <nav>
                 <div class="dropdown_menu" id="dropdownMenu">
@@ -118,31 +110,20 @@
                     <!--<a href="#">Option 2</a>-->
                 </div>
             </nav>
-        </div>
     </div>
-    <script src="ContributorMenu_Script_1.js"></script>
 
-    <!-- Barra de navegacion -->
-    
-    <div class="container">
-        
-        <h1 class="Titulo">Explore projects of your interest</h1> 
-
-        <div class="ProjectsDisplay"> 
-      
-            <div class="InfoPanel">Columna 1</div>
-            <div class="InfoPanel">Columna 2</div>
-            <div class="InfoPanel">Columna 3</div>
-            <div class="InfoPanel">Columna 4</div>
-            <div class="InfoPanel">Columna 5</div>
-            <div class="InfoPanel">Columna 6</div>
-        
-        </div>
-    
-    
+    <!-- About Section -->
+    <div class="about_section">
+        <h1 class="title">About</h1>
+        <img src="path_to_logo_image" class="logo" alt="RiseFund Logo">
+        <p class="text">
+            Our platform's primary goal is to facilitate the realization of small projects through the support of committed individuals and their donations. We strongly believe in the power of community to drive ideas that might not otherwise have the opportunity to come to life. By connecting creators and entrepreneurs with individuals who share their vision and are willing to contribute to their success, we aim to bring meaningful projects to fruition.
+            <br><br>
+            Every donation counts and makes a difference, which is why we prioritize transparency at every step. From the moment a contribution is made to the project's completion, we ensure that every part of the process is clear, accessible, and completely transparent to all involved. Our commitment is to be the bridge that connects great ideas with the resources needed to bring them to life, always ensuring integrity and trust.
+        </p>
     </div>
-    
+
+
+    <script src="About_Script_1.js"></script>
 </body>
-
-
 </html>
