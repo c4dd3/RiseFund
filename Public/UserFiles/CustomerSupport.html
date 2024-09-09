@@ -5,71 +5,102 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>RISEFUND About</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f4f4f4;
+        }
+
         .navigation_bar{    
             position: relative;
-            width: device-width;
+            width: 100%;
             height: 80px;
             margin: -8px;
             margin-bottom: 0px;
             background-color: #A0D5C3;
             box-shadow: 0px 5px #e2e2e2af;
-            box-align: left; 
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
         }
-        .navigation_bar_content_container{
-            position: relative;
-            width: fit-content;
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            width: 200px;
             height: 60px;
-            margin: 0px;
-            float: right;
-            margin-right: calc(1%);
-            margin-top: 15px;
-            
-            
+            margin-top: 5px;
+            margin-left: 30px;
+            border-radius: 10px;
         }
+        
+        .logo span {
+            font-weight: bold;
+            font-size: 25px;
+            margin-left: 10px;
+        }
+
+        .navigation_bar_content_container{
+            display: flex;
+            align-items: center;
+        }
+        
         .nav_item{
-            margin: 0px 15px;
-            padding: 0px 10px;
+            margin: 0 15px;
+            padding: 0 10px;
             color: #000000;
             text-decoration: none;
-            font-size: 25px;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+            font-size: 20px;
         }
+
         .hamburgerButton {
             background-color: #A0D5C3;
             font-size: 25px;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             border: none;
             cursor: pointer;
         }
+
         .dropdown_menu {
             display: none;
             position: absolute;
             top: 65px;
             right: 0;
-            background-color: #A0D5C3;
+            background-color: #FFFFFF;
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.1);
             border-radius: 5px;
             z-index: 1;
         }
+
         .dropdown_menu a {
             display: block;
             padding: 10px 20px;
             text-decoration: none;
             color: #333;
-            font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
             font-size: 15px;
         }
+
         .dropdown_menu a:hover {
             background-color: #e2e2e2;
         }
+
 
   /* Flexbox layout for the form and FAQ */
   .content {
             display: flex;
             justify-content: space-between;
-            margin: 10px auto;
+            margin: 5px auto;
             width: 80%;
             align-items: flex-start;
+            
         }
 
         .form_container {
@@ -148,7 +179,6 @@
         }
 
         .title_section {
-            padding: 20px;
             text-align: center;
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
         }
@@ -156,27 +186,32 @@
         .title{
             font-size: 50px;
             font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-            margin-top: 15vh;
+            margin-top: 5vh;
             margin-bottom: 5vh;
         }
       
     </style>
 </head>
 <body>
-    <div class="navigation_bar">
-        <div class="navigation_bar_content_container">
-            <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
-            <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
-            <a href="../UserFiles/CustomerSupport.html" class="nav_item">Customer support</a>
-            <a href="../UserFiles/About.html" class="nav_item">About</a>
-            <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
-            <nav>
-                <div class="dropdown_menu" id="dropdownMenu">
-                    <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
-                    <!--<a href="#">Option 2</a>-->
-                </div>
-            </nav>
-    </div>
+    <header class="navbar">
+        <div class="navigation_bar">
+            <div class="logo">
+                <img src="../Logo.jpg" alt="Logo">
+            </div>
+            <div class="navigation_bar_content_container">
+                <a href="../CreatorFiles/CreatorMenu.html" class="nav_item">Creators</a>
+                <a href="../ContributorFiles/ContributorMenu.html" class="nav_item">Contributors</a>
+                <a href="../UserFiles/CustomerSupport.html" class="nav_item">Customer Support</a>
+                <a href="../UserFiles/About.html" class="nav_item">About</a>
+                <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
+                <nav>
+                    <div class="dropdown_menu" id="dropdownMenu">
+                        <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                    </div>
+                </nav>
+            </div>
+        </div>
+    </header>
 
     <div class="title_section">
         <h1 class="title">Customer Support</h1>
