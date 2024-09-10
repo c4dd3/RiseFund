@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RiseFund Admin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+        }
+
+        body {
+            background-color: #f3f3f3;
+        }
+
+        /* Navigation bar */
+        .navigation_bar {
+            position: relative;
+            width: 100%;
+            height: 80px;
+            background-color: #A0D5C3;
+            box-shadow: 0px 5px 10px #e2e2e2af;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .title {
+            font-family: 'Lucida Calligraphy', serif;
+            font-size: 40px;
+            font-weight: bold;
+            color: #3697FF;
+            text-decoration: none;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+            width: 95%;
+            min-height: 80vh;
+        }
+
+        /* Title inside the container */
+        .header {
+            font-size: 32px;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .form-container {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            padding: 10px;
+            gap: 20px;
+        }
+
+        .form-section {
+            width: 35%;
+            background-color: #f0f0f0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .form-section label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .form-section input, .form-section select {
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            width: calc(100% - 24px); /* Adjust width to account for padding */
+            margin-bottom: 15px;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        .button-container {
+            width: 95%;
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+        .button-container button {
+            flex: 1;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .accept-btn {
+            background-color: #4CAF50; 
+        }
+
+        .accept-btn:hover {
+            background-color: #45a049;
+        }
+
+        .decline-btn {
+            background-color: #f44336; 
+        }
+
+        .decline-btn:hover {
+            background-color: #da190b;
+        }
+
+        .project-list {
+            flex: 1;
+            padding: 20px;
+            background-color: #f0f0f0;
+            border-radius: 15px;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+            max-width: 70%;
+            height: auto;
+        }
+
+        .user-table {
+            width: 100%;
+            margin-top: 20px;
+            border-collapse: collapse;
+            text-align: left;
+            background-color: #ffffff;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .user-table th, .user-table td {
+            padding: 12px 15px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .user-table th {
+            background-color: #f0f0f0;
+        }
+
+        .user-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .user-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .user-table td {
+            font-size: 14px;
+        }
+
+        .textarea{
+            resize: none;
+            width: 94%;
+            height: 100px;
+            padding: 12px 20px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            background-color: #f8f8f8;
+            font-size: 16px;
+            resize: none;
+            font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <div class="navigation_bar">
+        <a href="../AdminFiles/AdministratorMenu.html" class="title">RiseFund admin</a>
+    </div>
+
+    <!-- Main container for the admin UI -->
+    <div class="container">
+        <!-- Title is now inside the container -->
+        <div class="header">Donation Administration</div>
+
+        <div class="form-container">
+            <!-- Form Section for Project Info -->
+            <div class="form-section">
+                <label for="donationID">Donation ID</label>
+                <input id="donationID" type="text" placeholder="Donation ID" value="0987654321" disabled>
+
+                <label for="amountDonated">Amount Donated</label>
+                <input id="amountDonated" type="text" placeholder="$0000.00" disabled>
+
+                <label for="creatorID">Contributor ID/User ID</label>
+                <input id="creatorID" type="text" placeholder="Contributor ID/User ID" value="1234567890" disabled>
+
+                <label for="donationAdministration">Donation Administration</label>
+                <div class="button-container">
+                    <button class="accept-btn">Accept</button>
+                    <button class="decline-btn">Decline</button>
+                </div>
+
+                <label for="projectID">Project ID</label>
+                <input id="projectID" type="text" placeholder="Project ID" value="0987654321" disabled>
+
+                <label for="Details">Details</label>
+                <textarea id="Details" class="textarea" placeholder="This is an example of a description that the creator gives to inform the contributor about the whereabouts of the project. " disabled></textarea>
+            </div>
+
+            <!-- Smaller project list section -->
+            <div class="project-list">
+                <table class="user-table">
+                    <thead>
+                        <tr>
+                            <th>Project ID</th>
+                            <th>Creator ID</th>
+                            <th>Progress</th>
+                            <th>Amount Gathered</th>
+                            <th>Contributors</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>0987654321</td>
+                            <td>1234567890</td>
+                            <td>%000</td>
+                            <td>$0000.00</td>
+                            <td>0</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
