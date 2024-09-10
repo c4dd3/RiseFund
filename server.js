@@ -57,6 +57,26 @@ app.get('/getUserRegisters', async (req, res) => {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
 });
+//get Project Registers
+app.get('/getProjectRegisters', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('select TOP 20  * FROM [REGISTER_PROJECT] ORDER BY 1 desc');
+        res.json(result.recordset);  // Send data as JSON
+    } catch (err) {
+        res.status(500).send('Error retrieving users: ' + err.message);
+    }
+});
+//get Donation Registers
+app.get('/getDonationRegisters', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('select TOP 20  * FROM [REGISTER_Donation] ORDER BY 1 desc');
+        res.json(result.recordset);  // Send data as JSON
+    } catch (err) {
+        res.status(500).send('Error retrieving users: ' + err.message);
+    }
+});
 //GetLastProjectID
 app.get('/GetLastProjectID', async (req, res) => {
     try {
@@ -90,7 +110,7 @@ app.get('/ProjectsInfo', async (req, res) => {
     }
     
 });
-
+//
 app.post('/ProjectsCreatorInfo', async (req, res) => {
     const userID = req.body.userID;  // Obtener el userID desde el cuerpo de la solicitud
 
@@ -172,6 +192,30 @@ app.post('/AddProject', async (req, res) => {
         res.json({ message: err.message });
     }
 });
+// Add Donation / Crear Donation
+app.post('/AddDonation', async (req, res) => {
+    console.log(req.body);
+    const { UserID, ProjectID, Ammount, Comment, Status, Date, Time} = req.body;
+    try {
+        await sql.connect(config);
+        const query = `
+            INSERT INTO [DONATION] (UserID, ProjectID, Ammount, Comment, [Status], Date, [Time])
+            VALUES (@UserID, @ProjectID, @Ammount, @Comment, @Status, @Date, @Time)
+        `;
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, parseInt(UserID, 10));
+        request.input('ProjectID', sql.Int, parseInt(ProjectID, 10));
+        request.input('Ammount', sql.Decimal, Ammount);
+        request.input('Comment', sql.NVarChar, Comment);
+        request.input('Status', sql.Int, parseInt(Status,10));
+        request.input('Date', sql.Date, Date);
+        request.input('Time', sql.NVarChar, Time);
+        await request.query(query);
+        res.json({ message: 'Donatation created successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
 
 //Register User Activity
 app.post('/AddRegisterUserActivity', async (req, res) => {
@@ -216,30 +260,6 @@ app.post('/AddRegisterProjectActivity', async (req, res) => {
         res.json({ message: err.message });
     }
 });
-
-// Filtrar Proyectos por ID
-app.post('/FilterProject', async (req, res) => {
-
-    const   projectID = req.params.id;
-
-    try {
-        // Conectar a la base de datos
-        await sql.connect(config);
-        
-        // Consulta para obtener el proyecto por ID
-        const result = await sql.query`SELECT * FROM [PROJECT] WHERE ID = ${projectID}`;
-        
-        if (result.recordset.length > 0) {
-            res.json(result.recordset[0]); // Devolver el primer proyecto encontrado
-        } else {
-            res.status(404).json({ error: 'Project not found' });
-        }
-    } catch (err) {
-        console.error('Error querying the database:', err.stack);
-        res.status(500).json({ error: 'Internal server error' });
-    }
-});
-
 
 // Start the server
 app.listen(port, () => {

@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <h1 class="Titulos">${project.Title}</h1>
                     <div class="Info">
                         <p>USD Collected: $${project.Collected}</p>
-                        <p>Progress: ${percentage}%</p>
+                        <p>Progress: ${project.Percentage}%</p>
                         <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
                         <div class="ButtonContainer">
                             <a href="ContributorDetails.html?id=${project.ID}" class="btn">Details</a>

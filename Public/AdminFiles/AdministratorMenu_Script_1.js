@@ -12,10 +12,12 @@ function ProjectsManage(){
 }
 document.addEventListener('DOMContentLoaded', () => {
     fetchUserRecords();
+    fetchProjects();
+    fetchDonations();
 });
 async function fetchUserRecords() {
     try {
-        const response = await fetch('/getUserRegisters'); // Ruta del servidor para obtener registros
+        const response = await fetch('/getUserRegisters');
         if (!response.ok) {
             throw new Error('Network response was not ok');
         }
@@ -37,5 +39,67 @@ function displayRecordsUSER(records) {
         recordElement.className = 'record'; 
         recordElement.innerHTML = `<strong>ID:</strong> ${record.ID} ${formattedDate} ${formattedTime} <strong> Detail:</strong> ${record.Detail} `;
         container.appendChild(recordElement);
+    });
+}
+async function fetchProjects() {
+    try {
+        const response = await fetch('/getProjectRegisters');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const projects = await response.json();
+        displayProjects(projects);
+    } catch (err) {
+        console.error('Error fetching projects:', err);
+    }
+}
+function displayProjects(projects) {
+    const container = document.getElementById('projectRegisterList');
+    container.innerHTML = '';  // Limpiar el contenedor antes de agregar nuevos elementos
+
+    projects.forEach(project => {
+        const date = new Date(project.Date);
+        const formattedDate = date.toLocaleDateString(); 
+        const time = project.Time;
+        const projectElement = document.createElement('div');
+        projectElement.className = 'project';
+        projectElement.innerHTML = `
+           <strong>ID:</strong> ${project.ID} ${formattedDate} ${time} <strong>Detail:</strong> ${project.Detail} Num: ${project.ProjectID}
+        `;
+        container.appendChild(projectElement);
+    });
+}
+async function fetchDonations() {
+    try {
+        const response = await fetch('/getDonationRegisters');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+
+        const donations = await response.json();
+        displayDonations(donations);
+    } catch (err) {
+        console.error('Error fetching donations:', err);
+    }
+}
+function displayDonations(donations) {
+    const container = document.getElementById('donationRegisterList');
+    container.innerHTML = '';  // Limpiar el contenedor antes de agregar nuevos elementos
+
+    donations.forEach(donation => {
+        // Formatear la fecha
+        const date = new Date(donation.Date);
+        const formattedDate = date.toLocaleDateString();  // Por ejemplo, '09/09/2024'
+
+        // Formatear la hora
+        const formattedTime = donation.Time;
+
+        // Crear el elemento HTML para la donación
+        const donationElement = document.createElement('div');
+        donationElement.className = 'donation';
+        donationElement.innerHTML = `
+            <strong>ID:</strong> ${donation.ID} ${formattedDate} ${formattedTime} <strong>Donation ID:</strong> ${donation.DonationID} <strong>Detail:</strong> ${donation.Detail} 
+        `;
+        container.appendChild(donationElement);
     });
 }

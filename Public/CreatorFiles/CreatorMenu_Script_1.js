@@ -41,13 +41,13 @@ document.addEventListener('DOMContentLoaded', async () => {
             const projectPanel = `
                 <div class="project">
                 <img src="ProjectImage.jpg" alt="Project 1 Image" class="project-image">
-                <div class="project-title">Project 1</div>
-                <div class="project-details">Money Collected: $1000</div>
-                <div class="project-details">Progress: 50%</div>
-                <div class="progress-bar">
-                    <div class="progress" style="width: 50%;"></div>
+                <div class="project-title">${project.Title}</div>
+                <div class="Info">
+                        <p>USD Collected: $${project.Collected}</p>
+                        <p>Progress: ${percentage}%</p>
+                        <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
+                        <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
                 </div>
-                <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
             </div>
             `;
             // Agregar el panel al contenedor
