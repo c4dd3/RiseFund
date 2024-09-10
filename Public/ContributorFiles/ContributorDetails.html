@@ -328,6 +328,8 @@
                         Objetivo: Nuestro objetivo es recaudar fondos para cubrir los gastos médicos de Max y darle una segunda oportunidad de vivir una vida saludable y feliz. La meta de la campaña es $2,500, lo que garantizará que Max reciba el mejor cuidado posible y una rehabilitación completa.
                         Cómo Puedes Ayudar: Cada donación cuenta, sin importar el monto. Incluso con pequeñas contribuciones, puedes hacer una gran diferencia en la vida de Max. Además, si no puedes donar, te invitamos a compartir esta campaña con amigos y familiares para que más personas puedan sumarse a esta causa.
                     </p>
+                    <p id="projectId">Project ID: </p>
+                    <script src="ContributorDetails_Script_1.js"></script>
                 </div>
                 <p class="Authors">Authors...</p>
 
@@ -359,15 +361,7 @@
                     <textarea id="Comment" class="Comentario" placeholder="Share your thoughts with the author/authors" maxlength="500"></textarea>
                     <p id="charCount">0/500 characters</p>
                     <!--Contador de caracteres-->
-                    <script>
-                        const commentBox = document.getElementById('Comment');
-                        const charCount = document.getElementById('charCount');
-
-                        commentBox.addEventListener('input', () => {
-                            const currentLength = commentBox.value.length;
-                            charCount.textContent = `${currentLength}/500 characters`;
-                        });
-                    </script>
+                    <script src="ContributorDetails_Script_1.js"></script>
 
                     <div class="DonateContainer">
                         <input id="AmmountToDonate" class="AmmountInputText" placeholder="$0000.00"></input>
@@ -382,7 +376,6 @@
 
 
     </div>
-
 </body>
 
 

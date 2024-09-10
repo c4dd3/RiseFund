@@ -10,24 +10,32 @@ function ProjectsManage(){
     console.log("Admin on ProjectsManage");
     window.location.href = 'AdministratorProjects.html';
 }
-/*
-async function loadUsers() {
+document.addEventListener('DOMContentLoaded', () => {
+    fetchUserRecords();
+});
+async function fetchUserRecords() {
     try {
-        const response = await fetch('/FUNCTION NAME');
+        const response = await fetch('/getUserRegisters'); // Ruta del servidor para obtener registros
         if (!response.ok) {
-            throw new Error('Network response was not ok.');
+            throw new Error('Network response was not ok');
         }
-        const result = await response.json();
-        const li = document.createElement('li');
-        li.textContent = `${table.atribute} ${table.atribute} (${table.atribute}) ${table.atribute}`;
-        console.log(li);
-    } catch (error) {
-        console.error('Error fetching users:', error);
+
+        const records = await response.json(); 
+        displayRecordsUSER(records);
+    } catch (err) {
+        console.error('Error fetching records:', err);
     }
 }
-*/
-
-
-
-// Load users when the page is loaded
-window.onload = loadUsers;
+function displayRecordsUSER(records) {
+    const container = document.getElementById('userRegisterList');
+    container.innerHTML = '';
+    records.forEach(record => {
+        const date = new Date(record.Date);
+        const formattedDate = date.toLocaleDateString(); 
+        const formattedTime = record.Time;  
+        const recordElement = document.createElement('div');
+        recordElement.className = 'record'; 
+        recordElement.innerHTML = `<strong>ID:</strong> ${record.ID} ${formattedDate} ${formattedTime} <strong> Detail:</strong> ${record.Detail} `;
+        container.appendChild(recordElement);
+    });
+}

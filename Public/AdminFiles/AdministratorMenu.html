@@ -54,10 +54,10 @@
             text-align: center;
         }
         .registerContainer{
-            display: flex;
+            display: grid;
             margin-top: -15px;
             margin-left: 2.5%;
-            justify-content: center; /* Centra los elementos horizontalmente */
+            justify-content: left; /* Centra los elementos horizontalmente */
             align-items: center; /* Centra los elementos verticalmente */
             background-color: #ffffff;
             height: 70vh;
@@ -86,9 +86,8 @@
     <div class="mainContainer">
         <div class="subContainer">
             <h class="title-2">User Register</h>
-            <div class="registerContainer">
-                <ul id="userList"></ul>
-                <script src="AdministratorMenu_Script_1.js"></script>
+            <div id="userRegisterList" class="registerContainer">
+                
             </div>
             <button class="button" onclick="UserManage()">Manage</button>
         </div>

@@ -1,24 +1,8 @@
-/*
-app.get('/function name', async (req, res) => {
-    try {
-        await sql.connect(config);
-        const result = await sql.query('SELECT * FROM [TABLE]');
-        res.json(result.recordset);  // Send data as JSON
-    } catch (err) {
-        res.status(500).send('Error retrieving users: ' + err.message);
-    }
-});
-
-*/
-
-
 const express = require('express');
 const sql = require('mssql');
 const path = require('path');
-
 const app = express();
 const port = 3000;
-
 // Database configuration
 const config = {
     user: 'sa',
@@ -30,13 +14,10 @@ const config = {
         trustServerCertificate: true  
     }
 };
-
 // Middleware to serve static files
 app.use(express.static(path.join(__dirname, 'public')));
-
 // Middleware para procesar cuerpos de solicitudes JSON
 app.use(express.json());
-
 // Route to test database connection
 app.get('/test-connection', async (req, res) => {
     try {
@@ -46,7 +27,6 @@ app.get('/test-connection', async (req, res) => {
         res.status(500).send('Database connection failed: ' + err.message);
     }
 });
-
 // Route to get list of users
 app.get('/users', async (req, res) => {
     try {
@@ -57,7 +37,6 @@ app.get('/users', async (req, res) => {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
 });
-
 //ConfirmExistingEmail
 app.get('/confirmEmail', async (req, res) => {
     try {
@@ -68,6 +47,68 @@ app.get('/confirmEmail', async (req, res) => {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
 });
+//get User Registers
+app.get('/getUserRegisters', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const result = await sql.query('select TOP 20  * FROM [REGISTER_USER] ORDER BY 1 desc');
+        res.json(result.recordset);  // Send data as JSON
+    } catch (err) {
+        res.status(500).send('Error retrieving users: ' + err.message);
+    }
+});
+//GetLastProjectID
+app.get('/GetLastProjectID', async (req, res) => {
+    try {
+        await sql.connect(config);
+
+        const result = await sql.query('SELECT MAX(ID) AS LastProjectID FROM PROJECT');
+        
+        if (result.recordset.length > 0) {
+            // Envía el ID más grande de vuelta al cliente
+            res.json({ LastProjectID: result.recordset[0].LastProjectID });
+        } else {
+            res.json({ LastProjectID: null });  // Si no hay proyectos, devolver null
+        }
+    } catch (err) {
+        res.status(500).send('Error retrieving the last project ID: ' + err.message);
+    }
+});
+
+
+
+
+// Endpoint para obtener los proyectos
+app.get('/ProjectsInfo', async (req, res) => {
+
+    try{
+        await sql.connect(config);
+        const result = await sql.query('SELECT * FROM [PROJECT]');
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving projects list: ' + err.message)
+    }
+    
+});
+
+app.post('/ProjectsCreatorInfo', async (req, res) => {
+    const userID = req.body.userID;  // Obtener el userID desde el cuerpo de la solicitud
+
+    try {
+        await sql.connect(config);
+        const query = 'SELECT * FROM [PROJECT] WHERE UserID = @UserID';
+        
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, userID);  // Inyectar el userID de manera segura
+
+        const result = await request.query(query);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving projects list: ' + err.message);
+    }
+});
+
+
 
 //AddUser
 app.post('/AddUser', async (req, res) => {
@@ -101,23 +142,17 @@ app.post('/AddUser', async (req, res) => {
 
 //AddProject
 app.post('/AddProject', async (req, res) => {
-    console.log(req.body);  // Muestra el cuerpo de la solicitud en la consola para verificar el contenido
-    
+    console.log(req.body);
     const { UserID, Title, Description, ContributionGoal, Start, End, PrimaryContact, 
-        SecondaryContact, DepositMethod, AccountNumber, Status} = req.body;  // Desestructuración de los datos recibidos
-    
+        SecondaryContact, DepositMethod, AccountNumber, Status, Collected} = req.body;
     try {
         await sql.connect(config);
-
-
         const query = `
             INSERT INTO [PROJECT] (UserID, Title, [Description], ContributionGoal, [Start], [End], PrimaryContact, 
-            SecondaryContact, DepositMethod, AccountNumber, [Status])
+            SecondaryContact, DepositMethod, AccountNumber, [Status], Collected)
             VALUES (@UserID, @Title, @Description, @ContributionGoal, @Start, @End, @PrimaryContact, 
-        @SecondaryContact, @DepositMethod, @AccountNumber, @Status)
+        @SecondaryContact, @DepositMethod, @AccountNumber, @Status, @Collected)
         `;
-
-        // Prepara e inyecta los valores de manera segura
         const request = new sql.Request();
         request.input('UserID', sql.Int, parseInt(UserID, 10));
         request.input('Title', sql.NVarChar, Title);
@@ -130,12 +165,78 @@ app.post('/AddProject', async (req, res) => {
         request.input('DepositMethod', sql.NVarChar, DepositMethod);
         request.input('AccountNumber', sql.NVarChar, AccountNumber);
         request.input('Status', sql.Int, parseInt(Status,10));
-        
+        request.input('Collected', sql.Decimal, Collected);
         await request.query(query);
-
         res.json({ message: 'Project created successfully!' });
     } catch (err) {
         res.json({ message: err.message });
+    }
+});
+
+//Register User Activity
+app.post('/AddRegisterUserActivity', async (req, res) => {
+    console.log(req.body);
+    const { UserID, Detail, Date, Times } = req.body;
+    try {
+        await sql.connect(config);
+        const query = `
+            INSERT INTO [REGISTER_USER] (UserID, Detail, Date, [Time])
+            VALUES (@UserID, @Detail, @Date, @Times)
+        `;
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, parseInt(UserID, 10));
+        request.input('Detail', sql.NVarChar, Detail);
+        request.input('Date', sql.Date, Date);
+        request.input('Times', sql.NVarChar, Times);
+        await request.query(query);
+        res.json({ message: 'Registered user activity successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
+//Register Project Activity
+app.post('/AddRegisterProjectActivity', async (req, res) => {
+    console.log(req.body);
+    const { ProjectID, Detail, Date, Times } = req.body;
+    
+    try {
+        await sql.connect(config);
+        const query = `
+            INSERT INTO [REGISTER_PROJECT] (ProjectID, Detail, Date, [Time])
+            VALUES (@ProjectID, @Detail, @Date, @Times)
+        `;
+        const request = new sql.Request();
+        request.input('ProjectID', sql.Int, parseInt(ProjectID, 10));
+        request.input('Detail', sql.NVarChar, Detail);
+        request.input('Date', sql.Date, Date);
+        request.input('Times', sql.NVarChar, Times);
+        await request.query(query);
+        res.json({ message: 'Registered user activity successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
+
+// Filtrar Proyectos por ID
+app.post('/FilterProject', async (req, res) => {
+
+    const   projectID = req.params.id;
+
+    try {
+        // Conectar a la base de datos
+        await sql.connect(config);
+        
+        // Consulta para obtener el proyecto por ID
+        const result = await sql.query`SELECT * FROM [PROJECT] WHERE ID = ${projectID}`;
+        
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]); // Devolver el primer proyecto encontrado
+        } else {
+            res.status(404).json({ error: 'Project not found' });
+        }
+    } catch (err) {
+        console.error('Error querying the database:', err.stack);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 
@@ -144,3 +245,4 @@ app.post('/AddProject', async (req, res) => {
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
+
