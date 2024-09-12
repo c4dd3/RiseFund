@@ -187,21 +187,52 @@
             resize: none;
             font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
         }
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-bar {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            margin-right: 10px;
+        }
+        .search-btn {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+
     <div class="navigation_bar">
         <a href="../AdminFiles/AdministratorMenu.html" class="title">RiseFund admin</a>
     </div>
 
-    <!-- Main container for the admin UI -->
+ 
     <div class="container">
-        <!-- Title is now inside the container -->
+        
         <div class="header">Donation Administration</div>
 
+        <div class="search-bar-container">
+            <input id="searchBar" class="search-bar" type="text" placeholder="Search by Donation ID">
+            <button class="search-btn">Search</button>
+        </div>
+
         <div class="form-container">
-            <!-- Form Section for Project Info -->
+
             <div class="form-section">
                 <label for="donationID">Donation ID</label>
                 <input id="donationID" type="text" placeholder="Donation ID" value="0987654321" disabled>

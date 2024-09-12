@@ -11,11 +11,9 @@
             box-sizing: border-box;
             font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
         }
-
         body {
             background-color: #f3f3f3;
         }
-
         /* Navigation bar */
         .navigation_bar {
             position: relative;
@@ -27,7 +25,6 @@
             align-items: center;
             padding: 0 20px;
         }
-
         .title {
             font-family: 'Lucida Calligraphy', serif;
             font-size: 40px;
@@ -35,7 +32,6 @@
             color: #3697FF;
             text-decoration: none;
         }
-
         /* Container for the user admin section */
         .container {
             display: flex;
@@ -48,16 +44,14 @@
             border-radius: 15px;
             box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
             width: 95%;
-            height: 80vh;
+            height: 75vh;
         }
-
         .header {
             font-size: 32px;
             font-weight: bold;
             margin-top: 10px;
             margin-bottom: 10px;
         }
-
         .form-container {
             display: flex;
             justify-content: space-between;
@@ -65,7 +59,6 @@
             padding: 10px;
             gap: 20px;
         }
-
         .form-section {
             width: 35%;
             background-color: #f0f0f0;
@@ -73,13 +66,11 @@
             border-radius: 15px;
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
         }
-
         .form-section label {
             display: block;
             font-weight: bold;
             margin-bottom: 8px;
         }
-
         .form-section input, .form-section select {
             padding: 12px;
             font-size: 16px;
@@ -89,11 +80,9 @@
             width: calc(100% - 24px); /* Adjust width to account for padding */
             margin-bottom: 15px;
         }
-
         select {
             cursor: pointer;
         }
-
         /* Table for displaying user data */
         .user-table {
             width: 100%;
@@ -105,50 +94,78 @@
             overflow: hidden;
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
         }
-
         .user-table th, .user-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #ddd;
         }
-
         .user-table th {
             background-color: #f0f0f0;
         }
-
         .user-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
-
         .user-table tr:hover {
             background-color: #f1f1f1;
         }
-
         .user-table td {
             font-size: 14px;
+        }
+        /* Search bar and button */
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .search-bar {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 100%;
+            max-width: 300px;
+            margin-right: 10px;
+        }
+        .search-btn {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .search-btn:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <!-- Navigation Bar -->
+    
     <div class="navigation_bar">
         <a href="../AdminFiles/AdministratorMenu.html" class="title">RiseFund admin</a>
     </div>
 
-    <!-- Main container for the admin UI -->
+    
     <div class="container">
         <div class="header">User Administration</div>
 
+        
+        <div class="search-bar-container">
+            <input id="searchBar" class="search-bar" type="text" placeholder="Search by User ID">
+            <button class="search-btn">Search</button>
+        </div>
+
         <div class="form-container">
-            <!-- Form Section for User Info -->
+            
             <div class="form-section">
                 <label for="userID">User ID</label>
-                <input id="userID" type="text" placeholder="User ID" value="1234567890" disabled>
+                <input id="userID" type="text" placeholder="User ID" value="" disabled>
 
                 <label for="firstName">First Name</label>
-                <input id="firstName" type="text" placeholder="First Name" value="FirstNameExample">
+                <input id="firstName" type="text" placeholder="First Name" value="" disabled>
 
-                <label for="lastName">Last Name</label>
-                <input id="lastName" type="text" placeholder="Last Name" value="LastNameExample">
+                <label for="lastName" >Last Name</label>
+                <input id="lastName" type="text" placeholder="Last Name" value="" disabled>
 
                 <label for="status">Status</label>
                 <select id="status">
@@ -158,7 +175,7 @@
                 </select>
 
                 <label for="email">Email</label>
-                <input id="email" type="email" placeholder="email@example.com" value="email.example@domain.ex" disabled>
+                <input id="email" type="email" placeholder="email@example.com" value="" disabled>
             </div>
 
             <!-- Table displaying the user list -->
@@ -173,18 +190,13 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1234567890</td>
-                            <td>FirstNameExample</td>
-                            <td>LastNameExample</td>
-                            <td>email.example@domain.ex</td>
-                            <td>Current Status</td>
-                        </tr>
+                    <tbody id="userTableBody">
+                        <!-- User data rows will be dynamically added here -->
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
+    <script src="AdministratorUser_Script_1.js"></script>
 </body>
 </html>

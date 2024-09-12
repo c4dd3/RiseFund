@@ -101,7 +101,6 @@
             height: auto;
             width: 100%;
         }
-
         .Titulo {
             margin-left: calc(10%);
             margin-top: 4vh;
@@ -119,7 +118,6 @@
             gap: 5vh;
             margin-top: 5vh;
         }
-
         .InfoPanel {
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
@@ -129,13 +127,11 @@
             width: auto;
             margin-right: 25px;
         }
-
         .image {
             height: auto;
             width: 100%;
             border-radius: 25px;
         }
-
         .DescriptionPanel {
             padding-top: 25px;
             padding-bottom: 25px;
@@ -148,23 +144,19 @@
             border-radius: 25px;
             margin-bottom: 3vh;
         }
-
         .Description {
             font-size: 20px;
             text-align: justify;
         }
-
         .Authors {
             font-size: 18px;
             text-align: justify;
         }
-
         /*Paneles de la derecha*/
         .InfoDatos {
             height: auto;
             width: 50vh;
         }
-
         .PrimerPanel {
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
@@ -173,42 +165,36 @@
             border-radius: 15px;
             margin-bottom: 20px;
         }
-
         .ProgressContainerText {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 10px;
         }
-
         .ProgressText, .AmountRaised {
             font-size: 25px;
             margin: 0;
         }
-
         /*Barra de progreso, formato*/
         .ProgressBar {
             width: 100%;
             appearance: none;
         }
-
-            .ProgressBar::-webkit-progress-bar {
-                background-color: #e0e0e0;
-                border-radius: 10px;
-                height: 20px;
-            }
-
-            .ProgressBar::-webkit-progress-value {
-                background-color: #4caf50;
-                border-radius: 10px;
-                height: 20px;
-            }
-
-            .ProgressBar::-moz-progress-bar {
-                background-color: #4caf50;
-                border-radius: 10px;
-                height: 20px;
-            }
+        .ProgressBar::-webkit-progress-bar {
+            background-color: #e0e0e0;
+            border-radius: 10px;
+            height: 20px;
+        }
+        .ProgressBar::-webkit-progress-value {
+            background-color: #4caf50;
+            border-radius: 10px;
+            height: 20px;
+        }
+        .ProgressBar::-moz-progress-bar {
+            background-color: #4caf50;
+            border-radius: 10px;
+            height: 20px;
+        }
 
         /*Contenedor de botones*/
         .ButtonContainer {
@@ -217,7 +203,6 @@
             gap: 10px; /* Espacio entre los botones */
             margin-top: 20px; /* Espacio superior para separar de los textos */
         }
-
         button {
             padding: 10px;
             font-size: 16px;
@@ -225,19 +210,16 @@
             border-radius: 5px;
             cursor: pointer;
         }
-
         .ShareButton {
             background-color: black;
             color: white;
             border-radius: 15px;
         }
-
         .ContactButton {
             background-color: black;
             color: white;
             border-radius: 15px;
         }
-
         .SegundoPanel {
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
             padding: 20px;
@@ -245,7 +227,6 @@
             width: auto;
             border-radius: 15px;
         }
-
         .Comentario {
             width: 100%; /* Ocupa todo el ancho disponible */
             height: 150px; /* Ajusta la altura */
@@ -255,21 +236,18 @@
             resize: none;
             overflow-y: auto;
         }
-
         #charCount {
             font-size: 14px;
             color: #666;
             text-align: right;
             margin-top: 5px;
         }
-
         .DonateContainer {
             display: flex;
             width: 100%;
             height: auto;
             align-items: center;
         }
-
         .DonateButton {
             width: 40%;
             font-size: 15px;
@@ -277,7 +255,6 @@
             color: white;
             border-radius: 15px;
         }
-
         .AmmountInputText {
             width: 50%;
             margin-right: 15px;
@@ -285,9 +262,7 @@
         }
     </style>
 </head>
-
 <body>
-
     <!-- Barra de navegacion -->
     <header class="navbar">
         <div class="navigation_bar">
@@ -311,73 +286,50 @@
         </div>
     </header>
     <script src="ContributorMenu_Script_1.js"></script>
-
     <!-- Barra de navegacion -->
-
     <div class="container">
-
         <h1 class="Titulo">Title of project</h1>
-
         <div class="ProjectInfo">
             <div class="InfoPanel">
-
                 <img src="Perro.jpeg" class="image">
                 <div class="DescriptionPanel">
                     <p class="Description">
-                        Descripción del Proyecto: Max es un perro rescatado que recientemente sufrió un accidente grave, y ahora necesita una cirugía urgente para poder caminar nuevamente. Es un perro amoroso y juguetón que, a pesar de su difícil pasado, ha mantenido una actitud alegre y optimista. El costo de su tratamiento médico, que incluye la cirugía, medicamentos y cuidados postoperatorios, supera los recursos disponibles.
-                        Objetivo: Nuestro objetivo es recaudar fondos para cubrir los gastos médicos de Max y darle una segunda oportunidad de vivir una vida saludable y feliz. La meta de la campaña es $2,500, lo que garantizará que Max reciba el mejor cuidado posible y una rehabilitación completa.
-                        Cómo Puedes Ayudar: Cada donación cuenta, sin importar el monto. Incluso con pequeñas contribuciones, puedes hacer una gran diferencia en la vida de Max. Además, si no puedes donar, te invitamos a compartir esta campaña con amigos y familiares para que más personas puedan sumarse a esta causa.
-                    </p>
+                        
                     <p id="projectId">Project ID: </p>
                     <script src="ContributorDetails_Script_1.js"></script>
                 </div>
                 <p class="Authors">Authors...</p>
-
             </div>
-
             <div class="InfoDatos">
-
                 <div class="PrimerPanel">
                     <div class="ProgressContainerText">
                         <h2 class="ProgressText">Progress: 50%</h2>
                         <h2 class="AmountRaised">USD Collected: 500</h2>
                     </div>
-
                     <progress class="ProgressBar" value="500" max="1000"></progress>
-
                     <div class="AdditionalText">
                         <h2 class="GoalAmount">Goal: 1000$</h2>
                         <h2 class="AmountContributors">Contributors: 632</h2>
                     </div>
-
                     <div class="ButtonContainer">
                         <button class="ShareButton" onclick="Compartir()">Share</button>
                         <button class="ContactButton" onclick="Contactos()">Contact</button>
                     </div>
                 </div>
-
                 <div class="SegundoPanel">
                     <h2>Comment:</h2>
                     <textarea id="Comment" class="Comentario" placeholder="Share your thoughts with the author/authors" maxlength="500"></textarea>
                     <p id="charCount">0/500 characters</p>
                     <!--Contador de caracteres-->
                     <script src="ContributorDetails_Script_1.js"></script>
-
                     <div class="DonateContainer">
                         <input id="AmmountToDonate" class="AmmountInputText" placeholder="$0000.00"></input>
                         <button class="DonateButton" onclick="showConfirmation()">Donate</button>
                     </div>
-
                 </div>
-
             </div>
-
         </div>
-
-
     </div>
     <script src="ContributorDetails_Script_1.js"> </script>
 </body>
-
-
 </html>

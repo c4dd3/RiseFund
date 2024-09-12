@@ -5,7 +5,6 @@ async function SignUp() {
     const password = document.getElementById("SignUpPassword").value;
     const confirm_password = document.getElementById("SignUpConfirmPassword").value;
     const terms = document.getElementById("SignUpTerms").checked;
-
     if (!validateFields(name, last_name, email, password, confirm_password, terms)) {
         console.log("Validation Failed");
         return;
@@ -16,7 +15,12 @@ async function SignUp() {
             console.log("Email already in use or invalid.");
             return;
         }
-    createUser(name, last_name, email, password)
+    await createUser(name, last_name, email, password);
+    const uniqueUserID =  await getUserID(email, password);
+    sessionStorage.setItem('userID', uniqueUserID);
+    const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
+    const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
+    await createRegisterUser(uniqueUserID, 'New User '+ uniqueUserID + ' Signed Up' , currentDateCR, currentTimeCR.toString());
     console.log("Sign Up Successful");
     window.location.href = 'MainMenu.html';
 }
@@ -73,7 +77,6 @@ async function createUser(name, last_name, email, password) {
         password: password, 
         status: 1
     };
-
     try {
         const response = await fetch('/AddUser', {
             method: 'POST',
@@ -82,15 +85,61 @@ async function createUser(name, last_name, email, password) {
             },
             body: JSON.stringify(userData)  
         });
-
         if (!response.ok) {
             const errorData = await response.json(); 
             throw new Error(errorData.error);
         }
-
         const result = await response.json();  
         console.log('Response from server:', result);
     } catch (err) {
         console.error('Error creating user:', err.message);  
+    }
+}
+
+async function createRegisterUser(UserID, Detail, Date, Times) {
+    const UserRegisterData = {
+        UserID:UserID,
+        Detail:Detail,
+        Date:Date,
+        Times:Times,
+    };
+    try {
+        const response = await fetch('/AddRegisterUserActivity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  
+            },
+            body: JSON.stringify(UserRegisterData)  
+        });
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(errorData.error);
+        }
+        const result = await response.json();  
+        console.log('Response from server:', result);
+    } catch (err) {
+        console.error('Error creating user:', err.message);  
+    }
+}
+
+async function getUserID(email, password) {
+    try {
+        const response = await fetch('/confirmEmail');
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        const result = await response.json();
+
+        // Busca el usuario que coincida con el email y la contraseña
+        const user = result.find(element => element.Email === email && element.UserPassword === password);
+
+        if (user) {
+            return user.ID;  // Devuelve el ID del usuario
+        } else {
+            return null;  // Si no se encuentra el usuario, devuelve null
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        return null;  // Si hay un error, también devuelve null
     }
 }

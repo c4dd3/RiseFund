@@ -159,6 +159,48 @@
             margin-bottom: 5px;
         }
 
+
+
+        .search-bar-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .search-bar {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            width: 1000px;
+            margin-left: 90px;
+            margin-bottom: 30px;
+            vertical-align: middle; 
+        }
+
+        .search-bar:focus {
+            outline: none;
+            border-color: #4caf50;
+        }
+
+        .search-btn {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            vertical-align: middle; 
+            margin-left: 10px;
+            margin-bottom: 30px; 
+        }
+
+        .search-btn:hover {
+            background-color: #45a049;
+        }
+
         /* Barra de progreso, formato */
         .ProgressBar {
             width: 100%;
@@ -243,44 +285,12 @@
 
         <h1 class="Titulo">Explore projects of your interest</h1>
 
-        <div class="ProjectsDisplay">
+        <div class="search-bar-container">
+            <input type="text" class="search-bar" placeholder="Search projects...">
+            <button class="search-btn">Search</button>
+        </div>
 
-            <div class="InfoPanel">
-                <img class="Portada" src="ProjectImage.jpg" alt="Project Image">
-                <h1 class="Titulos">Titulo</h1>
-                <div class="Info">
-                    <p>USD Collected: $0</p>
-                    <p>Progress: 70%</p>
-                    <progress class="ProgressBar" value="700" max="1000"></progress>
-                    <div class="ButtonContainer">
-                        <a href="ContributorDetails.html" class="btn">Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="InfoPanel">
-                <img class="Portada" src="ProjectImage.jpg" alt="Project Image">
-                <h1 class="Titulos">Titulo</h1>
-                <div class="Info">
-                    <p>USD Collected: $0</p>
-                    <p>Progress: 100%</p>
-                    <progress class="ProgressBar" value="1000" max="1000"></progress>
-                    <div class="ButtonContainer">
-                        <a href="ContributorDetails.html" class="btn">Details</a>
-                    </div>
-                </div>
-            </div>
-            <div class="InfoPanel">
-                <img class="Portada" src="ProjectImage.jpg" alt="Project Image">
-                <h1 class="Titulos">Titulo</h1>
-                <div class="Info">
-                    <p>USD Collected: $0</p>
-                    <p>Progress: 50%</p>
-                    <progress class="ProgressBar" value="500" max="1000"></progress>
-                    <div class="ButtonContainer">
-                        <a href="ContributorDetails.html" class="btn">Details</a>
-                    </div>
-                </div>
-            </div>
+        <div class="ProjectsDisplay">
 
         </div>
 

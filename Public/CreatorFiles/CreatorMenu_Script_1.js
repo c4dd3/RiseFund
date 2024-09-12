@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                         <p>USD Collected: $${project.Collected}</p>
                         <p>Progress: ${percentage}%</p>
                         <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
-                        <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html'">✎ Edit</button>
+                        <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html?id=${project.ID}'">✎ Edit</button>
                 </div>
             </div>
             `;

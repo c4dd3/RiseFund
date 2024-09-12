@@ -7,34 +7,40 @@ function toggleDropdown() {
     }
 }
 
+
 document.addEventListener('DOMContentLoaded', async () => {
-    try {
-        const response = await fetch('/ProjectsInfo');
-        
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
+    let projects = [];
+
+    async function loadProjects() {
+        try {
+            const projectsDisplay = document.querySelector('.ProjectsDisplay');
+            if (!projectsDisplay) return;
+
+            const response = await fetch('/ProjectsInfo');
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            projects = await response.json();
+            displayProjects(projects);
+        } catch (error) {
+            console.error('Error al cargar los proyectos:', error);
         }
+    }
 
-        // Convertir la respuesta en formato JSON
-        const projects = await response.json();
-        
-        // Seleccionar el contenedor donde se mostrarán los proyectos
+    function displayProjects(projects) {
         const projectsDisplay = document.querySelector('.ProjectsDisplay');
-        projectsDisplay.innerHTML = ''; // Limpiar los paneles anteriores
-                
+        projectsDisplay.innerHTML = '';
 
-        // Generar dinámicamente un panel para cada proyecto
         projects.forEach(project => {
-
-            const percentage = (project.Collected * 100)/project.ContributionGoal;
-
+            const percentage = (project.Collected * 100) / project.ContributionGoal;
             const projectPanel = `
                 <div class="InfoPanel">
                     <img class="Portada" src="ProjectImage.jpg" alt="Project Image">
                     <h1 class="Titulos">${project.Title}</h1>
                     <div class="Info">
                         <p>USD Collected: $${project.Collected}</p>
-                        <p>Progress: ${project.Percentage}%</p>
+                        <p>Progress: ${percentage}%</p>
                         <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
                         <div class="ButtonContainer">
                             <a href="ContributorDetails.html?id=${project.ID}" class="btn">Details</a>
@@ -42,11 +48,22 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
             `;
-            // Agregar el panel al contenedor
             projectsDisplay.innerHTML += projectPanel;
         });
-    } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
-        console.error('Error al cargar los proyectos:', error);
+    }
+
+    const searchButton = document.querySelector('.search-btn');
+    if (searchButton) {
+        searchButton.addEventListener('click', () => {
+            const searchTerm = document.querySelector('.search-bar').value.toLowerCase();
+            const filteredProjects = projects.filter(project => project.Title.toLowerCase().includes(searchTerm));
+            displayProjects(filteredProjects);
+        });
+    }
+
+    if (document.querySelector('.ProjectsDisplay')) {
+        loadProjects();
     }
 });
+
+

@@ -3,6 +3,7 @@ const sql = require('mssql');
 const path = require('path');
 const app = express();
 const port = 3000;
+const nodemailer = require('nodemailer');
 // Database configuration
 const config = {
     user: 'sa',
@@ -94,9 +95,81 @@ app.get('/GetLastProjectID', async (req, res) => {
         res.status(500).send('Error retrieving the last project ID: ' + err.message);
     }
 });
+//GetDonationID
+app.post('/GetDonationID', async (req, res) => {
+    const { UserID, ProjectID, Date, Time } = req.body; // Obtenemos los parámetros de la solicitud
 
+    try {
+        // Conexión a la base de datos
+        await sql.connect(config);
 
+        // Preparar y ejecutar la consulta
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, UserID);
+        request.input('ProjectID', sql.Int, ProjectID);
+        request.input('Date', sql.Date, Date);
+        request.input('Time', sql.NVarChar, Time);
 
+        const result = await request.query(`
+            SELECT ID FROM DONATION
+            WHERE 
+            UserID = @UserID
+            AND ProjectID = @ProjectID
+            AND Date = @Date
+            AND Time = @Time;
+        `);
+
+        // Si se encuentra una donación, devolver la ID
+        if (result.recordset.length > 0) {
+            res.json({ DonationID: result.recordset[0].ID });
+        } else {
+            res.status(404).json({ message: 'Donation not found' });
+        }
+
+    } catch (err) {
+        res.status(500).send('Error retrieving donation ID: ' + err.message);
+    }
+});
+//GetUserByID
+app.post('/GetUserByID', async (req, res) => {
+    const { UserID } = req.body;  // Obtenemos el ID del usuario desde los parámetros de consulta
+    try {
+        // Conexión a la base de datos
+        await sql.connect(config);
+        console.log(UserID);
+        // Preparar la consulta SELECT
+        const request = new sql.Request();
+        const query = `
+            SELECT * FROM [USER] WHERE ID = @ID;
+        `;
+        request.input('ID', sql.Int, UserID);
+        const result = await request.query(query);
+        console.log(result);
+        // Si se encuentra un usuario, devolver los datos
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (err) {
+        res.status(500).send('Error retrieving user: ' + err.message);
+    }
+});
+//GetUserList
+app.get('/GetUserList', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT [ID], [FirstName], [LastName], [Email], 
+            CASE [Status] WHEN 1 THEN 'Active' ELSE 'Blocked' END AS [STATUS] FROM [USER]
+        `;
+        const result = await sql.query(query);
+        console.log(result);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving user list: ' + err.message);
+    }
+});
 
 // Endpoint para obtener los proyectos
 app.get('/ProjectsInfo', async (req, res) => {
@@ -171,7 +244,7 @@ app.post('/AddProject', async (req, res) => {
             INSERT INTO [PROJECT] (UserID, Title, [Description], ContributionGoal, [Start], [End], PrimaryContact, 
             SecondaryContact, DepositMethod, AccountNumber, [Status], Collected)
             VALUES (@UserID, @Title, @Description, @ContributionGoal, @Start, @End, @PrimaryContact, 
-        @SecondaryContact, @DepositMethod, @AccountNumber, @Status, @Collected)
+        @SecondaryContact, @DepositMethod, @AccountNumber, @Status)
         `;
         const request = new sql.Request();
         request.input('UserID', sql.Int, parseInt(UserID, 10));
@@ -192,6 +265,54 @@ app.post('/AddProject', async (req, res) => {
         res.json({ message: err.message });
     }
 });
+//EditProject
+app.post('/EditProject', async (req, res) => {
+    console.log(req.body);
+    const { projectID, Title, Description, ContributionGoal, Start, End, PrimaryContact, 
+        SecondaryContact, DepositMethod, AccountNumber, Status} = req.body;
+    try {
+        await sql.connect(config);
+        const query = `
+            UPDATE [PROJECT] SET 
+                Title = @Title, 
+                [Description] = @Description, 
+                ContributionGoal = @ContributionGoal, 
+                [Start] = @Start, 
+                [End] = @End, 
+                PrimaryContact=@PrimaryContact, 
+                SecondaryContact=@SecondaryContact, 
+                DepositMethod=@DepositMethod, 
+                AccountNumber=@AccountNumber, 
+                [Status]=@Status
+            WHERE [PROJECT].ID = @projectID 
+        `;
+        const request = new sql.Request();
+        request.input('Title', sql.NVarChar, Title);
+        request.input('Description', sql.NVarChar, Description);
+        request.input('ContributionGoal', sql.Decimal, ContributionGoal);
+        request.input('Start', sql.Date, Start);
+        request.input('End', sql.Date, End);
+        request.input('PrimaryContact', sql.NVarChar, PrimaryContact);
+        request.input('SecondaryContact', sql.NVarChar, SecondaryContact);
+        request.input('DepositMethod', sql.NVarChar, DepositMethod);
+        request.input('AccountNumber', sql.NVarChar, AccountNumber);
+        request.input('Status', sql.Int, parseInt(Status,10));
+        request.input('projectID', sql.Int, parseInt(projectID, 10));
+        await request.query(query);
+        res.json({ message: 'Project Edited successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'risefund1@gmail.com',
+        pass: 'fmhs exmd eqyn twfp' 
+    }
+});
+
 // Add Donation / Crear Donation
 app.post('/AddDonation', async (req, res) => {
     console.log(req.body);
@@ -211,9 +332,35 @@ app.post('/AddDonation', async (req, res) => {
         request.input('Date', sql.Date, Date);
         request.input('Time', sql.NVarChar, Time);
         await request.query(query);
-        res.json({ message: 'Donatation created successfully!' });
+
+        const queryEmail = `
+            SELECT Email FROM [USER] WHERE ID = @UserID
+        `;
+        const emailRequest = new sql.Request();
+        emailRequest.input('UserID', sql.Int, parseInt(UserID, 10));
+
+        const result = await emailRequest.query(queryEmail);
+        const userEmail = result.recordset[0].Email;  
+        if (!result.recordset.length) {
+            return res.status(404).send('Usuario no encontrado');
+        }
+        const mailOptions = {
+            from: 'risefund1@gmail.com',   
+            to: userEmail,                 
+            subject: 'Confirmación de donación',  
+            text: `Gracias por tu donación de $${Ammount} al proyecto ${ProjectID}. Tu comentario fue: "${Comment}".`  // Cuerpo del correo
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).send('Error al enviar el correo: ' + error.toString());
+            }
+            console.log('Correo enviado: ' + info.response);
+            res.json({ message: 'Donación creada y correo enviado exitosamente!' });
+        });
+        
     } catch (err) {
-        res.json({ message: err.message });
+        console.error('Error al crear la donación:', err);
+        res.status(500).json({ message: 'Error creating donation', error: err.message });
     }
 });
 
@@ -233,7 +380,7 @@ app.post('/AddRegisterUserActivity', async (req, res) => {
         request.input('Date', sql.Date, Date);
         request.input('Times', sql.NVarChar, Times);
         await request.query(query);
-        res.json({ message: 'Registered user activity successfully!' });
+        res.json({ message: 'Registered User activity successfully!' });
     } catch (err) {
         res.json({ message: err.message });
     }
@@ -255,14 +402,140 @@ app.post('/AddRegisterProjectActivity', async (req, res) => {
         request.input('Date', sql.Date, Date);
         request.input('Times', sql.NVarChar, Times);
         await request.query(query);
-        res.json({ message: 'Registered user activity successfully!' });
+        res.json({ message: 'Registered Project activity successfully!' });
     } catch (err) {
         res.json({ message: err.message });
     }
 });
+//Register Donation Activity
+app.post('/AddRegisterDonationActivity', async (req, res) => {
+    console.log(req.body);
+    const { DonationID, Detail, Date, Times } = req.body;
+    
+    try {
+        await sql.connect(config);
+        const query = `
+            INSERT INTO [REGISTER_DONATION] (DonationID, Detail, Date, [Time])
+            VALUES (@DonationID, @Detail, @Date, @Times)
+        `;
+        const request = new sql.Request();
+        request.input('DonationID', sql.Int, parseInt(DonationID, 10));
+        request.input('Detail', sql.NVarChar, Detail);
+        request.input('Date', sql.Date, Date);
+        request.input('Times', sql.NVarChar, Times);
+        await request.query(query);
+        res.json({ message: 'Registered Donation activity successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
+
+// Search of Project
+
+app.post('/ProjectById', async (req, res) => {
+    const projectID = req.body.projectID;  
+
+    try {
+        await sql.connect(config);
+        const query = 'SELECT * FROM [PROJECT] INNER JOIN [USER] ON [PROJECT].UserID = [USER].ID WHERE [PROJECT].ID = @ProjectID';
+        
+        const request = new sql.Request();
+        request.input('ProjectID', sql.Int, projectID);
+        const result = await request.query(query);
+
+        
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Project not found');
+        }
+
+        
+        res.json(result.recordset[0]);
+    } catch (err) {
+        
+        res.status(500).send('Error getting project: ' + err.message);
+    }
+});
+
+// Searches for the People of the project
+app.post('/SearchDonatedPeople', async(req, res) => {
+    const projectID = req.body.projectID;
+
+    try{
+        await sql.connect(config);
+        const query = `SELECT PROJECT.ID, ISNULL(COUNT([DONATION].ProjectID), 0) DONANTES FROM [PROJECT] LEFT JOIN [DONATION] ON [PROJECT].ID = [DONATION].ProjectID 
+        WHERE [PROJECT].ID = @ProjectID
+        Group By [PROJECT].ID;`
+        
+        const request = new sql.Request();
+        request.input('ProjectID', sql.Int, projectID);
+        const result = await request.query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Author not found');
+        }
+
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error when searching for project author:')
+    }
+});
+
+//Search bank account
+app.post('/ExpirationDate', async(req, res) => {
+    const projectID = req.body.projectID;
+    try{
+        await sql.connect(config);
+        const query = `SELECT * FROM [PROJECT] INNER JOIN [USER] ON [PROJECT].UserID = [USER].ID
+        LEFT JOIN [BANK_ACCOUNT] ON [BANK_ACCOUNT].UserID = [USER].ID WHERE [PROJECT].ID = @ProjectID`
+        
+        const request = new sql.Request();
+        request.input('ProjectID', sql.Int, projectID);
+        const result = await request.query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).send('Author not found');
+        }
+
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error when searching for project author:')
+    }
+});
+
 
 // Start the server
 app.listen(port, () => {
     console.log(`Server is running at http://localhost:${port}`);
 });
 
+
+//GetProjectByID
+// app.get('/GetProjectByID', async (req, res) => {
+//     const { projectID } = req.body;
+//     try {
+//         await sql.connect(config);
+//         console.log(projectID);
+//         const request = new sql.Request();
+//         const query = `
+//             SELECT * FROM [PROJECT] WHERE ID = @ID;
+//         `;
+        
+
+//GetProjectList
+// app.get('/GetProjectList', async (req, res) => {
+//     try {
+//         await sql.connect(config);
+//         const query = `
+//             SELECT [ID], [UserID], [Description], [(Collected/ContributionGoal)*100] AS [Progress], [Collected], [Description],
+//             ISNULL(COUNT(DISTINCT [DONATION].[DonorID]), 0) AS [Contributors],
+//             CASE [Status] WHEN 1 THEN 'Active' ELSE '' END AS [Status]
+//     }
+// });
+//         `;
+//         const result = await sql.query(query);
+//         console.log(result);
+//         res.json(result.recordset);
+//     } catch (err) {
+//         res.status(500).send('Error retrieving uproject list: ' + err.message);
+//     }
+// });
