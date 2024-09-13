@@ -3,6 +3,12 @@ async function Login(){
     const password = document.getElementById("LoginPassword").value;
     const emailFound = await confirmEmail(email);
     const correctPassword = await confirmPassword(email, password);
+
+    if (email.value == '' || password == ''){
+        alert("Por favor, complete todos los campos.");
+        return;
+    }
+
     if(emailFound &&correctPassword ){
         console.log("Granted");
         const uniqueUserID =  await getUserID(email, password);
@@ -12,7 +18,8 @@ async function Login(){
         createRegisterUser(uniqueUserID, 'User '+ uniqueUserID + ' Loged In' , currentDateCR, currentTimeCR.toString());
         window.location.href = 'MainMenu.html'; 
     } else {
-        console.log("Denied");
+        alert("Contraseña o correo incorrecto, por favor vuelva a intentarlo")ñ
+        return;
     }
 }
 

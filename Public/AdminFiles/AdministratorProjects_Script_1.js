@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.querySelector('.search-btn');
     const searchInput = document.querySelector('.search-bar');
-    const projectIDField = document.getElementById('projectID');
+    const projectIDField = document.getElementById('.projectID');
     const amountField = document.getElementById('amountGathered');
-    const creatorIDField = document.getElementById('creatorID');
-    const progressField = document.getElementById('progress');
-    const contributorField = document.getElementById('contributor');
+    const creatorIDField = document.getElementById('UserID');
+    const progressField = document.getElementById('Progress');
+    const contributorField = document.getElementById('Contributors');
     const statusField = document.getElementById('status');
     const projectTableBody = document.querySelector('.project-table tbody');
 

@@ -9,6 +9,8 @@ function toggleDropdown() {
 
 function showConfirmation() {
     const projectID = document.getElementById("project-id").value;
+    const projectTitle = document.getElementById("project-title").value;
+    const projectDescription = document.getElementById("project-description").value;
     const startDate = document.getElementById("start-date").value;
     const goal = document.getElementById("goal").value;
     const completionDate = document.getElementById("completion-date").value;
@@ -17,8 +19,14 @@ function showConfirmation() {
     const depositMethod = document.getElementById("deposit-method").value;
     const expirationDate = document.getElementById("expiration").value;
     const accountNumber = document.getElementById("account-number").value;
-
-
+    intStatus = 0;
+    if(status == "Active"){
+        intStatus = 1;
+    } else if(status == "Finished"){
+        intStatus = 2;
+    } else {
+        intStatus = 3;
+    }
     if (!goal || !contact || !accountNumber) {
         alert("Please fill in all the required fields before confirming.");
         return;
@@ -37,13 +45,11 @@ function showConfirmation() {
     - Account Number: ${accountNumber}
 
     Confirm changes?`);
-
     if (confirmed) {
-        ActualizarInfo(title, Description, ContributionGoal, Start, End, PrimaryContact, PrimaryContact, DepositMethod, AccountNumber, Status); //TODO Pasarle los parametros aprseados
+        ActualizarInfo(projectTitle, projectDescription, goal, startDate, completionDate, contact, contact, depositMethod, accountNumber, intStatus); 
         alert("Project updated!");
     }
-}
-
+}                                                  
 function updateImage(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -183,7 +189,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <input type="file" id="file-input" accept="image/*" onchange="updateImage(event)">
                 </div>
                 <div class="description-box">
-                    <textarea placeholder="Description...">${project.Description}</textarea>
+                    <textarea id="project-description" placeholder="Description...">${project.Description}</textarea>
                 </div>
             </div>
         </section>

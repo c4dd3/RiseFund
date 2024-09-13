@@ -510,32 +510,46 @@ app.listen(port, () => {
 
 
 //GetProjectByID
-// app.get('/GetProjectByID', async (req, res) => {
-//     const { projectID } = req.body;
-//     try {
-//         await sql.connect(config);
-//         console.log(projectID);
-//         const request = new sql.Request();
-//         const query = `
-//             SELECT * FROM [PROJECT] WHERE ID = @ID;
-//         `;
+app.get('/GetProjectByID', async (req, res) => {
+    const { projectID } = req.body;
+    try {
+        await sql.connect(config);
+        console.log(projectID);
+        const request = new sql.Request();
+        const query = `
+            SELECT * FROM [PROJECT] WHERE ID = @ID;
+        `;
+        request.input('ID', sql.Int, projectID);
+
+        const result = await request.query(query);
+        console.log(result);
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            res.status(404).json({ message: 'Project not found' });
+        }
+    } catch (err) {
+        res.status(500).send('Error retrieving project: ' + err.message);
+    }
+});
         
 
 //GetProjectList
-// app.get('/GetProjectList', async (req, res) => {
-//     try {
-//         await sql.connect(config);
-//         const query = `
-//             SELECT [ID], [UserID], [Description], [(Collected/ContributionGoal)*100] AS [Progress], [Collected], [Description],
-//             ISNULL(COUNT(DISTINCT [DONATION].[DonorID]), 0) AS [Contributors],
-//             CASE [Status] WHEN 1 THEN 'Active' ELSE '' END AS [Status]
-//     }
-// });
-//         `;
-//         const result = await sql.query(query);
-//         console.log(result);
-//         res.json(result.recordset);
-//     } catch (err) {
-//         res.status(500).send('Error retrieving uproject list: ' + err.message);
-//     }
-// });
+app.get('/GetProjectList', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT [P.ID], [P.UserID], [P.Description], ISNULL((P.Collected / NULLIF(P.ContributionGoal, 0)) * 100, 0) AS [Progress], 
+            [P.Collected], ISNULL(COUNT(DISTINCT [DONATION].[DonorID]), 0) AS [Contributors],
+            CASE [Status] WHEN 1 THEN 'Active' ELSE '' END AS [STATUS] FROM [PROJECT] P 
+            LEFT JOIN [DONATION] ON [PROJECT].[ID] = [DONATION].[ProjectID]
+    }
+});
+        `;
+        const result = await sql.query(query);
+        console.log(result);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving uproject list: ' + err.message);
+    }
+});

@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <p class="Description">
                         ${project.Description}
                     </p>
-                    <p id="projectId">Project ID: </p>
+                    <p id="projectId">Project ID: ${projectID} </p>
                     <script src="ContributorDetails_Script_1.js"></script>
                 </div>
                 <p class="Authors">By: ${project.FirstName} ${project.LastName}</p>
