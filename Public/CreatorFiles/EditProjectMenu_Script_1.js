@@ -6,9 +6,43 @@ function toggleDropdown() {
         dropdownMenu.style.display = 'block';
     }
 }
+async function isOfUser(accountNumber, UserID) {
+    try {
+        const response = await fetch('/GetBankAccountList', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const accounts = await response.json();
+        const account = accounts.find(account => account.AccountNumer === accountNumber && account.UserID === parseInt(UserID));
+        return account !== undefined;
+    } catch (error) {
+        console.error('Error fetching account list:', error);
+        return false;
+    }
+}
+async function showConfirmation() {
+    const projectID = getQueryParam('id');
+    const response = await fetch('/ProjectById', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectID: projectID })
+    });
 
-function showConfirmation() {
-    const projectID = document.getElementById("project-id").value;
+    const project = await response.json();
+    var estado = true;
+    
+    if (parseInt(project.Status) == 3 || parseInt(project.Status) == 2) {
+        estado = false;
+    }
+    const userID = sessionStorage.getItem('userID');
+    const IDProject = document.getElementById("project-id").value;
     const projectTitle = document.getElementById("project-title").value;
     const projectDescription = document.getElementById("project-description").value;
     const startDate = document.getElementById("start-date").value;
@@ -19,6 +53,7 @@ function showConfirmation() {
     const depositMethod = document.getElementById("deposit-method").value;
     const expirationDate = document.getElementById("expiration").value;
     const accountNumber = document.getElementById("account-number").value;
+    const accountOwnership = await isOfUser(accountNumber, userID);
     intStatus = 0;
     if(status == "Active"){
         intStatus = 1;
@@ -31,24 +66,32 @@ function showConfirmation() {
         alert("Please fill in all the required fields before confirming.");
         return;
     }
-
-    const confirmed = confirm(`
-    Please verify the project details:
-    - Project ID: ${projectID}
-    - Start Date: ${startDate}
-    - Contribution Goal: ${goal}
-    - Expected Completion: ${completionDate}
-    - Status: ${status}
-    - Project Contact: ${contact}
-    - Deposit Method: ${depositMethod}
-    - Expiration Date: ${expirationDate}
-    - Account Number: ${accountNumber}
-
-    Confirm changes?`);
-    if (confirmed) {
-        ActualizarInfo(projectTitle, projectDescription, goal, startDate, completionDate, contact, contact, depositMethod, accountNumber, intStatus); 
-        alert("Project updated!");
+    if(estado){
+        if(accountOwnership){
+            const confirmed = confirm(`
+                Please verify the project details:
+                - Project ID: ${IDProject}
+                - Start Date: ${startDate}
+                - Contribution Goal: ${goal}
+                - Expected Completion: ${completionDate}
+                - Status: ${status}
+                - Project Contact: ${contact}
+                - Deposit Method: ${depositMethod}
+                - Expiration Date: ${expirationDate}
+                - Account Number: ${accountNumber}
+                Confirm changes?`);
+            if (confirmed) {
+                ActualizarInfo(projectTitle, projectDescription, goal, startDate, completionDate, contact, contact, depositMethod, accountNumber, intStatus); 
+                alert("Project updated!");
+            }
+        } else {
+            alert("Account number does not exist or is not yours");
+        }
+        
+    } else {
+        alert("Your Project is Bloqued Or Finished");
     }
+    
 }                                                  
 function updateImage(event) {
     const file = event.target.files[0];
@@ -166,8 +209,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <div class="form-row">
                     <label for="deposit-method">Deposit Method:</label>
                     <select id="deposit-method">
-                        <option value="Immediate">Immediate</option>
-                        <option value="Completion">Per completion</option>
+                        <option value="immediate">Immediate</option>
+                        <option value="completion">Per completion</option>
                     </select>
                 </div>
                 <div class="form-row">
@@ -207,9 +250,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         const statusField2 = document.getElementById('deposit-method');
         const depositMethod = project.DepositMethod;
         if (depositMethod == 'immediate'){
-            statusField2.value = 'Immediate';
+            statusField2.value = 'immediate';
         }else{
-            statusField2.value = 'Completion';
+            statusField2.value = 'completion';
         }
         
     } catch (error) {
@@ -235,7 +278,7 @@ async function ActualizarInfo(title, Description, ContributionGoal, Start, End, 
         Status:Status
     };
     try {
-        const response = await fetch('/ProjectById', {
+        const response = await fetch('/EditProject', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'  
@@ -248,6 +291,7 @@ async function ActualizarInfo(title, Description, ContributionGoal, Start, End, 
             throw new Error(errorData.error);
         }
 
+        
         const result = await response.json();  
         console.log('Response from server:', result);
     } catch (err) {

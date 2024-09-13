@@ -5,7 +5,7 @@ async function Login(){
     const correctPassword = await confirmPassword(email, password);
 
     if (email.value == '' || password == ''){
-        alert("Por favor, complete todos los campos.");
+        alert("Please fill in all the information");
         return;
     }
 
@@ -15,10 +15,10 @@ async function Login(){
         sessionStorage.setItem('userID', uniqueUserID);
         const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
         const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
-        createRegisterUser(uniqueUserID, 'User '+ uniqueUserID + ' Loged In' , currentDateCR, currentTimeCR.toString());
+        createRegisterUser(uniqueUserID, 'User '+ uniqueUserID + ' Logged In' , currentDateCR, currentTimeCR.toString());
         window.location.href = 'MainMenu.html'; 
     } else {
-        alert("Contraseña o correo incorrecto, por favor vuelva a intentarlo")ñ
+        alert("Incorrect password or email, please try again")
         return;
     }
 }

@@ -35,23 +35,25 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         // Generar dinámicamente un panel para cada proyecto
         projects.forEach(project => {
+            if(project.Status == 1 || project.Status == 2  ){ // Los bloqueados no salen
+                const percentage = (project.Collected * 100)/project.ContributionGoal;
 
-            const percentage = (project.Collected * 100)/project.ContributionGoal;
-
-            const projectPanel = `
-                <div class="project">
-                <img src="ProjectImage.jpg" alt="Project 1 Image" class="project-image">
-                <div class="project-title">${project.Title}</div>
-                <div class="Info">
-                        <p>USD Collected: $${project.Collected}</p>
-                        <p>Progress: ${percentage}%</p>
-                        <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
-                        <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html?id=${project.ID}'">✎ Edit</button>
+                const projectPanel = `
+                    <div class="project">
+                    <img src="ProjectImage.jpg" alt="Project 1 Image" class="project-image">
+                    <div class="project-title">${project.Title}</div>
+                    <div class="Info">
+                            <p>USD Collected: $${project.Collected}</p>
+                            <p>Progress: ${percentage}%</p>
+                            <progress class="ProgressBar" value="${project.Collected}" max="${project.ContributionGoal}"></progress>
+                            <button class="edit-button" onclick="window.location.href='../CreatorFiles/EditProjectMenu.html?id=${project.ID}'">✎ Edit</button>
+                    </div>
                 </div>
-            </div>
-            `;
-            // Agregar el panel al contenedor
-            projectsDisplay.innerHTML += projectPanel;
+                `;
+                // Agregar el panel al contenedor
+                projectsDisplay.innerHTML += projectPanel;
+            }
+            
         });
     } catch (error) {
         // Manejo de errores en caso de problemas con la solicitud

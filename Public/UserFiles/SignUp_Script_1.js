@@ -25,9 +25,26 @@ async function SignUp() {
     window.location.href = 'MainMenu.html';
 }
 
+// Verifica si hay simboloes especiales dado un string
+function contieneSimbolosEspeciales(str) {
+    const regex = /[^a-zA-Z0-9 ]/;  
+    return regex.test(str);  
+}
+
+// Verifica si hay numeros en un string dado
+function contieneNumero(str) {
+    const regex = /\d/;  
+    return regex.test(str);  
+}
+
 function validateFields(name, last_name, email, password, confirm_password, terms) {
     if (!name || !last_name || !email || !password || !confirm_password) {
         alert("All fields are required.");
+        return false;
+    }
+
+    if (contieneSimbolosEspeciales(name) || contieneSimbolosEspeciales(last_name) || contieneNumero(name) || contieneNumero(last_name)) {
+        alert("The name or last name are invalid");
         return false;
     }
 

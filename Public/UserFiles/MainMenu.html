@@ -138,7 +138,20 @@
             height: 600px;
             width: 600px;
             margin-top: 8vh;
-        }  
+        } 
+        .Estadisticas{
+            background-color: #3697FF;
+            width: 90%;
+            height: 10%;
+            margin-left: 5%;
+            margin-top: 10%;
+            border-radius: 15px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            align-items: center; /* Centra los elementos verticalmente */
+            text-align: center;
+        }
+        
     </style>
 </head>
 <body>
@@ -159,6 +172,7 @@
                 <nav>
                     <div class="dropdown_menu" id="dropdownMenu">
                         <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                        <a href="../UserFiles/UserConfig.html" class="title">User config</a>
                     </div>
                 </nav>
             </div>
@@ -170,6 +184,11 @@
             <div class="leftContainer">
                 <h1 class="Titulo"> RiseFund </h1>  
                 <p class="p1">"Building a brighter future, one contribution at a time"</p>
+                <div class="Estadisticas"> 
+                    <div class="TEXT">Over 0 projects</div>
+                    <div class="TEXT">Over 0 raised</div>
+                    <div class="TEXT">Over 0 users</div>
+                </div>
             </div>
             <div class="rightContainer">
                 <img src="CrowdFundingImage.jpg" class="image">

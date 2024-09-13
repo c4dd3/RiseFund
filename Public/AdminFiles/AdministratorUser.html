@@ -26,11 +26,16 @@
             padding: 0 20px;
         }
         .title {
-            font-family: 'Lucida Calligraphy', serif;
-            font-size: 40px;
-            font-weight: bold;
+            margin-left: calc(1%);
+            margin-top: 5px;
+            padding-top: 15px;
+            font-family: 'Baskerville', 'Baskerville Old Face', Garamond, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 50px;
+            font-weight: 1000;
             color: #3697FF;
             text-decoration: none;
+            margin-bottom: calc(1%);
         }
         /* Container for the user admin section */
         .container {
@@ -137,6 +142,35 @@
         .search-btn:hover {
             background-color: #45a049;
         }
+
+        .status-container {
+            display: flex;
+            width: 95%;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .status-container label {
+            width: 120px; /* Adjust width for the label */
+        }
+
+        .confirm-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 15px;
+            height: 53px;
+        }
+
+        .confirm-btn:hover {
+            background-color: #0056b3;
+        }
+
     </style>
 </head>
 <body>
@@ -167,12 +201,15 @@
                 <label for="lastName" >Last Name</label>
                 <input id="lastName" type="text" placeholder="Last Name" value="" disabled>
 
-                <label for="status">Status</label>
-                <select id="status">
-                    <option>Current Status</option>
-                    <option>Active</option>
-                    <option>Blocked</option>
-                </select>
+                <div class="status-container">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option>Current Status</option>
+                        <option>Active</option>
+                        <option>Blocked</option>
+                    </select>
+                    <button class="confirm-btn">Confirm</button>
+                </div>
 
                 <label for="email">Email</label>
                 <input id="email" type="email" placeholder="email@example.com" value="" disabled>

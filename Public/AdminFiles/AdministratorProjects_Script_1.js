@@ -1,20 +1,24 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.querySelector('.search-btn');
+    const confirmButton = document.querySelector('.confirm-btn');
     const searchInput = document.querySelector('.search-bar');
-    const projectIDField = document.getElementById('.projectID');
+    const projectIDField = document.getElementById('projectID');
     const amountField = document.getElementById('amountGathered');
-    const creatorIDField = document.getElementById('UserID');
-    const progressField = document.getElementById('Progress');
-    const contributorField = document.getElementById('Contributors');
+    const creatorIDField = document.getElementById('creatorID');
+    const progressField = document.getElementById('progress');
+    const contributorField = document.getElementById('contributors');
     const statusField = document.getElementById('status');
+    const detailsField = document.getElementById('details');
     const projectTableBody = document.querySelector('.project-table tbody');
 
 
     async function loadProjects() {
         try {
+            console.log('Fetching projects...');
             const response = await fetch('/GetProjectList');
             if (response.ok) {
                 const projects = await response.json();
+                console.log('Projects fetched:', projects);
                 displayProjects(projects);
             } else {
                 alert('Error fetching projects data');
@@ -60,45 +64,87 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 body: JSON.stringify(projectData),
             });
+            const data = await response.json();
+
             if (response.ok) {
-                const project = await response.json();
-                
-                if (project) {
+                if (data.success) {
+                    const project = data.project;
                     projectIDField.value = project.ID;
                     creatorIDField.value = project.UserID;
                     progressField.value = project.Progress;
                     amountField.value = project.Collected;
                     contributorField.value = project.Contributors;
-                    if(project.Status == 1){
+                    if(project.Status == 1) {
                         statusField.value = 'Active';
                     } else if (project.Status == 2) {
                         statusField.value = 'Finished';
-                    } else if (project.Status == 3) {
+                    } else {
                         statusField.value = 'Blocked';
                     }
-
                 } else {
-                    alert('project not found');
+                    alert(data.message || 'Project not found');
                     clearForm();
+                    loadProjects();
                 }
             } else {
                 alert('Error fetching project data');
                 clearForm();
+                loadProjects();
             }
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while searching for the project');
             clearForm();
+            loadProjects();
         }
     }
 
+    async function updateProjectStatus() {
+        const projectID = projectIDField.value;
+        const statusValue = statusField.value === 'Active' ? 1 : statusField.value === 'Finished' ? 2 : 3 ;
+
+        const updateData = {
+            projectID: projectID,
+            status: statusValue
+        };
+        console.log(statusValue);
+        try {
+            const response = await fetch('/UpdateProjectStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(updateData),
+            });
+
+            const result = await response.json();
+            if (response.ok) {
+                if (result.success) {
+                    alert('Project status updated successfully');
+                    loadProjects(); // Reload project data after updating
+                } else {
+                    alert(result.message || 'Failed to update project status');
+                }
+            } else {
+                alert('Error updating project status');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating the project status');
+        }
+    }
+
+    confirmButton.addEventListener('click', updateProjectStatus);
+
+
     function clearForm() {
         projectIDField.value = '';
-        firstNameField.value = '';
-        lastNameField.value = '';
-        emailField.value = '';
+        amountField.value = '';
+        creatorIDField.value = '';
+        progressField.value = '';
+        contributorField.value = '';
         statusField.value = '';
-        projectTableBody.innerHTML = '';
+
     }
 
     loadProjects();

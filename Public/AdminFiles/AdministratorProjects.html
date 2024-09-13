@@ -29,11 +29,16 @@
         }
 
         .title {
-            font-family: 'Lucida Calligraphy', serif;
-            font-size: 40px;
-            font-weight: bold;
+            margin-left: calc(1%);
+            margin-top: 5px;
+            padding-top: 15px;
+            font-family: 'Baskerville', 'Baskerville Old Face', Garamond, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 50px;
+            font-weight: 1000;
             color: #3697FF;
             text-decoration: none;
+            margin-bottom: calc(1%);
         }
 
         .container {
@@ -138,9 +143,9 @@
             font-size: 14px;
         }
 
-        .textarea{
+        .textarea {
             resize: none;
-            width: 94%;
+            width: 95%;
             height: 100px;
             padding: 12px 20px;
             box-sizing: border-box;
@@ -148,14 +153,15 @@
             border-radius: 5px;
             background-color: #f8f8f8;
             font-size: 16px;
-            resize: none;
             font-family: 'Lucida Sans', 'Lucida Grande', 'Lucida Sans Unicode', sans-serif;
         }
+
         .search-bar-container {
             display: flex;
             align-items: center;
             margin-bottom: 20px;
         }
+
         .search-bar {
             padding: 10px;
             border-radius: 20px;
@@ -165,6 +171,7 @@
             max-width: 300px;
             margin-right: 10px;
         }
+
         .search-btn {
             padding: 10px;
             background-color: #4caf50;
@@ -174,9 +181,40 @@
             cursor: pointer;
             font-size: 16px;
         }
+
         .search-btn:hover {
             background-color: #45a049;
         }
+
+        /* Status section styling */
+        .status-container {
+            display: flex;
+            width: 95%;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .status-container label {
+            width: 120px; /* Adjust width for the label */
+        }
+
+        .confirm-btn {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-bottom: 15px;
+            height: 53px;
+        }
+
+        .confirm-btn:hover {
+            background-color: #0056b3;
+        }
+
     </style>
 </head>
 <body>
@@ -184,7 +222,6 @@
     <div class="navigation_bar">
         <a href="../AdminFiles/AdministratorMenu.html" class="title">RiseFund admin</a>
     </div>
-
 
     <div class="container">
 
@@ -213,17 +250,20 @@
                 <label for="contributors">Contributors</label>
                 <input id="contributors" type="text" placeholder="0" disabled>
 
-                <label for="status">Status</label>
-                <select id="status">
-                    <option>Current Status</option>
-                    <option>Active</option>
-                    <option>Blocked</option>
-                </select>
+                <div class="status-container">
+                    <label for="status">Status</label>
+                    <select id="status">
+                        <option>Current Status</option>
+                        <option>Active</option>
+                        <option>Blocked</option>
+                    </select>
+                    <button class="confirm-btn">Confirm</button>
+                </div>
+
                 <label for="Details">Details</label>
                 <textarea id="Details" class="textarea" placeholder="This is an example of a description that the creator gives to inform the contributor about the whereabouts of the project. " disabled></textarea>
             </div>
 
-            
             <div class="project-list">
                 <table class="project-table">
                     <thead>
@@ -248,5 +288,6 @@
             </div>
         </div>
     </div>
+    <script src="AdministratorProjects_Script_1.js"></script>
 </body>
 </html>

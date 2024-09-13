@@ -1,81 +1,95 @@
-<!--RISEFUND PROYECT-->>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITLE ON BAR</title>
+    <title>Compartir enlace</title>
     <style>
-        .container{
-            position: relative;
-            width: 300px;
-            height: 300px;
-            border: 2px solid #000000;
+        /* Estilos para el pop-up */
+        #sharePopup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
             padding: 20px;
-
-            margin-left: auto;
-            margin-right: auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
         }
-        .sub_container{
-            position: relative;
-            width: 150px;
-            height: 150px;
-            border: 2px solid #000000;
-            margin-inline: auto;
-
+        #overlay {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
         }
-        .textfield{
-            width: 300px;
-            padding: 10px;
-            border: 2px solid #000000;
-            border-radius: 5px;
-            font-size: 16px;
-            margin-bottom: 10px;
+        button {
+            margin: 5px;
         }
-        .button_ok {
-            margin-top: 10px;
-            padding: 10px 20px; /*alto - ancho  */
-            background-color: #5e4caf;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .option_selection{
-            margin-top: 10px;
-            padding: 10px 20px;
-            background-color: #424242;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        .navigation_bar{
-            margin-top: 0px;
-            margin-bottom: 0px;
-            margin-left: 0px;
-            margin-right: 0px;
-
-        }
-
     </style>
 </head>
 <body>
-    <input type="text" id="idtext1" class="textfield" placeholder="Texto dentro del textfield">
-    <input type="text" id="idtext2" class="textfield" placeholder="Texto dentro del textfield">
-    <button class="button_ok" onclick="processTexts()">Ok Button</button>
-    <script src="A_SANDBOX_SCRIPT_1.js"></script>
+
+<h2>Compartir enlace</h2>
+
+<!-- Botón para compartir -->
+<button id="shareButton">Compartir</button>
+
+<!-- Overlay para el fondo oscuro -->
+<div id="overlay"></div>
+
+<!-- Pop-up con opciones de redes sociales -->
+<div id="sharePopup">
+    <p>Elige una opción para compartir:</p>
+    <button onclick="shareWhatsApp()">WhatsApp</button>
+    <button onclick="shareFacebook()">Facebook</button>
+    <button onclick="shareTwitter()">Twitter</button>
     <br>
-    <div class = "container">
-        <div class = "sub_container">Hola</div>
-    </div>
-    <br>
-    <select class="option_selection" id="IdSelect1" name="Options">
-        <option value="Option1">Option 1</option>
-        <option value="Option2">Option 2</option>
-    </select>
-    <nav style="background-color: #FFFFFF;">link</nav>
+    <button onclick="closePopup()">Cerrar</button>
+</div>
+
+<script>
+// URL de la página actual
+const currentUrl = window.location.href;
+
+// Mostrar el pop-up
+document.getElementById("shareButton").addEventListener("click", function() {
+    document.getElementById("sharePopup").style.display = "block";
+    document.getElementById("overlay").style.display = "block";
+});
+
+// Función para compartir en WhatsApp
+function shareWhatsApp() {
+    const whatsappUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(currentUrl)}`;
+    window.open(whatsappUrl, "_blank");
+}
+
+// Función para compartir en Facebook
+function shareFacebook() {
+    const facebookUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    window.open(facebookUrl, "_blank");
+}
+
+// Función para compartir en Twitter
+function shareTwitter() {
+    const twitterUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(currentUrl)}&text=¡Mira este enlace!`;
+    window.open(twitterUrl, "_blank");
+}
+
+// Cerrar el pop-up
+function closePopup() {
+    document.getElementById("sharePopup").style.display = "none";
+    document.getElementById("overlay").style.display = "none";
+}
+
+// Cerrar el pop-up al hacer clic en el overlay
+document.getElementById("overlay").addEventListener("click", closePopup);
+</script>
+
 </body>
 </html>

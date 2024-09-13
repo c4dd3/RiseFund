@@ -109,6 +109,30 @@
             font-style: italic;
             font-size: 50px;
         }
+
+        /* Estilos para el pop-up */
+        #sharePopup {
+            display: none;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%);
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        #overlay {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+        }
         /*Contenedor de informacion, izquierda y derecha*/
         .ProjectInfo {
             display: flex;
@@ -280,13 +304,14 @@
                 <nav>
                     <div class="dropdown_menu" id="dropdownMenu">
                         <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                        <a href="../UserFiles/UserConfig.html" class="title">User config</a>
                     </div>
                 </nav>
             </div>
         </div>
     </header>
     <script src="ContributorMenu_Script_1.js"></script>
-    <!-- Barra de navegacion -->
+    
     <div class="container">
         <h1 class="Titulo">Title of project</h1>
         <div class="ProjectInfo">
@@ -330,6 +355,21 @@
             </div>
         </div>
     </div>
+
+    <!-- Overlay para oscurecer el fondo -->
+    <div id="overlay" onclick="closePopup()"></div>
+
+    <!-- Pop-up de compartir -->
+    <div id="sharePopup">
+        <h2>Share this page</h2>
+        <button onclick="shareOn('whatsapp')">Share on WhatsApp</button>
+        <button onclick="shareOn('facebook')">Share on Facebook</button>
+        <button onclick="shareOn('twitter')">Share on Twitter</button>
+        <button onclick="closePopup()">Close</button>
+    </div>
+
+    <!-- Incluye el script -->
+
     <script src="ContributorDetails_Script_1.js"> </script>
 </body>
 </html>

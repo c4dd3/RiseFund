@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', function() {
     const searchButton = document.querySelector('.search-btn');
+    const confirmButton = document.querySelector('.confirm-btn');
     const searchInput = document.querySelector('.search-bar');
     const userIDField = document.getElementById('userID');
     const firstNameField = document.getElementById('firstName');
@@ -87,6 +88,38 @@ document.addEventListener('DOMContentLoaded', function() {
             clearForm();
         }
     }
+
+    async function updateUserStatus() {
+        const UserID = parseInt(userIDField.value);
+        const Status = statusField.value === 'Active' ? 1 : 0;
+        const UserData = {
+            UserID: UserID,
+            Status: Status
+        }
+        try {
+            const response = await fetch('/UpdateUserStatus', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(UserData),
+            });
+            if (response.ok) {
+                alert('User status updated successfully');
+                clearForm();
+                loadUsers();
+            } else {
+                alert('Error updating user status');
+                clearForm();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while updating user status');
+            clearForm();
+        }
+    }
+
+    confirmButton.addEventListener('click', updateUserStatus);
 
     function clearForm() {
         userIDField.value = '';

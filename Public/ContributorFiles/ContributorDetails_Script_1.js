@@ -7,12 +7,6 @@ function toggleDropdown() {
     }
 }
 
-function Compartir() {
-    console.log("Ha compartido el proyecto");
-};
-function Contacto() {
-    console.log("Se quiere contactar con el autor");
-};
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
@@ -233,8 +227,8 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
 
                     <div class="ButtonContainer">
-                        <button class="ShareButton" onclick="Compartir()">Share</button>
-                        <button class="ContactButton" onclick="Contactos()">Contact</button>
+                        <button class="ShareButton" onclick="Compartir()" id="shareButton">Share</button>
+                        <button class="ContactButton" onclick="Contactar()">Contact</button>
                     </div>
                 </div>
 
@@ -264,3 +258,58 @@ document.addEventListener('DOMContentLoaded', async () => {
     }
 });
 
+// Función para mostrar el pop-up
+function Compartir() {
+    const sharePopup = document.getElementById("sharePopup");
+    const overlay = document.getElementById("overlay");
+    sharePopup.style.display = "block";
+    overlay.style.display = "block";
+}
+
+// Función para ocultar el pop-up
+function closePopup() {
+    const sharePopup = document.getElementById("sharePopup");
+    const overlay = document.getElementById("overlay");
+    sharePopup.style.display = "none";
+    overlay.style.display = "none";
+}
+
+// Función para compartir el enlace en redes sociales
+function shareOn(platform) {
+    const url = window.location.href;
+    let shareUrl;
+
+    switch (platform) {
+        case 'whatsapp':
+            shareUrl = `https://api.whatsapp.com/send?text=${encodeURIComponent(url)}`;
+            break;
+        case 'facebook':
+            shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+            break;
+        case 'twitter':
+            shareUrl = `https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}`;
+            break;
+        default:
+            return;
+    }
+
+    window.open(shareUrl, '_blank');
+}
+
+// Función
+async function Contactar() {
+    const projectID = getQueryParam('id');
+    const response1 = await fetch('/ProjectById', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ projectID: projectID })
+    });
+
+    // Convertir la respuesta en formato JSON
+    const project = await response1.json();
+
+    const email = project.Email;
+    window.location.href = `mailto:${email}`;
+}

@@ -29,11 +29,16 @@
         }
 
         .title {
-            font-family: 'Lucida Calligraphy', serif;
-            font-size: 40px;
-            font-weight: bold;
+            margin-left: calc(1%);
+            margin-top: 5px;
+            padding-top: 15px;
+            font-family: 'Baskerville', 'Baskerville Old Face', Garamond, 'Times New Roman', serif;
+            font-style: italic;
+            font-size: 50px;
+            font-weight: 1000;
             color: #3697FF;
             text-decoration: none;
+            margin-bottom: calc(1%);
         }
 
         .container {
@@ -132,7 +137,7 @@
             background-color: #da190b;
         }
 
-        .project-list {
+        .donation-list {
             flex: 1;
             padding: 20px;
             background-color: #f0f0f0;
@@ -142,7 +147,7 @@
             height: auto;
         }
 
-        .user-table {
+        .donation-table {
             width: 100%;
             margin-top: 20px;
             border-collapse: collapse;
@@ -153,24 +158,24 @@
             box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.05);
         }
 
-        .user-table th, .user-table td {
+        .donation-table th, .donation-table td {
             padding: 12px 15px;
             border-bottom: 1px solid #ddd;
         }
 
-        .user-table th {
+        .donation-table th {
             background-color: #f0f0f0;
         }
 
-        .user-table tr:nth-child(even) {
+        .donation-table tr:nth-child(even) {
             background-color: #f9f9f9;
         }
 
-        .user-table tr:hover {
+        .donation-table tr:hover {
             background-color: #f1f1f1;
         }
 
-        .user-table td {
+        .donation-table td {
             font-size: 14px;
         }
 
@@ -235,29 +240,28 @@
 
             <div class="form-section">
                 <label for="donationID">Donation ID</label>
-                <input id="donationID" type="text" placeholder="Donation ID" value="0987654321" disabled>
+                <input id="donationID" type="text" placeholder="Donation ID" value="0" disabled>
 
                 <label for="amountDonated">Amount Donated</label>
                 <input id="amountDonated" type="text" placeholder="$0000.00" disabled>
 
-                <label for="creatorID">Contributor ID/User ID</label>
-                <input id="creatorID" type="text" placeholder="Contributor ID/User ID" value="1234567890" disabled>
+                <label for="userID">Contributor ID/User ID</label>
+                <input id="userID" type="text" placeholder="Contributor ID/User ID" value="0" disabled>
 
-                <label for="donationAdministration">Donation Administration</label>
                 <div class="button-container">
                     <button class="accept-btn">Accept</button>
                     <button class="decline-btn">Decline</button>
                 </div>
 
                 <label for="projectID">Project ID</label>
-                <input id="projectID" type="text" placeholder="Project ID" value="0987654321" disabled>
+                <input id="projectID" type="text" placeholder="Project ID" value="0" disabled>
 
-                <label for="Details">Details</label>
-                <textarea id="Details" class="textarea" placeholder="This is an example of a description that the creator gives to inform the contributor about the whereabouts of the project. " disabled></textarea>
+                <label for="Comment">Comment</label>
+                <textarea id="Comment" class="textarea" placeholder="Comment" disabled></textarea>
             </div>
 
-            <div class="project-list">
-                <table class="user-table">
+            <div class="donation-list">
+                <table class="donation-table">
                     <thead>
                         <tr>
                             <th>Donation ID</th>
@@ -269,7 +273,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>0987654321</td>
+                            <td>0</td>
                             <td>1234567890</td>
                             <td>%000</td>
                             <td>$0000.00</td>
@@ -280,5 +284,6 @@
             </div>
         </div>
     </div>
+    <script src="AdministratorDonation_Script_1.js"></script>
 </body>
 </html>

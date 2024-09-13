@@ -7,7 +7,27 @@ function toggleDropdown() {
     }
 }
 
-function showConfirmation() {
+async function isOfUser(accountNumber, UserID) {
+    try {
+        const response = await fetch('/GetBankAccountList', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        });
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const accounts = await response.json();
+        const account = accounts.find(account => account.AccountNumer === accountNumber && account.UserID === parseInt(UserID));
+        return account !== undefined;
+    } catch (error) {
+        console.error('Error fetching account list:', error);
+        return false;
+    }
+}
+
+async function showConfirmation() {
     const projectTitle = document.getElementById("project-title").value;
     const projectID = document.getElementById("project-id").value;
     const startDate = document.getElementById("start-date").value;
@@ -18,7 +38,8 @@ function showConfirmation() {
     const depositMethod = document.getElementById("deposit-method").value;
     const accountNumber = document.getElementById("account-number").value;
     const description = document.getElementById("description").value;
-
+    const userID = sessionStorage.getItem('userID');
+    const accountOwnership = await isOfUser(accountNumber, userID);
 
     if (!goal || !contact || !accountNumber) {
         alert("Please fill in all the required fields before confirming.");
@@ -40,13 +61,18 @@ function showConfirmation() {
     Confirm project creation?`);
 
     if (confirmed) {
-        createProject(projectTitle, description, goal, startDate, completionDate, 
-                        contact, depositMethod, accountNumber);
-        const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
-        const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
-        const userID = sessionStorage.getItem('userID'); 
-        createRegisterProject(projectID, 'New Project by user '+userID.toString()+' has been created', currentDateCR, currentTimeCR)
-        alert("Project Created!");
+        if (accountOwnership){
+            createProject(projectTitle, description, goal, startDate, completionDate, 
+                contact, depositMethod, accountNumber);
+            const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
+            const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
+            const userID = sessionStorage.getItem('userID'); 
+            createRegisterProject(projectID, 'New Project by user '+userID.toString()+' has been created', currentDateCR, currentTimeCR)
+            alert("Project Created!");
+        } else {
+            alert("Account number does not exist or is not yours");
+        }
+        
     }
 }
 
