@@ -9,7 +9,7 @@ async function Login(){
         return;
     }
 
-    if(emailFound &&correctPassword ){
+    if(emailFound && correctPassword ){
         console.log("Granted");
         const uniqueUserID =  await getUserID(email, password);
         sessionStorage.setItem('userID', uniqueUserID);
@@ -51,6 +51,12 @@ async function confirmPassword(email, password) {
     }
 }
 
+async function confirmStatus(email, password) {
+    try {
+        const response = 
+
+    }
+}
 
 async function guardarUsuario() {
     const email = 'usuario@example.com';  // Email del usuario

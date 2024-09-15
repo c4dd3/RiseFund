@@ -149,14 +149,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 body: JSON.stringify(donationData),
             });
             const data = await response.json();
-
             if (response.ok) {
                 if (data.success) {
                     alert('Donation status edited successfully');
-
-
-
-                    
                 } else {
                     alert(data.message || 'Donation not found');
                     clearForm();
@@ -169,18 +164,14 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
             alert('An error occurred while editing the donation');
         }
-
         const resultbody = await searchDonationData(DonationID);
         const ProjectID = resultbody.ProjectID;
         const collected = resultbody.collected;
         const sumToAdd = resultbody.sumToAdd;
         await updateCollectedAmmount(ProjectID, collected, sumToAdd);
-
         clearForm();
         loadDonations();
         desactiveButtons();
-
-        
     }
 
     async function updateCollectedAmmount(ProjectID, collected, sumToAdd) {

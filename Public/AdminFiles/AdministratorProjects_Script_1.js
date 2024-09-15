@@ -14,11 +14,9 @@ document.addEventListener('DOMContentLoaded', function() {
 
     async function loadProjects() {
         try {
-            console.log('Fetching projects...');
             const response = await fetch('/GetProjectList');
             if (response.ok) {
                 const projects = await response.json();
-                console.log('Projects fetched:', projects);
                 displayProjects(projects);
             } else {
                 alert('Error fetching projects data');
@@ -107,7 +105,7 @@ document.addEventListener('DOMContentLoaded', function() {
             projectID: projectID,
             status: statusValue
         };
-        console.log(statusValue);
+
         try {
             const response = await fetch('/UpdateProjectStatus', {
                 method: 'POST',
