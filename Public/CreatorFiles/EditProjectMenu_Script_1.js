@@ -82,6 +82,11 @@ async function showConfirmation() {
                 Confirm changes?`);
             if (confirmed) {
                 ActualizarInfo(projectTitle, projectDescription, goal, startDate, completionDate, contact, contact, depositMethod, accountNumber, intStatus); 
+                const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
+                const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
+                const userID = sessionStorage.getItem('userID'); 
+                createRegisterProject(projectID, 'Project by user '+userID.toString()+' has been edited', currentDateCR, currentTimeCR);
+                sendConfirmation(userID);
                 alert("Project updated!");
             }
         } else {
@@ -89,10 +94,37 @@ async function showConfirmation() {
         }
         
     } else {
-        alert("Your Project is Bloqued Or Finished");
+        alert("Your Project is Blocked Or Finished");
     }
     
-}                                                  
+}             
+
+async function createRegisterProject(ProjectID, Detail, Date, Times) {
+    const ProjectRegisterData = {
+        ProjectID:ProjectID,
+        Detail:Detail,
+        Date:Date,
+        Times:Times,
+    };
+    try {
+        const response = await fetch('/AddRegisterProjectActivity', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'  
+            },
+            body: JSON.stringify(ProjectRegisterData)  
+        });
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(errorData.error);
+        }
+        const result = await response.json();  
+        console.log('Response from server:', result);
+    } catch (err) {
+        console.error('Error creating user:', err.message);  
+    }
+}
+
 function updateImage(event) {
     const file = event.target.files[0];
     const reader = new FileReader();
@@ -296,6 +328,32 @@ async function ActualizarInfo(title, Description, ContributionGoal, Start, End, 
         console.log('Response from server:', result);
     } catch (err) {
         console.error('Error editing project:', err.message);  
+    }
+}
+
+async function sendConfirmation(UserID) {
+    if (!UserID) {
+        console.error('Email not found.');
+        alert('Email is missing.');
+        return;
+    }
+    try {
+        const response = await fetch('/sendEditingEmail', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ UserID })  // Enviar el correo electrónico en el cuerpo de la solicitud
+        });
+
+        if (response.ok) {
+            alert('Confirmation email sent successfully!');
+        } else {
+            alert('Failed to send the confirmation email.');
+        }
+    } catch (error) {
+        console.error('Error sending the confirmation email:', error);
+        alert('An error occurred while sending the confirmation email.');
     }
 }
 

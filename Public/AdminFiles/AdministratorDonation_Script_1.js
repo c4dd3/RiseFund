@@ -14,12 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const statisticsBtn = document.querySelector('.statistics-btn');
     const closeBtn = document.querySelector('.close-btn');
     const totalAmountDiv = document.getElementById('totalAmount');
+    const donationApprovedDiv = document.getElementById('donationApproved');
+    const donationRejectedDiv = document.getElementById('donationRejected');
     historyEnable.value = '0';
 
     statisticsBtn.addEventListener('click', async () => {
         const totalAmount = await getTotalDonations();
         totalAmountDiv.textContent = `Total Amount Donated: $${totalAmount}`;
-        
+        donationApprovedDiv.textContent = `Donations Approved: ${(await getDonationApproved())}`;
+        donationRejectedDiv.textContent = `Donations Pending: ${await getDonationRejected()}`;
         popup.style.display = 'flex';
     });
 
@@ -57,7 +60,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch('/GetDonationApproved');
             if (response.ok) {
                 const data = await response.json();
-                return data.sumaTotal;
+                return data.Total;
             } else {
                 alert('Error fetching total approved donations');
                 return 0;
@@ -74,7 +77,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch('/GetDonationRejected');
             if (response.ok) {
                 const data = await response.json();
-                return data.sumaTotal;
+                return data.Total;
             } else {
                 alert('Error fetching total rejected donations');
                 return 0;

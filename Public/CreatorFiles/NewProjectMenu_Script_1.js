@@ -67,7 +67,7 @@ async function showConfirmation() {
             const currentDateCR = new Date().toLocaleDateString('en-CA', { timeZone: 'America/Costa_Rica' });
             const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
             const userID = sessionStorage.getItem('userID'); 
-            createRegisterProject(projectID, 'New Project by user '+userID.toString()+' has been created', currentDateCR, currentTimeCR)
+            createRegisterProject(projectID, 'New Project by user '+userID.toString()+' has been created', currentDateCR, currentTimeCR);
             alert("Project Created!");
         } else {
             alert("Account number does not exist or is not yours");

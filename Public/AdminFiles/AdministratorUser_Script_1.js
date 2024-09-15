@@ -8,6 +8,59 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusField = document.getElementById('status');
     const emailField = document.getElementById('email');
     const userTableBody = document.querySelector('.user-table tbody');
+    const statisticsBtn = document.getElementById('statistics-btn');
+    const closeBtn = document.querySelector('.close-btn');
+    const popup = document.querySelector('.popup');
+    const activeUserDiv = document.getElementById('activeUser');
+    const blockedUserDiv = document.getElementById('blockedUser');
+ 
+    statisticsBtn.addEventListener('click', async () => {
+        activeUserDiv.textContent = `Total Active Users: ${(await getActiveUsers())}`;
+        blockedUserDiv.innerHTML = `Total Blocked Users: ${(await getBlockedUsers())}`;
+        popup.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.style.display = 'none';
+        }
+    });
+
+    async function getActiveUsers() {
+        try {
+            const response = await fetch('/GetActiveUsers');
+            if (response.ok) {
+                const users = await response.json();
+                return users.Total;
+            } else {
+                alert('Error fetching users data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading users');
+        }
+    }
+
+    async function getBlockedUsers() {
+        try {
+            const response = await fetch('/GetBlockedUsers');
+            if (response.ok) {
+                const users = await response.json();
+                return users.Total;
+            } else {
+                alert('Error fetching users data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading users');
+        }
+    }
+
+
 
 
     async function loadUsers() {

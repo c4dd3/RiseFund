@@ -30,7 +30,9 @@ document.addEventListener('DOMContentLoaded', async () => {
         projectsDisplay.innerHTML = '';
         projects.forEach(project => {
             if(project.Status == 1 && project.Collected <= raised){ // Los bloqueados o finalizados no
-                const percentage = (project.Collected * 100) / project.ContributionGoal;
+                let number = (project.Collected * 100) / project.ContributionGoal;
+                let limitedDecimals = number.toFixed(2);  
+                const percentage = parseFloat(limitedDecimals); 
                 if (percentage <= progress) {
                 const projectPanel = `
                     <div class="InfoPanel">

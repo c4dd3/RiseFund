@@ -10,6 +10,74 @@ document.addEventListener('DOMContentLoaded', function() {
     const statusField = document.getElementById('status');
     const descriptionField = document.getElementById('Description');
     const projectTableBody = document.querySelector('.project-table tbody');
+    const statisticsBtn = document.querySelector('.statistics-btn');
+    const popup = document.querySelector('.popup');
+    const closeBtn = document.querySelector('.close-btn');
+    const activeProjectDiv = document.getElementById('activeProject');
+    const finishedProjectDiv = document.getElementById('finishedProject');
+    const blockedProjectDiv = document.getElementById('blockedProject');
+
+    statisticsBtn.addEventListener('click', async () => {
+        activeProjectDiv.textContent = `Total Active Project: ${(await getActiveProjects())}`;
+        finishedProjectDiv.innerHTML = `Total Finished Projects: ${(await getFinishedProjects())}`;
+        blockedProjectDiv.innerHTML = `Total Blocked Project: ${(await getBlockedProjects())}`;
+        popup.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.style.display = 'none';
+        }
+    });
+
+    async function getActiveProjects() {
+        try{
+            const response = await fetch('/GetActiveProject');
+            if (response.ok) {
+                const projects = await response.json();
+                return projects.Total;
+            } else {
+                alert('Error fetching projects data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading projects');
+        }
+    }
+
+    async function getBlockedProjects() {
+        try{
+            const response = await fetch('/GetBlockedProject');
+            if (response.ok) {
+                const projects = await response.json();
+                return projects.Total;
+            } else {
+                alert('Error fetching projects data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading projects');
+        }
+    }
+
+    async function getFinishedProjects() {
+        try{
+            const response = await fetch('/GetFinishedProject');
+            if (response.ok) {
+                const projects = await response.json();
+                return projects.Total;
+            } else {
+                alert('Error fetching projects data');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while loading projects');
+        }
+    }
 
 
     async function loadProjects() {

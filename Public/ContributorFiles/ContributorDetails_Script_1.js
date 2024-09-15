@@ -191,7 +191,10 @@ document.addEventListener('DOMContentLoaded', async () => {
         projectsDisplay.innerHTML = ''; // Limpiar los paneles anteriores
         
         // Calcular el porcentaje de error
-        const percentage = (project.Collected * 100) / project.ContributionGoal;
+
+        let number = (project.Collected * 100) / project.ContributionGoal;
+        let limitedDecimals = number.toFixed(2);  
+        const percentage = parseFloat(limitedDecimals);  
 
         // Generar dinámicamente un panel para cada proyecto
         const projectPanel = `

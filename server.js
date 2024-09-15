@@ -459,6 +459,85 @@ app.post('/sendQuestion', async (req, res) => {
     }
 });
 
+// Send notification Register
+app.post('/sendConfirmation', async (req, res) => {
+    const { Email } = req.body;
+
+    if (!Email) {
+        return res.status(400).json({ message: 'Email is required.' });
+    }
+
+    // Definir opciones del correo electrónico
+    const mailOptions = {
+        from: 'risefund1@gmail.com',  // Dirección de correo electrónico del remitente
+        to: Email,
+        subject: 'Registration Confirmation Email',
+        html: `
+        <h1>Welcome to the RiseFund Family!</h1>
+        <p>Thank you for registering with RiseFund. We are thrilled to have you as part of our family.</p>
+        <p>We appreciate your support and look forward to working with you in the future.</p>
+        `
+    };
+  
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Correo electrónico enviado correctamente.');
+        res.json({ message: 'Confirmation email sent successfully!' });
+    } catch (error) {
+        console.error('Error al enviar el correo electrónico:', error);
+        res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
+    }
+});
+
+// Send Email when editing project
+app.post('/sendEditingEmail', async (req, res) => {
+    const { UserID } = req.body; // Asegúrate de recibir UserID desde el cliente
+
+    if (!UserID) {
+        return res.status(400).json({ message: 'Name, question, and UserID are required.' });
+    }
+
+    let userEmail;
+
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT Email FROM [USER] WHERE ID = @UserID
+        `;
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, parseInt(UserID, 10));
+        const result = await request.query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        userEmail = result.recordset[0].Email; // Obtener el email del primer registro
+    } catch (err) {
+        console.error('Error getting user email:', err);
+        return res.status(500).json({ message: 'Failed to get email.', error: err.message });
+    }
+
+    const mailOptions = {
+        from: 'risefund1@gmail.com',
+        to: userEmail,  // Aquí colocas el email del destinatario
+        subject: `Project Updated`,
+        html: `
+        <h1>You have made changes to your project</h1>
+        `
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully.');
+        res.json({ message: 'Question sent and email delivered successfully!' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
+    }
+});
+
+
 // Add Donation / Crear Donation
 app.post('/AddDonation', async (req, res) => {
     const { UserID, ProjectID, Ammount, Comment, Status, Date, Time} = req.body;
@@ -490,10 +569,15 @@ app.post('/AddDonation', async (req, res) => {
             return res.status(404).send('Usuario no encontrado');
         }
         const mailOptions = {
-            from: 'risefund1@gmail.com',   
-            to: userEmail,                 
-            subject: 'Confirmación de donación',  
-            text: `Gracias por tu donación de $${Ammount} al proyecto ${ProjectID}. Tu comentario fue: "${Comment}".`  // Cuerpo del correo
+            from: 'risefund1@gmail.com',
+            to: userEmail,
+            subject: 'Donation Confirmation',
+            html: `
+                <h1>Thank you for your donation!</h1>
+                <p>Your donation of $${Ammount} to project ${ProjectID} has been successfully received.</p>
+                <p>Comment: "${Comment}"</p>
+                <p>Thanks to your support, we can continue to grow and improve our projects and achieve our goals :D</p>
+            `
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -1032,10 +1116,12 @@ app.get('/GetDonationApproved', async (req, res) => {
     try {
         await sql.connect(config);
         const query = `
-            SELECT * FROM [DONATION] WHERE [DONATION].Status = 1
+            SELECT COUNT(*) [Total]
+            FROM [DONATION] 
+            WHERE [DONATION].Status = 1
         `;
         const result = await sql.query(query);
-        res.json(result.recordset);
+        res.json(result.recordset[0]);
     } catch (err) {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
@@ -1046,12 +1132,93 @@ app.get('/GetDonationRejected', async (req, res) => {
     try {
         await sql.connect(config);
         const query = `
-            SELECT * FROM [DONATION] WHERE [DONATION].Status = 0
+            SELECT COUNT(*) [Total]
+            FROM [DONATION] 
+            WHERE [DONATION].Status = 0
         `;
         const result = await sql.query(query);
-        res.json(result.recordset);
+        res.json(result.recordset[0]);
     } catch (err) {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
 
+//GetActiveUsers
+app.get('/GetActiveUsers', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT ISNULL(COUNT(*), 0) 
+            [Total] FROM [USER] 
+            WHERE [USER].Status = 1
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});
+
+//GetBlockedUsers
+app.get('/GetBlockedUsers', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT ISNULL(COUNT(*), 0) [Total] 
+            FROM [USER] 
+            WHERE [USER].Status = 0
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});
+
+// GetActiveProject
+app.get('/GetActiveProject', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT ISNULL(COUNT(*), 0) [Total] 
+            FROM [PROJECT] 
+            WHERE [PROJECT].Status = 1
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});
+
+// GetFinishedProject
+app.get('/GetFinishedProject', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT ISNULL(COUNT(*), 0) [Total] 
+            FROM [PROJECT] 
+            WHERE [PROJECT].Status = 2
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});
+
+// GetBlockedProject
+app.get('/GetBlockedProject', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT ISNULL(COUNT(*), 0) [Total] 
+            FROM [PROJECT] 
+            WHERE [PROJECT].Status = 3
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset[0]);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});

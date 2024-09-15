@@ -22,7 +22,36 @@ async function SignUp() {
     const currentTimeCR = new Date().toLocaleTimeString('en-GB', { timeZone: 'America/Costa_Rica', hour12: false });
     await createRegisterUser(uniqueUserID, 'New User '+ uniqueUserID + ' Signed Up' , currentDateCR, currentTimeCR.toString());
     console.log("Sign Up Successful");
+    await sendConfirmation(email);
     window.location.href = 'MainMenu.html';
+}
+
+async function sendConfirmation(email) {
+    // Obtener el correo electrónico del sessionStorage o de otra fuente
+    const Email = email;
+    if (!Email) {
+        console.error('Email not found.');
+        alert('Email is missing.');
+        return;
+    }
+    try {
+        const response = await fetch('/sendConfirmation', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ Email })  // Enviar el correo electrónico en el cuerpo de la solicitud
+        });
+
+        if (response.ok) {
+            alert('Confirmation email sent successfully!');
+        } else {
+            alert('Failed to send the confirmation email.');
+        }
+    } catch (error) {
+        console.error('Error sending the confirmation email:', error);
+        alert('An error occurred while sending the confirmation email.');
+    }
 }
 
 // Verifica si hay simboloes especiales dado un string
