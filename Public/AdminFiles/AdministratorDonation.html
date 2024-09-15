@@ -218,6 +218,76 @@
         .search-btn:hover {
             background-color: #45a049;
         }
+        .enable-btn {
+            padding: 10px;
+            margin-left: 2%;
+            width: 70%;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .enable-btn:hover {
+            background-color: #45a049;
+        }
+        /* Popup window */
+        .popup {
+            display: none;
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .popup-content {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 600px;
+            position: relative;
+        }
+        
+        .popup-content h2 {
+            margin-top: 0;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+            font-size: 20px;
+            color: #f44336;
+        }
+        .close-btn:hover {
+            color: #da190b;
+        }
+
+        /* Statistics button styling */
+        .statistics-btn {
+            padding: 10px;
+            margin-left: 2%;
+            width: 55%;
+            background-color: #3697FF;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .statistics-btn:hover {
+            background-color: #2a78d4;
+        }
+
     </style>
 </head>
 <body>
@@ -234,6 +304,21 @@
         <div class="search-bar-container">
             <input id="searchBar" class="search-bar" type="text" placeholder="Search by Donation ID">
             <button class="search-btn">Search</button>
+            <button class="enable-btn">View Pending</button>
+            <button class="statistics-btn">Statistics</button>
+        </div>
+
+        <div id="popupWindow" class="popup">
+            <div class="popup-content">
+                <span class="close-btn">&times;</span> <!-- Close Button -->
+                <h2>Donation Statistics</h2>
+                <div id="totalAmount">
+                    <!-- The total donation amount will be displayed here -->
+                </div>
+                <div id="totalDonations">
+                    <!-- The total number of donations will be displayed here -->
+                </div>
+            </div>
         </div>
 
         <div class="form-container">

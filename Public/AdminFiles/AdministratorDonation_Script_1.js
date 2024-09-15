@@ -9,7 +9,84 @@ document.addEventListener('DOMContentLoaded', function() {
     const projectIDField = document.getElementById('projectID');
     const commentField = document.getElementById('Comment');
     const donationTableBody = document.querySelector('.donation-table tbody');
+    const historyEnable = document.querySelector('.enable-btn');
+    const popup = document.getElementById('popupWindow');
+    const statisticsBtn = document.querySelector('.statistics-btn');
+    const closeBtn = document.querySelector('.close-btn');
+    const totalAmountDiv = document.getElementById('totalAmount');
+    historyEnable.value = '0';
 
+    statisticsBtn.addEventListener('click', async () => {
+        const totalAmount = await getTotalDonations();
+        totalAmountDiv.textContent = `Total Amount Donated: $${totalAmount}`;
+        
+        popup.style.display = 'flex';
+    });
+
+    closeBtn.addEventListener('click', () => {
+        popup.style.display = 'none';
+    });
+
+    window.addEventListener('click', (e) => {
+        if (e.target === popup) {
+            popup.style.display = 'none';
+        }
+    });
+
+    async function getTotalDonations() {
+        try {
+            const response = await fetch('/GetTotalRaised', {
+                method: 'POST',
+            });
+            if (response.ok) {
+                const data = await response.json();
+                return data.sumaTotal;
+            } else {
+                alert('Error fetching total donations');
+                return 0;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while fetching total donations');
+            return 0;
+        }
+    }
+
+    async function getDonationApproved() {
+        try {
+            const response = await fetch('/GetDonationApproved');
+            if (response.ok) {
+                const data = await response.json();
+                return data.sumaTotal;
+            } else {
+                alert('Error fetching total approved donations');
+                return 0;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while fetching total approved donations');
+            return 0;
+        }
+    }
+
+    async function getDonationRejected() {
+        try {
+            const response = await fetch('/GetDonationRejected');
+            if (response.ok) {
+                const data = await response.json();
+                return data.sumaTotal;
+            } else {
+                alert('Error fetching total rejected donations');
+                return 0;
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('An error occurred while fetching total rejected donations');
+            return 0;
+        }
+    }
+
+    
     async function loadDonations() {
         try {
             const response = await fetch('/GetDonationList');
@@ -28,7 +105,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function displayDonations(donations) {
         donationTableBody.innerHTML = '';
         donations.forEach(donation => {
-            donationTableBody.innerHTML += `
+            if(!donation.Status || historyEnable.value =='0'){
+                donationTableBody.innerHTML += `
                 <tr>
                     <td>${donation.ID}</td>
                     <td>${donation.Date}</td>
@@ -37,6 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${donation.UserID}</td>
                 </tr>
             `;
+            }
         });
     }
 
@@ -46,6 +125,18 @@ document.addEventListener('DOMContentLoaded', function() {
         if (donationID) {
             searchDonation(donationID);
         }
+    });
+
+    historyEnable.addEventListener('click', function() {
+        if(historyEnable.value == '0'){
+            historyEnable.value = '1';
+            historyEnable.textContent = 'View All';
+        } else {
+            historyEnable.value = '0';
+            historyEnable.textContent = 'View Pending';
+        }
+        clearForm();
+        loadDonations();
     });
 
     async function searchDonation(donationID) {
@@ -258,6 +349,7 @@ document.addEventListener('DOMContentLoaded', function() {
         commentField.value = '';
         donationTableBody.innerHTML = '';
     }
-
+    
+    clearForm();
     loadDonations();
 });

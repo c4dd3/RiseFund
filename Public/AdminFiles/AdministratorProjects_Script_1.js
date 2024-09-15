@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const progressField = document.getElementById('progress');
     const contributorField = document.getElementById('contributors');
     const statusField = document.getElementById('status');
-    const detailsField = document.getElementById('details');
+    const descriptionField = document.getElementById('Description');
     const projectTableBody = document.querySelector('.project-table tbody');
 
 
@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     } else {
                         statusField.value = 'Blocked';
                     }
+                    descriptionField.value = project.Description;
                 } else {
                     alert(data.message || 'Project not found');
                     clearForm();
@@ -142,7 +143,7 @@ document.addEventListener('DOMContentLoaded', function() {
         progressField.value = '';
         contributorField.value = '';
         statusField.value = '';
-
+        descriptionField.value = '';
     }
 
     loadProjects();

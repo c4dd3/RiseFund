@@ -23,3 +23,34 @@ function toggleFAQ(button) {
         button.innerText = "-";
     }
 }
+
+
+async function sendQuestion() {
+    const name = document.getElementById('name').value.trim();
+    const question = document.getElementById('inquiry').value.trim();
+    const UserID = sessionStorage.getItem('userID');
+
+    if (!name || !question) {
+        alert('Please, fill in all the spaces');
+        return;
+    }
+
+    try {
+        const response = await fetch('/sendQuestion', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ name, question, UserID })
+        });
+
+        if (response.ok) {
+            alert('Question sent successfully!');
+        } else {
+            alert('Failed to send the question.');
+        }
+    } catch (error) {
+        console.error('Error sending the question:', error);
+        alert('An error occurred while sending your question.');
+    }
+}

@@ -115,6 +115,14 @@
             gap: 10px;
             margin-top: 10px;
         }
+
+        .confirm-btn-personal-info {
+            background-color: #007bff;
+        }
+
+        .confirm-btn-payment-info {
+            background-color: #007bff;
+        }
     </style>
 </head>
 <body>
@@ -141,7 +149,7 @@
             <label for="confirmPassword">Confirm New Password</label>
             <input id="confirmPassword" type="password" placeholder="Confirm New Password">
 
-            <button class="confirm-btn">Update Information</button>
+            <button class="confirm-btn-personal-info" id ="confirm-btn-personal-info">Update Information</button>
         </div>
 
         <div class="form-section">
@@ -158,9 +166,40 @@
             <label for="securityNumber">Security Number</label>
             <input id="securityNumber" type="text" placeholder="Security Number">
 
-            <button class="confirm-btn">Save Payment Info</button>
+            <button class="confirm-btn-payment-info" id="confirm-btn-payment-info">Save Payment Info</button>
         </div>
     </div>
     <script src="UserConfig_Script_1.js"></script>
+
+    <script>
+        document.getElementById('expirationDate').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
+    
+            // Limit to a maximum of 8 digits (YYYYMMDD)
+            if (value.length > 8) {
+                value = value.slice(0, 8);
+            }
+    
+            // Add '-' after the first four digits (year) and after the next two digits (month)
+            if (value.length > 4) {
+                value = value.slice(0, 4) + '-' + value.slice(4);
+            }
+            if (value.length > 7) {
+                value = value.slice(0, 7) + '-' + value.slice(7);
+            }
+    
+            e.target.value = value;
+        });
+    
+        // Prevent typing non-numeric characters except for Backspace
+        document.getElementById('expirationDate').addEventListener('keydown', function (e) {
+            if (e.key.match(/[^0-9\-]/) && e.key !== 'Backspace') {
+                e.preventDefault();
+            }
+        });
+    </script>
+    
+    
+
 </body>
 </html>

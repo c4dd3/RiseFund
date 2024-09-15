@@ -250,12 +250,44 @@
             .btn:hover {
                 background-color: #45a049;
             }
+        .filter-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-left: 20px;
+            margin-bottom: 30px;
+        }
+
+        .filter-dropdown {
+            padding: 10px;
+            border-radius: 20px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            margin-right: 15px;
+            width: 200px;
+        }
+
+        .filter-btn {
+            padding: 10px;
+            background-color: #4caf50;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 16px;
+            vertical-align: middle;
+            margin-left: 10px;
+            margin-bottom: 2px;
+        }
+
+        .filter-btn:hover {
+            background-color: #45a049;
+        }
     </style>
 </head>
 
 <body>
 
-    <!-- Barra de navegacion -->
     <header class="navbar">
         <div class="navigation_bar">
             <div class="logo">
@@ -280,8 +312,6 @@
     </header>
     <script src="ContributorMenu_Script_1.js"></script>
 
-    <!-- Barra de navegacion -->
-
     <div class="container">
 
         <h1 class="Titulo">Explore projects of your interest</h1>
@@ -289,6 +319,26 @@
         <div class="search-bar-container">
             <input type="text" class="search-bar" placeholder="Search projects...">
             <button class="search-btn">Search</button>
+
+
+            <div class="filter-container">
+
+                <select class="filter-dropdown" id="completionFilter">
+                    <option value="100">Completion &lt; 100%</option>
+                    <option value="75">Completion &lt; 75%</option>
+                    <option value="50">Completion &lt; 50%</option>
+                    <option value="25">Completion &lt; 25%</option>
+                </select>
+
+                <select class="filter-dropdown" id="moneyFilter">
+                    <option value="5000" id="5000">Money Received &lt; $5000</option>
+                    <option value="1000" id="1000">Money Received &lt; $1000</option>
+                    <option value="500" id="500">Money Received &lt; $500</option>
+                    <option value="100" id="100">Money Received &lt; $100</option>
+                </select>
+
+                <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
+            </div>
         </div>
 
         <div class="ProjectsDisplay">

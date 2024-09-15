@@ -136,7 +136,6 @@ app.post('/GetUserByID', async (req, res) => {
     try {
         // Conexión a la base de datos
         await sql.connect(config);
-        console.log(UserID);
         // Preparar la consulta SELECT
         const request = new sql.Request();
         const query = `
@@ -144,7 +143,6 @@ app.post('/GetUserByID', async (req, res) => {
         `;
         request.input('ID', sql.Int, UserID);
         const result = await request.query(query);
-        console.log(result);
         // Si se encuentra un usuario, devolver los datos
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);
@@ -153,6 +151,29 @@ app.post('/GetUserByID', async (req, res) => {
         }
     } catch (err) {
         res.status(500).send('Error retrieving user: ' + err.message);
+    }
+});
+//GetPaymentDataByID
+app.post('/GetPaymentDataByID', async (req, res) => {
+    const { UserID } = req.body;  // Obtenemos el ID del usuario desde los parámetros de consulta
+    try {
+        // Conexión a la base de datos
+        await sql.connect(config);
+        // Preparar la consulta SELECT
+        const request = new sql.Request();
+        const query = `
+            SELECT * FROM [BANK_ACCOUNT] WHERE UserID = @ID;
+        `;
+        request.input('ID', sql.Int, UserID);
+        const result = await request.query(query);
+        // Si se encuentra un usuario, devolver los datos
+        if (result.recordset.length > 0) {
+            res.json(result.recordset[0]);
+        } else {
+            return;  
+        }
+    } catch (err) {
+        res.status(500).send('Error retrieving bank account: ' + err.message);
     }
 });
 //GetUserList
@@ -164,13 +185,37 @@ app.get('/GetUserList', async (req, res) => {
             CASE [Status] WHEN 1 THEN 'Active' ELSE 'Blocked' END AS [STATUS] FROM [USER]
         `;
         const result = await sql.query(query);
-        console.log(result);
         res.json(result.recordset);
     } catch (err) {
         res.status(500).send('Error retrieving user list: ' + err.message);
     }
 });
-
+//GetAdminList
+app.get('/GetAdminList', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT * FROM [ADMINISTRATOR]
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving user list: ' + err.message);
+    }
+});
+//GetBankAccountsList
+app.get('/GetBankAccountsList', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT * FROM [BANK_ACCOUNT]
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving bank account list: ' + err.message);
+    }
+});
 // Endpoint para obtener los proyectos
 app.get('/ProjectsInfo', async (req, res) => {
 
@@ -231,6 +276,63 @@ app.post('/AddUser', async (req, res) => {
         res.json({ message: err.message });
     }
 });
+
+//AddBankAccount
+app.post('/AddBankAccount', async (req, res) => {
+    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;  // Desestructuración de los datos recibidos
+    try {
+        await sql.connect(config);
+
+        // Consulta SQL para insertar el nuevo usuario
+        const query = `
+            INSERT INTO [BANK_ACCOUNT](AccountNumer, UserID, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber)
+            VALUES
+            (@AccountNumer, @UserID, @UserCardNumber, @UserCardExpirationDate, @UserCardSecurityNumber);
+        `;
+
+        // Prepara e inyecta los valores de manera segura
+        const request = new sql.Request();
+        request.input('AccountNumer', sql.NVarChar, AccountNumer);
+        request.input('UserID', sql.Int, UserID);
+        request.input('UserCardNumber', sql.NVarChar, UserCardNumber);
+        request.input('UserCardExpirationDate', sql.Date, UserCardExpirationDate);
+        request.input('UserCardSecurityNumber', sql.NVarChar, UserCardSecurityNumber);
+        await request.query(query);
+
+        res.json({ message: 'Bank account created successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+});
+
+//UpdatePaymentInfo
+app.post('/UpdatePaymentInfo', async (req, res) => {
+    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;  // Desestructuración de los datos recibidos
+    try {
+        await sql.connect(config);
+
+        const query = `
+            UPDATE [BANK_ACCOUNT] SET
+            AccountNumer = @AccountNumer,
+            UserCardNumber = @UserCardNumber,
+            UserCardExpirationDate = @UserCardExpirationDate,
+            UserCardSecurityNumber = @UserCardSecurityNumber
+            WHERE UserID = @UserID
+        `;
+
+        const request = new sql.Request();
+        request.input('AccountNumer', sql.NVarChar, AccountNumer);
+        request.input('UserID', sql.Int, UserID);
+        request.input('UserCardNumber', sql.NVarChar, UserCardNumber);
+        request.input('UserCardExpirationDate', sql.Date, UserCardExpirationDate);
+        request.input('UserCardSecurityNumber', sql.NVarChar, UserCardSecurityNumber);
+        await request.query(query);
+
+        res.json({ message: 'Bank account updated successfully!' });
+    } catch (err) {
+        res.json({ message: err.message });
+    }
+})
 
 //AddProject
 app.post('/AddProject', async (req, res) => {
@@ -307,6 +409,53 @@ const transporter = nodemailer.createTransport({
     auth: {
         user: 'risefund1@gmail.com',
         pass: 'fmhs exmd eqyn twfp' 
+    }
+});
+
+
+// Send Inquiry
+app.post('/sendQuestion', async (req, res) => {
+    const { name, question, UserID } = req.body; // Asegúrate de recibir UserID desde el cliente
+
+    if (!name || !question || !UserID) {
+        return res.status(400).json({ message: 'Name, question, and UserID are required.' });
+    }
+
+    let userEmail;
+
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT Email FROM [USER] WHERE ID = @UserID
+        `;
+        const request = new sql.Request();
+        request.input('UserID', sql.Int, parseInt(UserID, 10));
+        const result = await request.query(query);
+
+        if (result.recordset.length === 0) {
+            return res.status(404).json({ message: 'User not found.' });
+        }
+
+        userEmail = result.recordset[0].Email; // Obtener el email del primer registro
+    } catch (err) {
+        console.error('Error getting user email:', err);
+        return res.status(500).json({ message: 'Failed to get email.', error: err.message });
+    }
+
+    const mailOptions = {
+        from: 'risefund1@gmail.com',
+        to: 'risefund1@gmail.com',  // Aquí colocas el email del destinatario
+        subject: `New Question from ${name}`,
+        text: `You have received a new question:\n\nName: ${name}\nQuestion: ${question}\n\nContact: ${userEmail}`
+    };
+
+    try {
+        await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully.');
+        res.json({ message: 'Question sent and email delivered successfully!' });
+    } catch (error) {
+        console.error('Error sending email:', error);
+        res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
     }
 });
 
@@ -548,7 +697,6 @@ app.get('/GetProjectList', async (req, res) => {
             GROUP BY [P].[ID], [P].[UserID], [P].[Description], [P].[Collected], [P].[ContributionGoal], [P].[Status]
         `;
         const result = await sql.query(query);
-        //console.log(result);
         res.json(result.recordset);
     } catch (err) {
         res.status(500).send('Error retrieving uproject list: ' + err.message);
@@ -604,13 +752,40 @@ app.post('/UpdateUserStatus', async (req, res) => {
     }
 });
 
+//UpdateUserPersonalInfo
+app.post('/UpdateUserPersonalInfo', async (req, res) => {
+    const { UserID, FirstName, LastName, NewPassword} = req.body;
+    try {
+        await sql.connect(config);
+        const query = `
+            UPDATE [USER] SET 
+                [FirstName]=@FirstName,
+                [LastName]=@LastName,
+                [UserPassword]=@NewPassword
+            WHERE [USER].ID = @UserID 
+        `;
+        const request = new sql.Request();
+        request.input('FirstName', sql.NVarChar, FirstName);
+        request.input('LastName', sql.NVarChar, LastName);
+        request.input('NewPassword', sql.NVarChar, NewPassword);
+        request.input('UserID', sql.Int, parseInt(UserID, 10));
+        const result = await request.query(query);
+        if (result.rowsAffected[0] > 0) {
+            res.json({ success: true, message: 'User Edited successfully!' });
+        } else {
+            res.json({ success: false, message: 'User not found' });
+        }
+    } catch (err) {
+        res.json({ success: false, message: err.message });
+    }
+});
 
 //GetDonationList
 app.get('/GetDonationList', async (req, res) => {
     try {
         await sql.connect(config);
         const query = `
-            SELECT [D].[ID], [D].[Date], [D].[ProjectID], [D].[Ammount], [D].[UserID]
+            SELECT [D].[ID], [D].[Date], [D].[ProjectID], [D].[Ammount], [D].[UserID], [D].[Status]
             FROM [DONATION] [D]
         `;
         const result = await sql.query(query);
@@ -713,6 +888,7 @@ app.post('/GetTotalRaised', async (req, res) => {
     }
 });
 
+
 //Change Donation Status
 app.post('/ChangeDonationStatus', async (req, res) => {
     const {DonationID, Status} = req.body;
@@ -727,16 +903,54 @@ app.post('/ChangeDonationStatus', async (req, res) => {
         request.input('Status', sql.Bit, parseInt(Status,10));
         request.input('DonationID', sql.Int, parseInt(DonationID, 10));
         const result = await request.query(query);
+        console.log('hola');
+        const queryEmail = `
+            SELECT U.Email
+            FROM [DONATION] AS D
+            JOIN [PROJECT] AS P
+            ON D.ProjectID = P.ID
+            JOIN [USER] AS U
+            ON P.UserID = U.ID
+            WHERE D.ID = @DonationID;
+        `;
+        const emailRequest = new sql.Request();
+        emailRequest.input('DonationID', sql.Int, parseInt(DonationID, 10));
 
-        if (result.rowsAffected[0] > 0) {
-            res.json({ success: true, message: 'Donation Status Edited successfully!' });
-        } else {
-            res.json({ success: false, message: 'Donation not found' });
+        const resultEmail = await emailRequest.query(queryEmail);
+        const userEmail = resultEmail.recordset[0].Email;  
+        if (!resultEmail.recordset.length) {
+            return res.status(404).send('Fallo en buscar el email');
         }
+        console.log(userEmail);
+        const mailOptions = {
+            from: 'risefund1@gmail.com',   
+            to: userEmail,                 
+            subject: 'Confirmación de donación',  
+            text: `Haz recibido una donación".`  // Cuerpo del correo
+        };
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return res.status(500).send('Error al enviar el correo: ' + error.toString());
+            }
+            console.log('Correo enviado: ' + info.response);
+            res.json({ message: 'correo enviado exitosamente!' });
+        });
+        
     } catch (err) {
-        res.json({ success: false, message: err.message });
+        console.error('Error al crear la donación:', err);
+        res.status(500).json({ message: 'Error creating donation', error: err.message });
     }
 });
+
+        //if (result.rowsAffected[0] > 0) {
+        //    res.json({ success: true, message: 'Donation Status Edited successfully!' });
+        //} else {
+        //    res.json({ success: false, message: 'Donation not found' });
+        //}
+    //} catch (err) {
+     //   res.json({ success: false, message: err.message });
+    //}
+//});
 
 
 
@@ -810,6 +1024,34 @@ app.post('/GetDonationDataByID', async (req, res) => {
     } catch (err) {
         console.error('Error retrieving donation:', err.message);
         res.json({ success: false, message: 'Donation error.' });
+    }
+});
+
+//GetDonationApproved
+app.get('/GetDonationApproved', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT * FROM [DONATION] WHERE [DONATION].Status = 1
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
+    }
+});
+
+//GetDonationRejected
+app.get('/GetDonationRejected', async (req, res) => {
+    try {
+        await sql.connect(config);
+        const query = `
+            SELECT * FROM [DONATION] WHERE [DONATION].Status = 0
+        `;
+        const result = await sql.query(query);
+        res.json(result.recordset);
+    } catch (err) {
+        res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
 

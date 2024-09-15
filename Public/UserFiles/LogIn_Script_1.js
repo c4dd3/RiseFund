@@ -3,6 +3,7 @@ async function Login(){
     const password = document.getElementById("LoginPassword").value;
     const emailFound = await confirmEmail(email);
     const correctPassword = await confirmPassword(email, password);
+    const notBlocked = await confirmStatus(email, password);
 
     if (email.value == '' || password == ''){
         alert("Please fill in all the information");
@@ -10,6 +11,10 @@ async function Login(){
     }
 
     if(emailFound && correctPassword ){
+        if (!notBlocked) {
+            alert("Your account has been banned");
+            return;
+        }
         console.log("Granted");
         const uniqueUserID =  await getUserID(email, password);
         sessionStorage.setItem('userID', uniqueUserID);
@@ -53,8 +58,15 @@ async function confirmPassword(email, password) {
 
 async function confirmStatus(email, password) {
     try {
-        const response = 
-
+        const response = await fetch('/confirmEmail');
+        if (!response.ok) {
+            throw new Error('Network response was not ok.');
+        }
+        const result = await response.json();
+        const correctStatus = result.some(element => element.Email === email && element.UserPassword === password && element.Status === true);
+        return correctStatus;
+    } catch (error) {
+        console.error('Error fetching status:', error);
     }
 }
 
