@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', async () => {
             projects = await response.json();
             displayProjects(projects);
         } catch (error) {
-            console.error('Error al cargar los proyectos:', error);
+            console.error('Error at loading projects:', error);
         }
     }
     function displayProjects(projects) {
@@ -149,8 +149,10 @@ function applyFilters() {
         const projectsDisplay = document.querySelector('.ProjectsDisplay');
         projectsDisplay.innerHTML = '';
         projects.forEach(project => {
-            if(project.Status == 1 && project.Collected <= raised){ // Los bloqueados o finalizados no
-                const percentage = (project.Collected * 100) / project.ContributionGoal;
+            if(project.Status == 1 && project.Collected >= raised){ // Los bloqueados o finalizados no
+                let number = (project.Collected * 100) / project.ContributionGoal;
+                let limitedDecimals = number.toFixed(2);  
+                const percentage = parseFloat(limitedDecimals);                 
                 if (percentage <= progress) {
                 const projectPanel = `
                     <div class="InfoPanel">

@@ -20,6 +20,10 @@ async function showConfirmation() {
         alert("Please fill in all the required fields before confirming.");
         return;
     }
+    if (ammountToDonate <= 0) {
+        alert("Please enter a valid amount to donate.");
+        return;
+    }
     const confirmed = confirm(`
     Please verify the project details:
 

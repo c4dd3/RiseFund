@@ -66,6 +66,11 @@ async function showConfirmation() {
         alert("Please fill in all the required fields before confirming.");
         return;
     }
+    if (goal <= 0) {
+        alert('Contribution goal must be greater than 0');
+        return;
+    }
+
     if(estado){
         if(accountOwnership){
             const confirmed = confirm(`
@@ -341,7 +346,6 @@ async function checkIfUserIsAdmin(userID) {
 
 async function ActualizarInfo(title, Description, ContributionGoal, Start, End, PrimaryContact, PrimaryContact, DepositMethod, AccountNumber, Status) {
     const projectID = getQueryParam('id');
-
     const ProjectNewInfo = {
         projectID:projectID,
         Title:title,

@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 let number = (project.Collected * 100) / project.ContributionGoal;
                 let limitedDecimals = number.toFixed(2);  
                 const percentage = parseFloat(limitedDecimals); 
-                
+
                 const projectPanel = `
                     <div class="project">
                     <img src="ProjectImage.jpg" alt="Project 1 Image" class="project-image">

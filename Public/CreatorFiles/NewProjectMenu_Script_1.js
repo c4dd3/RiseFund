@@ -45,6 +45,12 @@ async function showConfirmation() {
         alert("Please fill in all the required fields before confirming.");
         return;
     }
+    
+    if (goal <= 0) {
+        console.log('Error: Contribution goal must be greater than 0');
+        alert('Contribution goal must be greater than 0');
+        return; 
+    }
 
     const confirmed = confirm(`
     Please verify the project details:
@@ -61,6 +67,7 @@ async function showConfirmation() {
     Confirm project creation?`);
 
     if (confirmed) {
+
         if (accountOwnership){
             createProject(projectTitle, description, goal, startDate, completionDate, 
                 contact, depositMethod, accountNumber);
@@ -104,6 +111,7 @@ async function createRegisterProject(ProjectID, Detail, Date, Times) {
 
 async function createProject(projectTitle, description, goal, startDate, completionDate, contact, depositMethod, accountNumber) {
     const userID = sessionStorage.getItem('userID'); 
+
     const projectData = {
         UserID: userID,
         Title: projectTitle,
@@ -123,9 +131,9 @@ async function createProject(projectTitle, description, goal, startDate, complet
         const response = await fetch('/AddProject', {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json'  
+                'Content-Type': 'application/json'
             },
-            body: JSON.stringify(projectData)  
+            body: JSON.stringify(projectData)
         });
 
         if (!response.ok) {
@@ -139,6 +147,7 @@ async function createProject(projectTitle, description, goal, startDate, complet
         console.error('Error creating project:', err.message);  
     }
 }
+
 
 function updateImage(event) {
     const file = event.target.files[0];

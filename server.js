@@ -482,10 +482,10 @@ app.post('/sendConfirmation', async (req, res) => {
   
     try {
         await transporter.sendMail(mailOptions);
-        console.log('Correo electrónico enviado correctamente.');
+        console.log('Email sent successfully!');
         res.json({ message: 'Confirmation email sent successfully!' });
     } catch (error) {
-        console.error('Error al enviar el correo electrónico:', error);
+        console.error('Error sending email:', error);
         res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
     }
 });
@@ -567,7 +567,7 @@ app.post('/AddDonation', async (req, res) => {
         const result = await emailRequest.query(queryEmail);
         const userEmail = result.recordset[0].Email;  
         if (!result.recordset.length) {
-            return res.status(404).send('Usuario no encontrado');
+            return res.status(404).send('User not found');
         }
         const mailOptions = {
             from: 'risefund1@gmail.com',
@@ -582,14 +582,14 @@ app.post('/AddDonation', async (req, res) => {
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return res.status(500).send('Error al enviar el correo: ' + error.toString());
+                return res.status(500).send('Error when sending email: ' + error.toString());
             }
-            console.log('Correo enviado: ' + info.response);
-            res.json({ message: 'Donación creada y correo enviado exitosamente!' });
+            console.log('Email sent: ' + info.response);
+            res.json({ message: 'Donation created successfully' });
         });
         
     } catch (err) {
-        console.error('Error al crear la donación:', err);
+        console.error('Error while creating donation:', err);
         res.status(500).json({ message: 'Error creating donation', error: err.message });
     }
 });
@@ -1004,21 +1004,21 @@ app.post('/ChangeDonationStatus', async (req, res) => {
         const resultEmail = await emailRequest.query(queryEmail);
         const userEmail = resultEmail.recordset[0].Email;  
         if (!resultEmail.recordset.length) {
-            return res.status(404).send('Fallo en buscar el email');
+            return res.status(404).send('Failed to search email');
         }
         console.log(userEmail);
         const mailOptions = {
             from: 'risefund1@gmail.com',   
             to: userEmail,                 
-            subject: 'Confirmación de donación',  
-            text: `Haz recibido una donación".`  // Cuerpo del correo
+            subject: 'Confirmation of donation status',  
+            text: `You have recieved a Donation!".`  // Cuerpo del correo
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return res.status(500).send('Error al enviar el correo: ' + error.toString());
+                return res.status(500).send('Error when sending email: ' + error.toString());
             }
-            console.log('Correo enviado: ' + info.response);
-            res.json({ message: 'correo enviado exitosamente!' });
+            console.log('Email sent: ' + info.response);
+            res.json({ message: 'Email sent successfully!' });
         });
         
     } catch (err) {
