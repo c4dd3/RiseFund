@@ -303,7 +303,7 @@
                 <button class="hamburgerButton" onclick="toggleDropdown()">☰</button>
                 <nav>
                     <div class="dropdown_menu" id="dropdownMenu">
-                        <a href="../AdminFiles/AdministratorMenu.html">Admin</a>
+                        <a id="adminLink">Admin</a>
                         <a href="../UserFiles/UserConfig.html" class="title">User config</a>
                     </div>
                 </nav>
@@ -333,10 +333,10 @@
 
                 <select class="filter-dropdown" id="moneyFilter">
                     <option value="-1" id="Any">Any</option>
-                    <option value="5000" id="5000">Money Received &lt; $5000</option>
-                    <option value="1000" id="1000">Money Received &lt; $1000</option>
-                    <option value="500" id="500">Money Received &lt; $500</option>
-                    <option value="100" id="100">Money Received &lt; $100</option>
+                    <option value="5000" id="5000">Money Received &gt; $5000</option>
+                    <option value="1000" id="1000">Money Received &gt; $1000</option>
+                    <option value="500" id="500">Money Received &gt; $500</option>
+                    <option value="100" id="100">Money Received &gt; $100</option>
                 </select>
 
                 <button class="filter-btn" onclick="applyFilters()">Apply Filters</button>
