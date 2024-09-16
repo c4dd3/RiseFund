@@ -6,9 +6,9 @@ const port = 3000;
 const nodemailer = require('nodemailer');
 // Database configuration
 const config = {
-    user: 'sa',
-    password: '12344',
-    server: 'DESKTOP-NMGCV0N\\SQLExpress',
+    user: 'RiseFundAdmin',
+    password: 'rise!@fund01',
+    server: 'risefundexpress.database.windows.net',
     database: 'RiseFund', 
     options: {
         encrypt: true, 
