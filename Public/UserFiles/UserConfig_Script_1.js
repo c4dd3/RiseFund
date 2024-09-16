@@ -261,13 +261,11 @@ document.addEventListener('DOMContentLoaded', async function() {
                 alert('An error occurred while updating payment information');
             }
         } else{ //No tiene cuenta -- Insert
-            if(inAccountNumberInUse(AccountNumer)){
-                console.log(inAccountNumberInUse(AccountNumer));
-                console.log(AccountNumer)
+            if(await inAccountNumberInUse(AccountNumer)){
                 alert('Error Account Number already in use');
                 return;
             }
-            if(inCardNumberInUse(CardNumber)){
+            if(await inCardNumberInUse(CardNumber)){
                 alert('Error Card Number already in use');
                 return;
             }
