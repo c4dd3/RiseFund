@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             verifyAdminUser();
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error at loading element:', error);
     }
 });
@@ -32,19 +31,14 @@ async function verifyAdminUser() {
 
 async function checkIfUserIsAdmin(userID) {
     try {
-        // Hacer la solicitud para obtener la lista de administradores
         const response = await fetch('/GetAdminList');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de administradores');
         }
-        
-        // Convertir la respuesta en un array de administradores
         const admins = await response.json();
         console.log(admins);
-        // Verificar si algún administrador tiene el mismo ID que el userID
         const isAdmin = admins.some(admin => admin.UserID == userID);
-        
         if (isAdmin) {
             console.log(`El usuario con ID ${userID} es administrador.`);
         } else {

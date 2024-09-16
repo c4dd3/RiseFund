@@ -188,7 +188,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (response.ok) {
                 if (result.success) {
                     alert('Project status updated successfully');
-                    loadProjects(); // Reload project data after updating
+                    loadProjects();
                 } else {
                     alert(result.message || 'Failed to update project status');
                 }

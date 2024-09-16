@@ -40,7 +40,7 @@ async function sendConfirmation(email) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ Email })  // Enviar el correo electrónico en el cuerpo de la solicitud
+            body: JSON.stringify({ Email })  
         });
 
         if (response.ok) {
@@ -180,12 +180,12 @@ async function getUserID(email, password) {
         const user = result.find(element => element.Email === email && element.UserPassword === password);
 
         if (user) {
-            return user.ID;  // Devuelve el ID del usuario
+            return user.ID; 
         } else {
-            return null;  // Si no se encuentra el usuario, devuelve null
+            return null;  
         }
     } catch (error) {
         console.error('Error fetching user data:', error);
-        return null;  // Si hay un error, también devuelve null
+        return null;  
     }
 }

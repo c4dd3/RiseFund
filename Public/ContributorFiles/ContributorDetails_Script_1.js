@@ -21,7 +21,7 @@ async function showConfirmation() {
         return;
     }
     if (ammountToDonate <= 0) {
-        alert("Please enter a valid amount to donate.");
+        alert("Please enter a valid amount to donate.(Greater than zero)");
         return;
     }
     const confirmed = confirm(`
@@ -147,12 +147,11 @@ function getQueryParam(param) {
     return urlParams.get(param);
 };
 
-// Mostrar el limite de palabras
 document.addEventListener('DOMContentLoaded', () => {
     const commentBox = document.getElementById('Comment');
     const charCount = document.getElementById('charCount');
 
-    // Verifica si el elemento existe antes de agregar el evento
+
     if (commentBox && charCount) {
         commentBox.addEventListener('input', () => {
             const currentLength = commentBox.value.length;
@@ -167,7 +166,6 @@ document.addEventListener('DOMContentLoaded', () => {
             verifyAdminUser();
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error at loading element:', error);
     }
 });
@@ -184,14 +182,12 @@ async function verifyAdminUser() {
 
 async function checkIfUserIsAdmin(userID) {
     try {
-        // Hacer la solicitud para obtener la lista de administradores
         const response = await fetch('/GetAdminList');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de administradores');
         }
         
-        // Convertir la respuesta en un array de administradores
         const admins = await response.json();
         console.log(admins);
         // Verificar si algún administrador tiene el mismo ID que el userID
@@ -212,10 +208,8 @@ async function checkIfUserIsAdmin(userID) {
 // Actualizar la pantalla segun la informacion
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Obtener el userID desde el sessionStorage
         const projectID = parseInt(getQueryParam('id'));
 
-        // Enviar el userID en el cuerpo de la solicitud POST
         const response1 = await fetch('/ProjectById', {
             method: 'POST',
             headers: {
@@ -224,7 +218,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             body: JSON.stringify({ projectID: projectID })
         });
 
-        // Convertir la respuesta en formato JSON
         const project = await response1.json();
         
         const response2 = await fetch('/SearchDonatedPeople',{
@@ -236,17 +229,14 @@ document.addEventListener('DOMContentLoaded', async () => {
         });
         const donantes = await response2.json(); 
 
-        // Seleccionar el contenedor donde se mostrarán los proyectos
         const projectsDisplay = document.querySelector('.container');
         projectsDisplay.innerHTML = ''; // Limpiar los paneles anteriores
-        
-        // Calcular el porcentaje de error
 
         let number = (project.Collected * 100) / project.ContributionGoal;
         let limitedDecimals = number.toFixed(2);  
         const percentage = parseFloat(limitedDecimals);  
 
-        // Generar dinámicamente un panel para cada proyecto
+
         const projectPanel = `
             <h1 class="Titulo">${project.Title}</h1>
 
@@ -307,7 +297,6 @@ document.addEventListener('DOMContentLoaded', async () => {
  
         projectsDisplay.innerHTML += projectPanel;
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error al cargar los proyectos:', error);
     }
 });
@@ -350,7 +339,7 @@ function shareOn(platform) {
     window.open(shareUrl, '_blank');
 }
 
-// Función
+// Función de contactar
 async function Contactar() {
     const projectID = getQueryParam('id');
     const response1 = await fetch('/ProjectById', {
@@ -361,7 +350,6 @@ async function Contactar() {
         body: JSON.stringify({ projectID: projectID })
     });
 
-    // Convertir la respuesta en formato JSON
     const project = await response1.json();
 
     const email = project.Email;

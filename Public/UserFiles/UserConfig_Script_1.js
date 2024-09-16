@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 alert('Error updating personal information');
             }
         } catch (error) {
-            console.error('Error:', error);
             alert('An error occurred while updating personal information');
         }
         
@@ -132,7 +131,6 @@ document.addEventListener('DOMContentLoaded', async function() {
                 return false;
             }
         } catch (error) {
-            console.error('Error:', error);
             alert('Error while checking if user is on list');
             return false;
         }
@@ -167,12 +165,10 @@ document.addEventListener('DOMContentLoaded', async function() {
                 const formattedExpirationDate = `${expirationDate.getFullYear()}-${(expirationDate.getMonth() + 1).toString().padStart(2, '0')}-${expirationDate.getDate().toString().padStart(2, '0')}`;
                 expirationDateField.value = formattedExpirationDate;
                 securityNumberField.value = data.UserCardSecurityNumber;
-                //return data.UserPassword;
             } else {
                 alert('Payment info not found');
             }
         } catch (error) {
-            console.error('Error:', error);
             alert('An error occurred while getting the payment info');
             return;
         }
@@ -180,13 +176,9 @@ document.addEventListener('DOMContentLoaded', async function() {
 
     function isValidDate(yyyyMmDd) {
         const [year, month, day] = yyyyMmDd.split('-').map(Number);
-    
-        // Check for invalid month or day range
-        if (month < 1 || month > 12 || day < 1 || day > 31) {
+            if (month < 1 || month > 12 || day < 1 || day > 31) {
             return false;
         }
-    
-        // Check for correct number of days in the month
         const daysInMonth = new Date(year, month, 0).getDate();
         if (day > daysInMonth) {
             return false;
@@ -199,7 +191,6 @@ document.addEventListener('DOMContentLoaded', async function() {
         const enteredDate = new Date(yyyyMmDd);
         const currentDate = new Date();
     
-        // Compare the entered date with the current date
         return enteredDate > currentDate;
     }
     
@@ -289,8 +280,6 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         }
     }
-
-    
     async function inAccountNumberInUse(accNumber) {
         try {
             const response = await fetch('/GetBankAccountsList');
@@ -329,9 +318,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return false;
         }
     }
-    
     confirmButtonPaymentInfo.addEventListener('click', updatePaymentInfo);
-    
     loadPaymentData(UserID);
 });
 

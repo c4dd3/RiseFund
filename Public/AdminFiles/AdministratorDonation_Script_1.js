@@ -223,13 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('An error occurred while searching for the donation');
         }
     }
-
-
-    
-
     async function confirmDonation(DonationID) {
-        
-        // Mueve el dinero al proyecto
         const donationData = {
             DonationID: DonationID,
             Status: 1
@@ -267,7 +261,6 @@ document.addEventListener('DOMContentLoaded', function() {
         loadDonations();
         desactiveButtons();
     }
-
     async function updateCollectedAmmount(ProjectID, collected, sumToAdd) {
         const newProjectData = {
             ProjectID: ProjectID,
@@ -281,7 +274,6 @@ document.addEventListener('DOMContentLoaded', function() {
             body: JSON.stringify(newProjectData),
         });
         const data = await response.json();
-
         if (response.ok) {
             if (data.success) {
                 alert('Project given donation successfully');
@@ -294,7 +286,6 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error donation project');
         }
     }
-
     async function confirmDecline(DonationID) {
         const donationData = {
             DonationID: DonationID
@@ -327,22 +318,18 @@ document.addEventListener('DOMContentLoaded', function() {
         clearForm();
         loadDonations();
     }
-
     acceptButton.addEventListener('click', function() {
         const donationID = parseInt(donationIDField.value.trim());
         if (donationID) {
             confirmDonation(donationID);
         }
     });
-
     declineButton.addEventListener('click', function() {
         const donationID = parseInt(donationIDField.value.trim());
         if (donationID) {
             confirmDecline(donationID);
         }
     });
-
-
     function clearForm() {
         searchInput.value = '';
         donationIDField.value = '';
@@ -352,7 +339,6 @@ document.addEventListener('DOMContentLoaded', function() {
         commentField.value = '';
         donationTableBody.innerHTML = '';
     }
-    
     clearForm();
     loadDonations();
 });

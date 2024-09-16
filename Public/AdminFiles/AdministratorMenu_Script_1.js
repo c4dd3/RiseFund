@@ -55,7 +55,7 @@ async function fetchProjects() {
 }
 function displayProjects(projects) {
     const container = document.getElementById('projectRegisterList');
-    container.innerHTML = '';  // Limpiar el contenedor antes de agregar nuevos elementos
+    container.innerHTML = '';  
 
     projects.forEach(project => {
         const date = new Date(project.Date);
@@ -84,17 +84,11 @@ async function fetchDonations() {
 }
 function displayDonations(donations) {
     const container = document.getElementById('donationRegisterList');
-    container.innerHTML = '';  // Limpiar el contenedor antes de agregar nuevos elementos
-
+    container.innerHTML = '';
     donations.forEach(donation => {
-        // Formatear la fecha
         const date = new Date(donation.Date);
-        const formattedDate = date.toLocaleDateString();  // Por ejemplo, '09/09/2024'
-
-        // Formatear la hora
+        const formattedDate = date.toLocaleDateString();
         const formattedTime = donation.Time;
-
-        // Crear el elemento HTML para la donación
         const donationElement = document.createElement('div');
         donationElement.className = 'donation';
         donationElement.innerHTML = `

@@ -9,10 +9,8 @@ function toggleDropdown() {
 
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Obtener el userID desde el sessionStorage
         const userID = sessionStorage.getItem('userID');
 
-        // Enviar el userID en el cuerpo de la solicitud POST
         const response = await fetch('/ProjectsCreatorInfo', {
             method: 'POST',
             headers: {
@@ -25,10 +23,9 @@ document.addEventListener('DOMContentLoaded', async () => {
             throw new Error('Network response was not ok');
         }
 
-        // Convertir la respuesta en formato JSON
         const projects = await response.json();
         
-        // Seleccionar el contenedor donde se mostrarán los proyectos
+
         const projectsDisplay = document.querySelector('.project-container');
         projectsDisplay.innerHTML = ''; // Limpiar los paneles anteriores
                 
@@ -52,13 +49,11 @@ document.addEventListener('DOMContentLoaded', async () => {
                     </div>
                 </div>
                 `;
-                // Agregar el panel al contenedor
                 projectsDisplay.innerHTML += projectPanel;
             }
             
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error al cargar los proyectos:', error);
     }
     try {
@@ -67,7 +62,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             verifyAdminUser();
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error at loading element:', error);
     }
 });
@@ -85,17 +79,14 @@ async function verifyAdminUser() {
 
 async function checkIfUserIsAdmin(userID) {
     try {
-        // Hacer la solicitud para obtener la lista de administradores
         const response = await fetch('/GetAdminList');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de administradores');
         }
         
-        // Convertir la respuesta en un array de administradores
         const admins = await response.json();
         console.log(admins);
-        // Verificar si algún administrador tiene el mismo ID que el userID
         const isAdmin = admins.some(admin => admin.UserID == userID);
         
         if (isAdmin) {

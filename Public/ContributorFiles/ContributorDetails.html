@@ -92,9 +92,7 @@
                 .dropdown_menu a:hover {
                     background-color: #e2e2e2;
                 }
-        /*Barra de navegacion*/
 
-        /*Contenedor Global*/
         .container {
             display: block;
             justify-content: space-between;
@@ -110,7 +108,6 @@
             font-size: 50px;
         }
 
-        /* Estilos para el pop-up */
         #sharePopup {
             display: none;
             position: fixed;
@@ -133,7 +130,7 @@
             background-color: rgba(0, 0, 0, 0.5);
             z-index: 999;
         }
-        /*Contenedor de informacion, izquierda y derecha*/
+
         .ProjectInfo {
             display: flex;
             justify-content: center;
@@ -176,7 +173,7 @@
             font-size: 18px;
             text-align: justify;
         }
-        /*Paneles de la derecha*/
+  
         .InfoDatos {
             height: auto;
             width: 50vh;
@@ -199,7 +196,7 @@
             font-size: 25px;
             margin: 0;
         }
-        /*Barra de progreso, formato*/
+ 
         .ProgressBar {
             width: 100%;
             appearance: none;
@@ -220,12 +217,11 @@
             height: 20px;
         }
 
-        /*Contenedor de botones*/
         .ButtonContainer {
             display: flex;
-            flex-direction: column; /* Apila los botones uno encima del otro */
-            gap: 10px; /* Espacio entre los botones */
-            margin-top: 20px; /* Espacio superior para separar de los textos */
+            flex-direction: column; 
+            gap: 10px; 
+            margin-top: 20px; 
         }
         button {
             padding: 10px;
@@ -252,8 +248,8 @@
             border-radius: 15px;
         }
         .Comentario {
-            width: 100%; /* Ocupa todo el ancho disponible */
-            height: 150px; /* Ajusta la altura */
+            width: 100%;
+            height: 150px; 
             font-size: 16px;
             border-radius: 5px;
             border: 1px solid #ccc;
@@ -287,7 +283,6 @@
     </style>
 </head>
 <body>
-    <!-- Barra de navegacion -->
     <header class="navbar">
         <div class="navigation_bar">
             <div class="logo">
@@ -316,7 +311,7 @@
         <h1 class="Titulo">Title of project</h1>
         <div class="ProjectInfo">
             <div class="InfoPanel">
-                <img src="Perro.jpeg" class="image">
+                <img src="ProjectImage.jpg" class="image">
                 <div class="DescriptionPanel">
                     <p class="Description">
                         
@@ -345,7 +340,6 @@
                     <h2>Comment:</h2>
                     <textarea id="Comment" class="Comentario" placeholder="Share your thoughts with the author/authors" maxlength="500"></textarea>
                     <p id="charCount">0/500 characters</p>
-                    <!--Contador de caracteres-->
                     <script src="ContributorDetails_Script_1.js"></script>
                     <div class="DonateContainer">
                         <input id="AmmountToDonate" class="AmmountInputText" placeholder="$0000.00"></input>
@@ -355,11 +349,7 @@
             </div>
         </div>
     </div>
-
-    <!-- Overlay para oscurecer el fondo -->
     <div id="overlay" onclick="closePopup()"></div>
-
-    <!-- Pop-up de compartir -->
     <div id="sharePopup">
         <h2>Share this page</h2>
         <button onclick="shareOn('whatsapp')">Share on WhatsApp</button>
@@ -367,9 +357,6 @@
         <button onclick="shareOn('twitter')">Share on Twitter</button>
         <button onclick="closePopup()">Close</button>
     </div>
-
-    <!-- Incluye el script -->
-
     <script src="ContributorDetails_Script_1.js"> </script>
 </body>
 </html>

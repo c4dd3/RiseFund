@@ -173,14 +173,10 @@
 
     <script>
         document.getElementById('expirationDate').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
-    
-            // Limit to a maximum of 8 digits (YYYYMMDD)
+            let value = e.target.value.replace(/\D/g, '');
             if (value.length > 8) {
                 value = value.slice(0, 8);
             }
-    
-            // Add '-' after the first four digits (year) and after the next two digits (month)
             if (value.length > 4) {
                 value = value.slice(0, 4) + '-' + value.slice(4);
             }
@@ -190,24 +186,25 @@
     
             e.target.value = value;
         });
-    
-        // Prevent typing non-numeric characters except for Backspace
         document.getElementById('expirationDate').addEventListener('keydown', function (e) {
             if (e.key.match(/[^0-9\-]/) && e.key !== 'Backspace') {
                 e.preventDefault();
             }
         });
-
-         // Prevent typing non-numeric characters except for Backspace in card number
          document.getElementById('cardNumber').addEventListener('keydown', function (e) {
             if (e.key.match(/[^0-9]/) && e.key !== 'Backspace') {
                 e.preventDefault();
             }
         });
-
-        // Limit security number to 3 digits and allow only numbers
+        document.getElementById('cardNumber').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 16) {
+                value = value.slice(0, 16);
+            }
+            e.target.value = value;
+        });
         document.getElementById('securityNumber').addEventListener('input', function (e) {
-            let value = e.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
+            let value = e.target.value.replace(/\D/g, ''); 
     
             if (value.length > 3) {
                 value = value.slice(0, 3);
@@ -215,16 +212,11 @@
     
             e.target.value = value;
         });
-
-        // Prevent typing non-numeric characters except for Backspace in security number
         document.getElementById('securityNumber').addEventListener('keydown', function (e) {
             if (e.key.match(/[^0-9]/) && e.key !== 'Backspace') {
                 e.preventDefault();
             }
         });
     </script>
-    
-    
-
 </body>
 </html>

@@ -141,19 +141,15 @@ function updateImage(event) {
     }
 }
 
-// Función para obtener el parámetro de consulta de la URL
 function getQueryParam(param) {
     const urlParams = new URLSearchParams(window.location.search);
     return urlParams.get(param);
 };
 
-// Actualizar la pantalla segun la informacion
 document.addEventListener('DOMContentLoaded', async () => {
     try {
-        // Obtener el userID desde el sessionStorage
         const projectID = parseInt(getQueryParam('id'));
 
-        // Enviar el userID en el cuerpo de la solicitud POST
         const response1 = await fetch('/ProjectById', {
             method: 'POST',
             headers: {
@@ -174,39 +170,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         const cuentaBancaria = await response2.json();
 
-        // Seleccionar el contenedor donde se mostrarán los proyectos
         const projectsDisplay = document.querySelector('.container');
-        projectsDisplay.innerHTML = ''; // Limpiar los paneles anteriores
+        projectsDisplay.innerHTML = ''; 
         
-        // Calcular el porcentaje de error
         const percentage = (project.Collected * 100) / project.ContributionGoal;
 
-        // Convertir formato de tiempo de inicio
         const start = new Date(project.Start);
         const year1 = start.getFullYear();
-        const month1 = String(start.getMonth() + 1).padStart(2, '0'); // getMonth() devuelve 0-11, por eso sumamos 1
-        const day1 = String(start.getDate()).padStart(2, '0'); // padStart para asegurar dos dígitos
+        const month1 = String(start.getMonth() + 1).padStart(2, '0'); 
+        const day1 = String(start.getDate()).padStart(2, '0'); 
 
         const end = new Date(project.End);
         const year2 = end.getFullYear();
-        const month2 = String(end.getMonth() + 1).padStart(2, '0'); // getMonth() devuelve 0-11, por eso sumamos 1
-        const day2 = String(end.getDate()).padStart(2, '0'); // padStart para asegurar dos dígitos
+        const month2 = String(end.getMonth() + 1).padStart(2, '0'); 
+        const day2 = String(end.getDate()).padStart(2, '0'); 
 
         const expirationDate = new Date(cuentaBancaria.UserCardExpirationDate);
         const year3 = expirationDate.getFullYear();
-        const month3 = String(expirationDate.getMonth() + 1).padStart(2, '0'); // getMonth() devuelve 0-11, por eso sumamos 1
-        const day3 = String(expirationDate.getDate()).padStart(2, '0'); // padStart para asegurar dos dígitos
+        const month3 = String(expirationDate.getMonth() + 1).padStart(2, '0'); 
+        const day3 = String(expirationDate.getDate()).padStart(2, '0'); 
        
-        // Construir la fecha en formato YYYY-MM-DD
         const formattedStart = `${year1}-${month1}-${day1}`;
         const formattedEnd = `${year2}-${month2}-${day2}`;
         const formattedExpiration = `${year3}-${month3}-${day3}`;
         
         
-        // Obtener el valor del parámetro de consulta 'status'
         
         
-        //Generar dinámicamente un panel para cada proyecto
         const projectPanel = `
             <section class="project-form">
             <div class="form-left">
@@ -293,7 +283,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
         
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error al cargar los proyectos:', error);
     }
     try {
@@ -302,7 +291,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             verifyAdminUser();
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error at loading element:', error);
     }
 });
@@ -318,17 +306,14 @@ async function verifyAdminUser() {
 }
 async function checkIfUserIsAdmin(userID) {
     try {
-        // Hacer la solicitud para obtener la lista de administradores
         const response = await fetch('/GetAdminList');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de administradores');
         }
         
-        // Convertir la respuesta en un array de administradores
         const admins = await response.json();
         console.log(admins);
-        // Verificar si algún administrador tiene el mismo ID que el userID
         const isAdmin = admins.some(admin => admin.UserID == userID);
         
         if (isAdmin) {
@@ -393,7 +378,7 @@ async function sendConfirmation(UserID) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ UserID })  // Enviar el correo electrónico en el cuerpo de la solicitud
+            body: JSON.stringify({ UserID })
         });
 
         if (response.ok) {
@@ -406,6 +391,3 @@ async function sendConfirmation(UserID) {
         alert('An error occurred while sending the confirmation email.');
     }
 }
-
-// const { projectID, Title, Description, ContributionGoal, Start, End, PrimaryContact, 
-//     SecondaryContact, DepositMethod, AccountNumber, Status}

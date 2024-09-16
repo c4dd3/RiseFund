@@ -2,7 +2,7 @@ const express = require('express');
 const sql = require('mssql');
 const path = require('path');
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 8080;
 const nodemailer = require('nodemailer');
 // Database configuration
 const config = {
@@ -16,7 +16,47 @@ const config = {
     }
 };
 // Middleware to serve static files
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'Public'), {
+    setHeaders: function (res, path){
+        if (path.endsWith('.js')) {
+            res.setHeader('Content-Type', 'application/javascript');
+        }
+    }
+}));
+app.use(express.static(path.join(__dirname, 'Public', 'UserFiles')));
+// Route to serve 'LogIn.html' from 'UserFiles'
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'UserFiles', 'LogIn.html'), function(err) {
+        if (err) {
+            console.error('Error loading the login page: ' + err.message);
+            res.status(500).send('Error loading the login page: ' + err.message);
+        }
+    });
+});
+// Route to serve js files
+app.get('/LogIn_Script_1.js', (req, res) => {
+    res.type('application/javascript');
+    res.sendFile(path.join(__dirname, 'Public', 'UserFiles', 'LogIn_Script_1.js'));
+});
+app.get('/MainMenu_Script_1.js', (req, res) => {
+    res.type('application/javascript');
+    res.sendFile(path.join(__dirname, 'Public', 'UserFiles', 'MainMenu_Script_1.js'));
+});
+// Route to serve 'MainMenu.html'
+app.get('/MainMenu.html', (req, res) => {
+    res.sendFile(path.join(__dirname, 'Public', 'UserFiles', 'MainMenu.html'));
+});
+// Start the server
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}`);
+}).on('error', (err) => {
+    if (err.code === 'EADDRINUSE') {
+        console.error(`Port ${port} is already in use!`);
+        process.exit(1);  // O intenta con otro puerto si es posible
+    } else {
+        console.error(`Server error: ${err}`);
+    }
+});
 // Middleware para procesar cuerpos de solicitudes JSON
 app.use(express.json());
 // Route to test database connection
@@ -33,7 +73,7 @@ app.get('/users', async (req, res) => {
     try {
         await sql.connect(config);
         const result = await sql.query('SELECT * FROM [USER]');
-        res.json(result.recordset);  // Send data as JSON
+        res.json(result.recordset);
     } catch (err) {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
@@ -43,7 +83,7 @@ app.get('/confirmEmail', async (req, res) => {
     try {
         await sql.connect(config);
         const result = await sql.query('SELECT * FROM [USER]');
-        res.json(result.recordset);  // Send data as JSON
+        res.json(result.recordset);  
     } catch (err) {
         console.log(err.message);
         res.status(500).send('Error retrieving users: ' + err.message);
@@ -54,7 +94,7 @@ app.get('/getUserRegisters', async (req, res) => {
     try {
         await sql.connect(config);
         const result = await sql.query('select TOP 20  * FROM [REGISTER_USER] ORDER BY 1 desc');
-        res.json(result.recordset);  // Send data as JSON
+        res.json(result.recordset); 
     } catch (err) {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
@@ -64,7 +104,7 @@ app.get('/getProjectRegisters', async (req, res) => {
     try {
         await sql.connect(config);
         const result = await sql.query('select TOP 20  * FROM [REGISTER_PROJECT] ORDER BY 1 desc');
-        res.json(result.recordset);  // Send data as JSON
+        res.json(result.recordset);
     } catch (err) {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
@@ -74,7 +114,7 @@ app.get('/getDonationRegisters', async (req, res) => {
     try {
         await sql.connect(config);
         const result = await sql.query('select TOP 20  * FROM [REGISTER_Donation] ORDER BY 1 desc');
-        res.json(result.recordset);  // Send data as JSON
+        res.json(result.recordset);  
     } catch (err) {
         res.status(500).send('Error retrieving users: ' + err.message);
     }
@@ -83,14 +123,11 @@ app.get('/getDonationRegisters', async (req, res) => {
 app.get('/GetLastProjectID', async (req, res) => {
     try {
         await sql.connect(config);
-
         const result = await sql.query('SELECT MAX(ID) AS LastProjectID FROM PROJECT');
-        
         if (result.recordset.length > 0) {
-            // Envía el ID más grande de vuelta al cliente
             res.json({ LastProjectID: result.recordset[0].LastProjectID });
         } else {
-            res.json({ LastProjectID: null });  // Si no hay proyectos, devolver null
+            res.json({ LastProjectID: null }); 
         }
     } catch (err) {
         res.status(500).send('Error retrieving the last project ID: ' + err.message);
@@ -98,19 +135,14 @@ app.get('/GetLastProjectID', async (req, res) => {
 });
 //GetDonationID
 app.post('/GetDonationID', async (req, res) => {
-    const { UserID, ProjectID, Date, Time } = req.body; // Obtenemos los parámetros de la solicitud
-
+    const { UserID, ProjectID, Date, Time } = req.body;
     try {
-        // Conexión a la base de datos
         await sql.connect(config);
-
-        // Preparar y ejecutar la consulta
         const request = new sql.Request();
         request.input('UserID', sql.Int, UserID);
         request.input('ProjectID', sql.Int, ProjectID);
         request.input('Date', sql.Date, Date);
         request.input('Time', sql.NVarChar, Time);
-
         const result = await request.query(`
             SELECT ID FROM DONATION
             WHERE 
@@ -119,32 +151,26 @@ app.post('/GetDonationID', async (req, res) => {
             AND Date = @Date
             AND Time = @Time;
         `);
-
-        // Si se encuentra una donación, devolver la ID
         if (result.recordset.length > 0) {
             res.json({ DonationID: result.recordset[0].ID });
         } else {
             res.status(404).json({ message: 'Donation not found' });
         }
-
     } catch (err) {
         res.status(500).send('Error retrieving donation ID: ' + err.message);
     }
 });
 //GetUserByID
 app.post('/GetUserByID', async (req, res) => {
-    const { UserID } = req.body;  // Obtenemos el ID del usuario desde los parámetros de consulta
+    const { UserID } = req.body; 
     try {
-        // Conexión a la base de datos
         await sql.connect(config);
-        // Preparar la consulta SELECT
         const request = new sql.Request();
         const query = `
             SELECT * FROM [USER] WHERE ID = @ID;
         `;
         request.input('ID', sql.Int, UserID);
         const result = await request.query(query);
-        // Si se encuentra un usuario, devolver los datos
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);
         } else {
@@ -156,18 +182,15 @@ app.post('/GetUserByID', async (req, res) => {
 });
 //GetPaymentDataByID
 app.post('/GetPaymentDataByID', async (req, res) => {
-    const { UserID } = req.body;  // Obtenemos el ID del usuario desde los parámetros de consulta
+    const { UserID } = req.body;  
     try {
-        // Conexión a la base de datos
         await sql.connect(config);
-        // Preparar la consulta SELECT
         const request = new sql.Request();
         const query = `
             SELECT * FROM [BANK_ACCOUNT] WHERE UserID = @ID;
         `;
         request.input('ID', sql.Int, UserID);
         const result = await request.query(query);
-        // Si se encuentra un usuario, devolver los datos
         if (result.recordset.length > 0) {
             res.json(result.recordset[0]);
         } else {
@@ -219,7 +242,6 @@ app.get('/GetBankAccountsList', async (req, res) => {
 });
 // Endpoint para obtener los proyectos
 app.get('/ProjectsInfo', async (req, res) => {
-
     try{
         await sql.connect(config);
         const result = await sql.query('SELECT * FROM [PROJECT]');
@@ -227,71 +249,52 @@ app.get('/ProjectsInfo', async (req, res) => {
     } catch (err) {
         res.status(500).send('Error retrieving projects list: ' + err.message)
     }
-    
 });
-//
+//ProjectsCreatorInfo
 app.post('/ProjectsCreatorInfo', async (req, res) => {
-    const userID = req.body.userID;  // Obtener el userID desde el cuerpo de la solicitud
-
+    const userID = req.body.userID;
     try {
         await sql.connect(config);
         const query = 'SELECT * FROM [PROJECT] WHERE UserID = @UserID';
-        
         const request = new sql.Request();
-        request.input('UserID', sql.Int, userID);  // Inyectar el userID de manera segura
-
+        request.input('UserID', sql.Int, userID);
         const result = await request.query(query);
         res.json(result.recordset);
     } catch (err) {
         res.status(500).send('Error retrieving projects list: ' + err.message);
     }
 });
-
-
-
 //AddUser
 app.post('/AddUser', async (req, res) => {
-    const { firstName, lastName, email, password, status } = req.body;  // Desestructuración de los datos recibidos
-    
+    const { firstName, lastName, email, password, status } = req.body;
     try {
         await sql.connect(config);
-
-        // Consulta SQL para insertar el nuevo usuario
         const query = `
             INSERT INTO [USER] (FirstName, LastName, Email, UserPassword, Status)
             VALUES (@FirstName, @LastName, @Email, @UserPassword, @Status)
         `;
-
-        // Prepara e inyecta los valores de manera segura
         const request = new sql.Request();
         request.input('FirstName', sql.NVarChar, firstName);
         request.input('LastName', sql.NVarChar, lastName);
         request.input('Email', sql.NVarChar, email);
         request.input('UserPassword', sql.NVarChar, password);
-        request.input('Status', sql.Bit, parseInt(status, 10));  // Convierte el status a entero y luego a bit
-        
+        request.input('Status', sql.Bit, parseInt(status, 10));
         await request.query(query);
-
         res.json({ message: 'User created successfully!' });
     } catch (err) {
         res.json({ message: err.message });
     }
 });
-
 //AddBankAccount
 app.post('/AddBankAccount', async (req, res) => {
-    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;  // Desestructuración de los datos recibidos
+    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;
     try {
         await sql.connect(config);
-
-        // Consulta SQL para insertar el nuevo usuario
         const query = `
             INSERT INTO [BANK_ACCOUNT](AccountNumer, UserID, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber)
             VALUES
             (@AccountNumer, @UserID, @UserCardNumber, @UserCardExpirationDate, @UserCardSecurityNumber);
         `;
-
-        // Prepara e inyecta los valores de manera segura
         const request = new sql.Request();
         request.input('AccountNumer', sql.NVarChar, AccountNumer);
         request.input('UserID', sql.Int, UserID);
@@ -299,19 +302,16 @@ app.post('/AddBankAccount', async (req, res) => {
         request.input('UserCardExpirationDate', sql.Date, UserCardExpirationDate);
         request.input('UserCardSecurityNumber', sql.NVarChar, UserCardSecurityNumber);
         await request.query(query);
-
         res.json({ message: 'Bank account created successfully!' });
     } catch (err) {
         res.json({ message: err.message });
     }
 });
-
 //UpdatePaymentInfo
 app.post('/UpdatePaymentInfo', async (req, res) => {
-    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;  // Desestructuración de los datos recibidos
+    const { UserID, AccountNumer, UserCardNumber, UserCardExpirationDate, UserCardSecurityNumber } = req.body;
     try {
         await sql.connect(config);
-
         const query = `
             UPDATE [BANK_ACCOUNT] SET
             AccountNumer = @AccountNumer,
@@ -320,7 +320,6 @@ app.post('/UpdatePaymentInfo', async (req, res) => {
             UserCardSecurityNumber = @UserCardSecurityNumber
             WHERE UserID = @UserID
         `;
-
         const request = new sql.Request();
         request.input('AccountNumer', sql.NVarChar, AccountNumer);
         request.input('UserID', sql.Int, UserID);
@@ -328,13 +327,11 @@ app.post('/UpdatePaymentInfo', async (req, res) => {
         request.input('UserCardExpirationDate', sql.Date, UserCardExpirationDate);
         request.input('UserCardSecurityNumber', sql.NVarChar, UserCardSecurityNumber);
         await request.query(query);
-
         res.json({ message: 'Bank account updated successfully!' });
     } catch (err) {
         res.json({ message: err.message });
     }
 })
-
 //AddProject
 app.post('/AddProject', async (req, res) => {
     const { UserID, Title, Description, ContributionGoal, Start, End, PrimaryContact, 
@@ -404,7 +401,6 @@ app.post('/EditProject', async (req, res) => {
         res.json({ message: err.message });
     }
 });
-
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
@@ -412,18 +408,13 @@ const transporter = nodemailer.createTransport({
         pass: 'fmhs exmd eqyn twfp' 
     }
 });
-
-
 // Send Inquiry
 app.post('/sendQuestion', async (req, res) => {
-    const { name, question, UserID } = req.body; // Asegúrate de recibir UserID desde el cliente
-
+    const { name, question, UserID } = req.body;
     if (!name || !question || !UserID) {
         return res.status(400).json({ message: 'Name, question, and UserID are required.' });
     }
-
     let userEmail;
-
     try {
         await sql.connect(config);
         const query = `
@@ -432,24 +423,20 @@ app.post('/sendQuestion', async (req, res) => {
         const request = new sql.Request();
         request.input('UserID', sql.Int, parseInt(UserID, 10));
         const result = await request.query(query);
-
         if (result.recordset.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
         }
-
-        userEmail = result.recordset[0].Email; // Obtener el email del primer registro
+        userEmail = result.recordset[0].Email;
     } catch (err) {
         console.error('Error getting user email:', err);
         return res.status(500).json({ message: 'Failed to get email.', error: err.message });
     }
-
     const mailOptions = {
         from: 'risefund1@gmail.com',
-        to: 'risefund1@gmail.com',  // Aquí colocas el email del destinatario
+        to: 'risefund1@gmail.com',  
         subject: `New Question from ${name}`,
         text: `You have received a new question:\n\nName: ${name}\nQuestion: ${question}\n\nContact: ${userEmail}`
     };
-
     try {
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully.');
@@ -459,18 +446,14 @@ app.post('/sendQuestion', async (req, res) => {
         res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
     }
 });
-
 // Send notification Register
 app.post('/sendConfirmation', async (req, res) => {
     const { Email } = req.body;
-
     if (!Email) {
         return res.status(400).json({ message: 'Email is required.' });
     }
-
-    // Definir opciones del correo electrónico
     const mailOptions = {
-        from: 'risefund1@gmail.com',  // Dirección de correo electrónico del remitente
+        from: 'risefund1@gmail.com',  
         to: Email,
         subject: 'Registration Confirmation Email',
         html: `
@@ -479,7 +462,6 @@ app.post('/sendConfirmation', async (req, res) => {
         <p>We appreciate your support and look forward to working with you in the future.</p>
         `
     };
-  
     try {
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully!');
@@ -489,17 +471,13 @@ app.post('/sendConfirmation', async (req, res) => {
         res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
     }
 });
-
-// Send Email when editing project
+// sendEditingEmail
 app.post('/sendEditingEmail', async (req, res) => {
-    const { UserID } = req.body; // Asegúrate de recibir UserID desde el cliente
-
+    const { UserID } = req.body; 
     if (!UserID) {
         return res.status(400).json({ message: 'Name, question, and UserID are required.' });
     }
-
     let userEmail;
-
     try {
         await sql.connect(config);
         const query = `
@@ -512,22 +490,19 @@ app.post('/sendEditingEmail', async (req, res) => {
         if (result.recordset.length === 0) {
             return res.status(404).json({ message: 'User not found.' });
         }
-
-        userEmail = result.recordset[0].Email; // Obtener el email del primer registro
+        userEmail = result.recordset[0].Email; 
     } catch (err) {
         console.error('Error getting user email:', err);
         return res.status(500).json({ message: 'Failed to get email.', error: err.message });
     }
-
     const mailOptions = {
         from: 'risefund1@gmail.com',
-        to: userEmail,  // Aquí colocas el email del destinatario
+        to: userEmail,  
         subject: `Project Updated`,
         html: `
         <h1>You have made changes to your project</h1>
         `
     };
-
     try {
         await transporter.sendMail(mailOptions);
         console.log('Email sent successfully.');
@@ -537,8 +512,6 @@ app.post('/sendEditingEmail', async (req, res) => {
         res.status(500).json({ message: 'Failed to send email.', error: error.toString() });
     }
 });
-
-
 // Add Donation / Crear Donation
 app.post('/AddDonation', async (req, res) => {
     const { UserID, ProjectID, Ammount, Comment, Status, Date, Time} = req.body;
@@ -557,13 +530,11 @@ app.post('/AddDonation', async (req, res) => {
         request.input('Date', sql.Date, Date);
         request.input('Time', sql.NVarChar, Time);
         await request.query(query);
-
         const queryEmail = `
             SELECT Email FROM [USER] WHERE ID = @UserID
         `;
         const emailRequest = new sql.Request();
         emailRequest.input('UserID', sql.Int, parseInt(UserID, 10));
-
         const result = await emailRequest.query(queryEmail);
         const userEmail = result.recordset[0].Email;  
         if (!result.recordset.length) {
@@ -587,13 +558,11 @@ app.post('/AddDonation', async (req, res) => {
             console.log('Email sent: ' + info.response);
             res.json({ message: 'Donation created successfully' });
         });
-        
     } catch (err) {
         console.error('Error while creating donation:', err);
         res.status(500).json({ message: 'Error creating donation', error: err.message });
     }
 });
-
 //Register User Activity
 app.post('/AddRegisterUserActivity', async (req, res) => {
     const { UserID, Detail, Date, Times } = req.body;
@@ -617,7 +586,6 @@ app.post('/AddRegisterUserActivity', async (req, res) => {
 //Register Project Activity
 app.post('/AddRegisterProjectActivity', async (req, res) => {
     const { ProjectID, Detail, Date, Times } = req.body;
-    
     try {
         await sql.connect(config);
         const query = `
@@ -638,7 +606,6 @@ app.post('/AddRegisterProjectActivity', async (req, res) => {
 //Register Donation Activity
 app.post('/AddRegisterDonationActivity', async (req, res) => {
     const { DonationID, Detail, Date, Times } = req.body;
-    
     try {
         await sql.connect(config);
         const query = `
@@ -656,56 +623,42 @@ app.post('/AddRegisterDonationActivity', async (req, res) => {
         res.json({ message: err.message });
     }
 });
-
 // Search of Project by ID
 app.post('/ProjectById', async (req, res) => {
     const projectID = req.body.projectID;  
-
     try {
         await sql.connect(config);
         const query = 'SELECT * FROM [PROJECT] INNER JOIN [USER] ON [PROJECT].UserID = [USER].ID WHERE [PROJECT].ID = @ProjectID';
-        
         const request = new sql.Request();
         request.input('ProjectID', sql.Int, projectID);
         const result = await request.query(query);
-
-        
         if (result.recordset.length === 0) {
             return res.status(404).send('Project not found');
         }
-
-        
         res.json(result.recordset[0]);
-    } catch (err) {
-        
+    } catch (err) { 
         res.status(500).send('Error getting project: ' + err.message);
     }
 });
-
 // Searches for the People of the project
 app.post('/SearchDonatedPeople', async(req, res) => {
     const projectID = req.body.projectID;
-
     try{
         await sql.connect(config);
         const query = `SELECT PROJECT.ID, ISNULL(COUNT([DONATION].ProjectID), 0) DONANTES FROM [PROJECT] LEFT JOIN [DONATION] ON [PROJECT].ID = [DONATION].ProjectID 
         WHERE [PROJECT].ID = @ProjectID
         Group By [PROJECT].ID;`
-        
         const request = new sql.Request();
         request.input('ProjectID', sql.Int, projectID);
         const result = await request.query(query);
-
         if (result.recordset.length === 0) {
             return res.status(404).send('Author not found');
         }
-
         res.json(result.recordset[0]);
     } catch (err) {
         res.status(500).send('Error when searching for project author:')
     }
 });
-
 //Search bank account
 app.post('/ExpirationDate', async(req, res) => {
     const projectID = req.body.projectID;
@@ -713,27 +666,17 @@ app.post('/ExpirationDate', async(req, res) => {
         await sql.connect(config);
         const query = `SELECT * FROM [PROJECT] INNER JOIN [USER] ON [PROJECT].UserID = [USER].ID
         LEFT JOIN [BANK_ACCOUNT] ON [BANK_ACCOUNT].UserID = [USER].ID WHERE [PROJECT].ID = @ProjectID`
-        
         const request = new sql.Request();
         request.input('ProjectID', sql.Int, projectID);
         const result = await request.query(query);
-
         if (result.recordset.length === 0) {
             return res.status(404).send('Author not found');
         }
-
         res.json(result.recordset[0]);
     } catch (err) {
         res.status(500).send('Error when searching for project author:')
     }
 });
-
-
-// Start the server
-app.listen(port, () => {
-    console.log(`Server is running at http://localhost:${port}`);
-});
-
 
 //GetProjectByID
 app.post('/GetProjectByID', async (req, res) => {
@@ -763,8 +706,6 @@ app.post('/GetProjectByID', async (req, res) => {
         res.json({ success: false, message: 'An unexpected error occurred. Please try again later.' });
     }
 });
-        
-
 //GetProjectList
 app.get('/GetProjectList', async (req, res) => {
     try {
@@ -787,7 +728,6 @@ app.get('/GetProjectList', async (req, res) => {
         res.status(500).send('Error retrieving uproject list: ' + err.message);
     }
 });
-
 //UpdateProjectStatus
 app.post('/UpdateProjectStatus', async (req, res) => {
     const { projectID, status} = req.body;
@@ -811,9 +751,7 @@ app.post('/UpdateProjectStatus', async (req, res) => {
         res.json({ success: false, message: err.message });
     }
 });
-
 //UpdateUserStatus
-
 app.post('/UpdateUserStatus', async (req, res) => {
     const { UserID, Status} = req.body;
     try {
@@ -836,7 +774,6 @@ app.post('/UpdateUserStatus', async (req, res) => {
         res.json({ success: false, message: err.message });
     }
 });
-
 //UpdateUserPersonalInfo
 app.post('/UpdateUserPersonalInfo', async (req, res) => {
     const { UserID, FirstName, LastName, NewPassword} = req.body;
@@ -864,7 +801,6 @@ app.post('/UpdateUserPersonalInfo', async (req, res) => {
         res.json({ success: false, message: err.message });
     }
 });
-
 //GetDonationList
 app.get('/GetDonationList', async (req, res) => {
     try {
@@ -877,16 +813,14 @@ app.get('/GetDonationList', async (req, res) => {
         const formattedResult = result.recordset.map(donation => {
             return {
                 ...donation,
-                Date: new Date(donation.Date).toISOString().split('T')[0] // Formateo de la fecha
+                Date: new Date(donation.Date).toISOString().split('T')[0] 
             };
         });
-
         res.json(formattedResult);
     } catch (err) {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 //Confirm bank account number is users
 app.get('/GetBankAccountList', async (req, res) => {
     try {
@@ -900,7 +834,6 @@ app.get('/GetBankAccountList', async (req, res) => {
         res.status(500).send('Error retrieving accounts list: ' + err.message);
     }
 });
-
 //GetDonationByID
 app.post('/GetDonationByID', async (req, res) => {
     const { donationID } = req.body; 
@@ -924,7 +857,6 @@ app.post('/GetDonationByID', async (req, res) => {
         res.json({ success: false, message: 'An unexpected error occurred. Please try again later.' });
     }
 });
-
 // Obtener la cantidad de Projects
 app.post('/GetTotalProjects', async (req, res) => {
     try {
@@ -934,13 +866,12 @@ app.post('/GetTotalProjects', async (req, res) => {
             SELECT COUNT(*) AS totalProjects FROM [PROJECT]            
         `;
         const result = await request.query(query);
-        res.json({ totalProjects: result.recordset[0].totalProjects }); // Corregido el nombre
+        res.json({ totalProjects: result.recordset[0].totalProjects });
     } catch (err) {
         console.error('Error at retrieving project stats', err.message);
         res.status(500).send('Error retrieving project stats');
     }
 });
-
 // Obtener la cantidad de Users
 app.post('/GetTotalUsers', async (req, res) => {
     try {
@@ -950,13 +881,12 @@ app.post('/GetTotalUsers', async (req, res) => {
             SELECT COUNT(*) AS totalUsers FROM [USER]         
         `;
         const result = await request.query(query);
-        res.json({ totalUsers: result.recordset[0].totalUsers }); // Corregido el nombre
+        res.json({ totalUsers: result.recordset[0].totalUsers });
     } catch (err) {
         console.error('Error at retrieving users stats', err.message);
         res.status(500).send('Error retrieving users stats');
     }
 });
-
 // Obtener la cantidad de dinero donado
 app.post('/GetTotalRaised', async (req, res) => {
     try {
@@ -966,14 +896,12 @@ app.post('/GetTotalRaised', async (req, res) => {
             SELECT ISNULL(SUM(Ammount),0) AS sumaTotal FROM [DONATION] WHERE [DONATION].Status = 1      
         `;
         const result = await request.query(query);
-        res.json({ sumaTotal: result.recordset[0].sumaTotal }); // Corregido el nombre
+        res.json({ sumaTotal: result.recordset[0].sumaTotal }); 
     } catch (err) {
         console.error('Error at retrieving donation stats', err.message);
         res.status(500).send('Error retrieving donation stats');
     }
 });
-
-
 //Change Donation Status
 app.post('/ChangeDonationStatus', async (req, res) => {
     const {DonationID, Status} = req.body;
@@ -1000,7 +928,6 @@ app.post('/ChangeDonationStatus', async (req, res) => {
         `;
         const emailRequest = new sql.Request();
         emailRequest.input('DonationID', sql.Int, parseInt(DonationID, 10));
-
         const resultEmail = await emailRequest.query(queryEmail);
         const userEmail = resultEmail.recordset[0].Email;  
         if (!resultEmail.recordset.length) {
@@ -1011,7 +938,7 @@ app.post('/ChangeDonationStatus', async (req, res) => {
             from: 'risefund1@gmail.com',   
             to: userEmail,                 
             subject: 'Confirmation of donation status',  
-            text: `You have recieved a Donation!".`  // Cuerpo del correo
+            text: `You have recieved a Donation!".` 
         };
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
@@ -1020,25 +947,11 @@ app.post('/ChangeDonationStatus', async (req, res) => {
             console.log('Email sent: ' + info.response);
             res.json({ message: 'Email sent successfully!' });
         });
-        
     } catch (err) {
         console.error('Error al crear la donación:', err);
         res.status(500).json({ message: 'Error creating donation', error: err.message });
     }
 });
-
-        //if (result.rowsAffected[0] > 0) {
-        //    res.json({ success: true, message: 'Donation Status Edited successfully!' });
-        //} else {
-        //    res.json({ success: false, message: 'Donation not found' });
-        //}
-    //} catch (err) {
-     //   res.json({ success: false, message: err.message });
-    //}
-//});
-
-
-
 //Delete Donation
 app.post('/DeleteDonation', async (req, res) => {
     const { DonationID} = req.body;
@@ -1051,7 +964,6 @@ app.post('/DeleteDonation', async (req, res) => {
         const request = new sql.Request();
         request.input('DonationID', sql.Int, parseInt(DonationID, 10));
         const result = await request.query(query);
-
         if (result.rowsAffected[0] > 0) {
             res.json({ success: true, message: 'Donation Deleted successfully!' });
         } else {
@@ -1061,8 +973,6 @@ app.post('/DeleteDonation', async (req, res) => {
         res.json({ success: false, message: err.message });
     }
 });
-
-
 //UpdateProjectCollected
 app.post('/UpdateProjectCollected', async (req, res) => {
     const { ProjectID, Collected} = req.body;
@@ -1086,7 +996,6 @@ app.post('/UpdateProjectCollected', async (req, res) => {
         res.json({ success: false, message: err.message });
     }
 });
-
 // Obtiene la info de la donacion por ID
 app.post('/GetDonationDataByID', async (req, res) => {
     const { donationID } = req.body; 
@@ -1111,7 +1020,6 @@ app.post('/GetDonationDataByID', async (req, res) => {
         res.json({ success: false, message: 'Donation error.' });
     }
 });
-
 //GetDonationApproved
 app.get('/GetDonationApproved', async (req, res) => {
     try {
@@ -1127,7 +1035,6 @@ app.get('/GetDonationApproved', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 //GetDonationRejected
 app.get('/GetDonationRejected', async (req, res) => {
     try {
@@ -1143,7 +1050,6 @@ app.get('/GetDonationRejected', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 //GetActiveUsers
 app.get('/GetActiveUsers', async (req, res) => {
     try {
@@ -1159,7 +1065,6 @@ app.get('/GetActiveUsers', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 //GetBlockedUsers
 app.get('/GetBlockedUsers', async (req, res) => {
     try {
@@ -1175,7 +1080,6 @@ app.get('/GetBlockedUsers', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 // GetActiveProject
 app.get('/GetActiveProject', async (req, res) => {
     try {
@@ -1191,7 +1095,6 @@ app.get('/GetActiveProject', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 // GetFinishedProject
 app.get('/GetFinishedProject', async (req, res) => {
     try {
@@ -1207,7 +1110,6 @@ app.get('/GetFinishedProject', async (req, res) => {
         res.status(500).send('Error retrieving donation list: ' + err.message);
     }
 });
-
 // GetBlockedProject
 app.get('/GetBlockedProject', async (req, res) => {
     try {

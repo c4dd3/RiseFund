@@ -163,15 +163,15 @@ function updateImage(event) {
 
 async function setLastProjectID() {
     try {
-        const response = await fetch('/GetLastProjectID');  // Petición para obtener el último ID de proyecto
-        const data = await response.json();  // Recibe la respuesta como JSON
+        const response = await fetch('/GetLastProjectID');
+        const data = await response.json();
 
         if (data.LastProjectID !== null) {
-            const nextProjectID = data.LastProjectID + 1;  // Incrementa el último ID
-            document.getElementById('project-id').value = nextProjectID;  // Establece el valor en el input
+            const nextProjectID = data.LastProjectID + 1;
+            document.getElementById('project-id').value = nextProjectID;
         } else {
             console.log("No projects found.");
-            document.getElementById('project-id').value = 1;  // Si no hay proyectos, empieza desde 1
+            document.getElementById('project-id').value = 1;
         }
     } catch (error) {
         console.error("Error fetching the last project ID:", error);
@@ -185,7 +185,6 @@ document.addEventListener('DOMContentLoaded', async () => {
             verifyAdminUser();
         });
     } catch (error) {
-        // Manejo de errores en caso de problemas con la solicitud
         console.error('Error at loading element:', error);
     }
 });
@@ -203,17 +202,14 @@ async function verifyAdminUser() {
 
 async function checkIfUserIsAdmin(userID) {
     try {
-        // Hacer la solicitud para obtener la lista de administradores
         const response = await fetch('/GetAdminList');
         
         if (!response.ok) {
             throw new Error('Error al obtener la lista de administradores');
         }
         
-        // Convertir la respuesta en un array de administradores
         const admins = await response.json();
         console.log(admins);
-        // Verificar si algún administrador tiene el mismo ID que el userID
         const isAdmin = admins.some(admin => admin.UserID == userID);
         
         if (isAdmin) {

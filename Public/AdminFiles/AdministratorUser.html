@@ -37,7 +37,7 @@
             text-decoration: none;
             margin-bottom: calc(1%);
         }
-        /* Container for the user admin section */
+
         .container {
             display: flex;
             flex-direction: column;
@@ -82,13 +82,13 @@
             border-radius: 8px;
             border: 1px solid #ccc;
             background-color: #f9f9f9;
-            width: calc(100% - 24px); /* Adjust width to account for padding */
+            width: calc(100% - 24px); 
             margin-bottom: 15px;
         }
         select {
             cursor: pointer;
         }
-        /* Table for displaying user data */
+
         .user-table {
             width: 100%;
             margin-top: 20px;
@@ -115,7 +115,7 @@
         .user-table td {
             font-size: 14px;
         }
-        /* Search bar and button */
+
         .search-bar-container {
             display: flex;
             align-items: center;
@@ -152,7 +152,7 @@
         }
 
         .status-container label {
-            width: 120px; /* Adjust width for the label */
+            width: 120px; 
         }
 
         .confirm-btn {
@@ -166,12 +166,9 @@
             margin-bottom: 15px;
             height: 53px;
         }
-
         .confirm-btn:hover {
             background-color: #0056b3;
         }
-
-        /* Popup window */
         .popup {
             display: none;
             position: fixed;
@@ -184,7 +181,6 @@
             align-items: center;
             z-index: 1000;
         }
-        
         .popup-content {
             background-color: #fff;
             padding: 20px;
@@ -193,11 +189,9 @@
             max-width: 600px;
             position: relative;
         }
-        
         .popup-content h2 {
             margin-top: 0;
         }
-        
         .close-btn {
             position: absolute;
             top: 10px;
@@ -209,8 +203,6 @@
         .close-btn:hover {
             color: #da190b;
         }
-
-        /* Statistics button styling */
         .statistics-btn {
             padding: 10px;
             margin-left: 2%;
@@ -222,7 +214,6 @@
             cursor: pointer;
             font-size: 16px;
         }
-
         .statistics-btn:hover {
             background-color: #2a78d4;
         }
@@ -248,13 +239,11 @@
 
         <div id="popupWindow" class="popup">
             <div class="popup-content">
-                <span class="close-btn">&times;</span> <!-- Close Button -->
+                <span class="close-btn">&times;</span> 
                 <h2>User Statistics</h2>
                 <div id="activeUser">
-                    <!-- The total donation amount will be displayed here -->
                 </div>
                 <div id="blockedUser">
-                    <!-- The total number of donations approved will be displayed here -->
                 </div>
             </div>
         </div>
@@ -284,8 +273,6 @@
                 <label for="email">Email</label>
                 <input id="email" type="email" placeholder="email@example.com" value="" disabled>
             </div>
-
-            <!-- Table displaying the user list -->
             <div class="form-section" style="flex: 1;">
                 <table class="user-table">
                     <thead>
@@ -298,7 +285,6 @@
                         </tr>
                     </thead>
                     <tbody id="userTableBody">
-                        <!-- User data rows will be dynamically added here -->
                     </tbody>
                 </table>
             </div>
