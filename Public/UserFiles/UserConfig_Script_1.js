@@ -282,6 +282,7 @@ document.addEventListener('DOMContentLoaded', async function() {
                     throw new Error(errorData.error);
                 }
                 const result = await response.json();  
+                alert('Bank Account registered');
                 console.log('Response from server:', result);
             } catch (err) {
                 console.error('Error creating user:', err.message);  
@@ -328,7 +329,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             return false;
         }
     }
-
+    
     confirmButtonPaymentInfo.addEventListener('click', updatePaymentInfo);
     
     loadPaymentData(UserID);

@@ -197,6 +197,31 @@
                 e.preventDefault();
             }
         });
+
+         // Prevent typing non-numeric characters except for Backspace in card number
+         document.getElementById('cardNumber').addEventListener('keydown', function (e) {
+            if (e.key.match(/[^0-9]/) && e.key !== 'Backspace') {
+                e.preventDefault();
+            }
+        });
+
+        // Limit security number to 3 digits and allow only numbers
+        document.getElementById('securityNumber').addEventListener('input', function (e) {
+            let value = e.target.value.replace(/\D/g, ''); // Remove all non-numeric characters
+    
+            if (value.length > 3) {
+                value = value.slice(0, 3);
+            }
+    
+            e.target.value = value;
+        });
+
+        // Prevent typing non-numeric characters except for Backspace in security number
+        document.getElementById('securityNumber').addEventListener('keydown', function (e) {
+            if (e.key.match(/[^0-9]/) && e.key !== 'Backspace') {
+                e.preventDefault();
+            }
+        });
     </script>
     
     
