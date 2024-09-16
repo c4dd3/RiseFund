@@ -36,6 +36,7 @@ document.addEventListener('DOMContentLoaded', async function() {
             } else {
                 alert('User not found');
             }
+            
         } catch (error) {
             console.error('Error:', error);
             alert('An error occurred while getting the user');
@@ -261,6 +262,8 @@ document.addEventListener('DOMContentLoaded', async function() {
             }
         } else{ //No tiene cuenta -- Insert
             if(inAccountNumberInUse(AccountNumer)){
+                console.log(inAccountNumberInUse(AccountNumer));
+                console.log(AccountNumer)
                 alert('Error Account Number already in use');
                 return;
             }

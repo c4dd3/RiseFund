@@ -45,6 +45,7 @@ app.get('/confirmEmail', async (req, res) => {
         const result = await sql.query('SELECT * FROM [USER]');
         res.json(result.recordset);  // Send data as JSON
     } catch (err) {
+        console.log(err.message);
         res.status(500).send('Error retrieving users: ' + err.message);
     }
 });
